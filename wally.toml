@@ -1,17 +1,21 @@
 [package]
-name = "plum/roblox-game"
-version = "0.1.0"
-registry = "https://github.com/UpliftGames/wally-index"
+name = "pluviolithic/horror-simulator"
+version = "1.0.0"
+authors = ["Eric McKanna <e-mckanna@onu.edu>"]
 realm = "shared"
+registry = "https://github.com/upliftgames/wally-index"
 
 [dependencies]
-Red = "red-blox/red@2.0.0"
-jest = "jsdotlua/jest@3.4.1"
-guard = "red-blox/guard@1.0.1"
-fusion = "elttob/fusion@0.2.0"
-reflex = "littensy/reflex@4.3.1"
-immut = "solarhorizon/immut@0.4.4"
-roblox-lua-promise = "jsdotlua/roblox-lua-promise@3.5.0"
+t = "osyrisrblx/t@3.0.0"
+Sift = "csqrl/sift@0.0.3"
+Rodux = "roblox/rodux@3.0.0"
+Immut = "solarhorizon/immut@0.4.4"
+
+Net = "vorlias/net@3.0.1"
+Promise = "evaera/promise@3.1.0"
+ZonePlus = "legendoj1/zoneplus@3.2.2"
+Janitor = "howmanysmall/janitor@1.13.14"
+Datastructures = "howmanysmall/datastructures@1.1.0"
 
 [server-dependencies]
 Cmdr = "evaera/cmdr@1.9.0"

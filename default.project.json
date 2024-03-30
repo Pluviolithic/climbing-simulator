@@ -1,5 +1,5 @@
 {
-  "name": "roblox-game",
+  "name": "climbing-simulator",
   "tree": {
     "$className": "DataModel",
     "ReplicatedStorage": {

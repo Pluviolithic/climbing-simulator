@@ -23,14 +23,14 @@ local function initializeLeaderboard(player: Player, data)
 	strength.Value = formatter.formatNumberWithSuffix(data.Stats.Strength)
 	strength.Parent = leaderstats
 
-	local rank = Instance.new "StringValue"
-	rank.Name = "Rank"
-	rank.Value = formatter.formatNumberWithSuffix(data.Stats.Rank)
-	rank.Parent = leaderstats
+	-- local rank = Instance.new "StringValue"
+	-- rank.Name = "Rank"
+	-- rank.Value = formatter.formatNumberWithSuffix(data.Stats.Rank)
+	-- rank.Parent = leaderstats
 
 	local kills = Instance.new "StringValue"
-	kills.Name = "Kills"
-	kills.Value = formatter.formatNumberWithSuffix(data.Stats.Kills)
+	kills.Name = "Wins"
+	kills.Value = formatter.formatNumberWithSuffix(data.Stats.Wins)
 	kills.Parent = leaderstats
 
 	local Rebirths = Instance.new "StringValue"
@@ -105,17 +105,17 @@ Players.PlayerRemoving:Connect(function(player)
 	end
 	store:dispatch(actions.removePlayer(player.Name))
 
-	for _, existingPlayer in Players:GetPlayers() do
-		if existingPlayer == player then
-			continue
-		end
-
-		task.spawn(function()
-			if existingPlayer:IsFriendsWith(player.UserId) then
-				store:dispatch(actions.removeFriend(existingPlayer.Name, player.Name))
-			end
-		end)
-	end
+	-- for _, existingPlayer in Players:GetPlayers() do
+	-- 	if existingPlayer == player then
+	-- 		continue
+	-- 	end
+	--
+	-- 	task.spawn(function()
+	-- 		if existingPlayer:IsFriendsWith(player.UserId) then
+	-- 			store:dispatch(actions.removeFriend(existingPlayer.Name, player.Name))
+	-- 		end
+	-- 	end)
+	-- end
 end)
 
 Remotes.Server:Get("GetGlobalState"):SetCallback(function()

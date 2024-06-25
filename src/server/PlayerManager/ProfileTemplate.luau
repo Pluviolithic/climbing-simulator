@@ -2,7 +2,7 @@ return {
 	Stats = {
 		Wins = 0,
 		Rebirths = 0,
-		Strength = game:GetService("ReplicatedStorage").Config.Workout.Strength.Value,
+		Strength = 0,
 
 		Luck = 0,
 		Gems = 0,
@@ -81,10 +81,7 @@ return {
 		CurrentStep = 1,
 	},
 
-	MilestonesData = {
-		["100MStrength"] = false,
-		["TopRebirths"] = false,
-	},
+	MilestonesData = {},
 
 	GiftData = {
 		ClaimedGifts = {},

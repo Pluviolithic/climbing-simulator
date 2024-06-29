@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local clockUtils = require(ReplicatedStorage.Common.Utils.ClockUtils)
 

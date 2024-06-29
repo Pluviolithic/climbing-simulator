@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
 local makeActionCreator = Rodux.makeActionCreator
 

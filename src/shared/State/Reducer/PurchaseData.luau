@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Immut = require(ReplicatedStorage.Common.lib.Immut)
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
@@ -10,7 +10,8 @@ local produce = Immut.produce
 return Rodux.createReducer({}, {
 	addPlayer = function(state, action)
 		return produce(state, function(draft)
-			draft[action.playerName] = Dict.mergeDeep(defaultStates.PurchaseData, action.profileData.PurchaseData)
+			draft[action.playerName] =
+				Dict.mergeDeep(defaultStates.PurchaseData, action.profileData.PurchaseData)
 		end)
 	end,
 	removePlayer = function(state, action)
@@ -44,20 +45,21 @@ return Rodux.createReducer({}, {
 	end,
 	applyBoostToPlayer = function(state, action)
 		return produce(state, function(draft)
-			local currentBoostData = draft[action.playerName].ActiveBoosts[action.boostName:match "%D+"]
+			local currentBoostData =
+				draft[action.playerName].ActiveBoosts[action.boostName:match("%D+")]
 			if currentBoostData then
-				currentBoostData.Duration += tonumber(action.boostName:match "%d*%.?%d+") :: number * 60
+				currentBoostData.Duration += tonumber(action.boostName:match("%d*%.?%d+")) :: number * 60
 			else
-				draft[action.playerName].ActiveBoosts[action.boostName:match "%D+"] = {
+				draft[action.playerName].ActiveBoosts[action.boostName:match("%D+")] = {
 					StartTime = os.time(),
-					Duration = tonumber(action.boostName:match "(%d*%.?%d+)") :: number * 60,
+					Duration = tonumber(action.boostName:match("(%d*%.?%d+)")) :: number * 60,
 				}
 			end
 		end)
 	end,
 	removeBoostFromPlayer = function(state, action)
 		return produce(state, function(draft)
-			draft[action.playerName].ActiveBoosts[action.boostName:match "%D+"] = nil
+			draft[action.playerName].ActiveBoosts[action.boostName:match("%D+")] = nil
 		end)
 	end,
 	redeemCode = function(state, action)

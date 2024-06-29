@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Immut = require(ReplicatedStorage.Common.lib.Immut)
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
@@ -25,7 +25,8 @@ return Rodux.createReducer({}, {
 	switchSetting = function(state, action)
 		return produce(state, function(draft)
 			if draft[action.playerName][action.setting] ~= nil then
-				draft[action.playerName][action.setting] = not state[action.playerName][action.setting]
+				draft[action.playerName][action.setting] =
+					not state[action.playerName][action.setting]
 			end
 		end)
 	end,

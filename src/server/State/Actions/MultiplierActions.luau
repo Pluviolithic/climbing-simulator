@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
 local makeActionCreator = Rodux.makeActionCreator
 
@@ -31,10 +31,13 @@ return {
 			friendName = friendName,
 		}
 	end),
-	removeFriend = makeActionCreator("removeFriend", function(playerName: string, friendName: string)
-		return {
-			playerName = playerName,
-			friendName = friendName,
-		}
-	end),
+	removeFriend = makeActionCreator(
+		"removeFriend",
+		function(playerName: string, friendName: string)
+			return {
+				playerName = playerName,
+				friendName = friendName,
+			}
+		end
+	),
 }

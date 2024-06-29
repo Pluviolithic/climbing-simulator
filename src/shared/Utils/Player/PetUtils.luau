@@ -1,6 +1,6 @@
-local Players = game:GetService "Players"
-local RunService = game:GetService "RunService"
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Janitor = require(ReplicatedStorage.Common.lib.Janitor)
 
@@ -8,8 +8,8 @@ local petConfig = ReplicatedStorage.Config.Pets
 local modelYOffset = petConfig.VerticalOffset.Value
 local leaderboardPetName = ReplicatedStorage.Config.Misc.LeaderboardPet.Value
 
-local baseBodyPosition = Instance.new "BodyPosition"
-local baseBodyGyro = Instance.new "BodyGyro"
+local baseBodyPosition = Instance.new("BodyPosition")
+local baseBodyGyro = Instance.new("BodyGyro")
 
 baseBodyPosition.D = petConfig.Dampening.Value
 baseBodyPosition.P = petConfig.Aggressiveness.Value
@@ -24,7 +24,11 @@ local function calculatePosition(rootPart, numPets, i)
 	local petRadius = 4
 
 	local bobOffset = Vector3.new(0, math.sin(tick() * 5) * 0.3, 0)
-	local petOffset = Vector3.new(math.cos(petAngle * i) * petRadius, modelYOffset, math.sin(petAngle * i) * petRadius)
+	local petOffset = Vector3.new(
+		math.cos(petAngle * i) * petRadius,
+		modelYOffset,
+		math.sin(petAngle * i) * petRadius
+	)
 	local petCFrame = rootPart.CFrame * CFrame.new(petOffset + bobOffset)
 	local lookVector = (rootPart.Position - petCFrame.Position).Unit
 
@@ -35,9 +39,9 @@ local petUtils
 petUtils = {
 	getPet = function(petName: string): Instance?
 		local pets
-		if petName:match "Evolved" then
+		if petName:match("Evolved") then
 			pets = ReplicatedStorage.EvolvedPets
-		elseif petName:match "Shiny" or petName == leaderboardPetName then
+		elseif petName:match("Shiny") or petName == leaderboardPetName then
 			pets = ReplicatedStorage.ShinyPets
 		else
 			pets = ReplicatedStorage.Pets
@@ -72,7 +76,10 @@ petUtils = {
 	getPetRarities = function(petNames: { string }): { string }
 		local rarities = {}
 		for _, petName in petNames do
-			table.insert(rarities, ReplicatedStorage.Pets:FindFirstChild(petName, true).RarityName.Value)
+			table.insert(
+				rarities,
+				ReplicatedStorage.Pets:FindFirstChild(petName, true).RarityName.Value
+			)
 		end
 		return rarities
 	end,
@@ -104,7 +111,7 @@ petUtils = {
 			if not isServer then
 				return
 			end
-			petsModel = Instance.new "Model"
+			petsModel = Instance.new("Model")
 			petsModel.Name = playerName
 			petsModel.Parent = workspace.PetModels
 
@@ -114,8 +121,9 @@ petUtils = {
 		end
 
 		task.spawn(function()
-			local character = Players[playerName].Character or Players[playerName].CharacterAdded:Wait()
-			local rootPart = character:WaitForChild "HumanoidRootPart"
+			local character = Players[playerName].Character
+				or Players[playerName].CharacterAdded:Wait()
+			local rootPart = character:WaitForChild("HumanoidRootPart")
 			local equippedPetModels = petsModel:GetChildren()
 			for petName, quantity in equippedPets do
 				for i = 1, quantity do
@@ -138,13 +146,18 @@ petUtils = {
 					else
 						continue
 					end
-					newPet.PrimaryPart.BodyGyro.CFrame = CFrame.lookAt(position, look * Vector3.new(1, 0, 1))
+					newPet.PrimaryPart.BodyGyro.CFrame =
+						CFrame.lookAt(position, look * Vector3.new(1, 0, 1))
 					newPet.PrimaryPart.BodyPosition.Position = position
-					newPet:SetPrimaryPartCFrame(CFrame.lookAt(position, look * Vector3.new(1, 0, 1)))
+					newPet:SetPrimaryPartCFrame(
+						CFrame.lookAt(position, look * Vector3.new(1, 0, 1))
+					)
 					newPet.Parent = petsModel
 
 					if isServer then
-						newPet:FindFirstChildWhichIsA("BasePart"):SetNetworkOwner(Players[playerName])
+						newPet
+							:FindFirstChildWhichIsA("BasePart")
+							:SetNetworkOwner(Players[playerName])
 					end
 				end
 			end

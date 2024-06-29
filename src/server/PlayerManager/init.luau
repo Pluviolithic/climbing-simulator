@@ -1,6 +1,6 @@
-local Players = game:GetService "Players"
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
-local ServerScriptService = game:GetService "ServerScriptService"
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 local Remotes = require(ReplicatedStorage.Common.Remotes)
 local ProfileService = require(ServerScriptService.Server.lib.ProfileService)
@@ -15,10 +15,10 @@ local PlayerStatusUI = require(ServerScriptService.Server.PlayerManager.PlayerSt
 local profileStore = ProfileService.GetProfileStore("PlayerData", profileTemplate)
 
 local function initializeLeaderboard(player: Player, data)
-	local leaderstats = Instance.new "Folder"
+	local leaderstats = Instance.new("Folder")
 	leaderstats.Name = "leaderstats"
 
-	local strength = Instance.new "StringValue"
+	local strength = Instance.new("StringValue")
 	strength.Name = "Strength"
 	strength.Value = formatter.formatNumberWithSuffix(data.Stats.Strength)
 	strength.Parent = leaderstats
@@ -28,12 +28,12 @@ local function initializeLeaderboard(player: Player, data)
 	-- rank.Value = formatter.formatNumberWithSuffix(data.Stats.Rank)
 	-- rank.Parent = leaderstats
 
-	local kills = Instance.new "StringValue"
+	local kills = Instance.new("StringValue")
 	kills.Name = "Wins"
 	kills.Value = formatter.formatNumberWithSuffix(data.Stats.Wins)
 	kills.Parent = leaderstats
 
-	local Rebirths = Instance.new "StringValue"
+	local Rebirths = Instance.new("StringValue")
 	Rebirths.Name = "Rebirths"
 	Rebirths.Value = formatter.formatNumberWithSuffix(data.Stats.Rebirths)
 	Rebirths.Parent = leaderstats
@@ -44,7 +44,7 @@ end
 local function onPlayerAdded(player: Player)
 	local profile = profileStore:LoadProfileAsync("Player_" .. player.UserId)
 	if not profile then
-		player:Kick "Data failed to load correctly."
+		player:Kick("Data failed to load correctly.")
 		return
 	end
 	profile:AddUserId(player.UserId)

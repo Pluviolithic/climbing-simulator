@@ -1,15 +1,18 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
 local makeActionCreator = Rodux.makeActionCreator
 
 return {
-	givePlayerPets = makeActionCreator("givePlayerPets", function(playerName: string, petNames: { [string]: number })
-		return {
-			playerName = playerName,
-			petsToGive = petNames,
-			shouldSave = true,
-		}
-	end),
+	givePlayerPets = makeActionCreator(
+		"givePlayerPets",
+		function(playerName: string, petNames: { [string]: number })
+			return {
+				playerName = playerName,
+				petsToGive = petNames,
+				shouldSave = true,
+			}
+		end
+	),
 	deletePlayerPets = makeActionCreator(
 		"deletePlayerPets",
 		function(playerName: string, petNames: { [string]: number })
@@ -20,13 +23,16 @@ return {
 			}
 		end
 	),
-	equipPlayerPets = makeActionCreator("equipPlayerPets", function(playerName: string, petNames: { [string]: number })
-		return {
-			playerName = playerName,
-			petsToEquip = petNames,
-			shouldSave = true,
-		}
-	end),
+	equipPlayerPets = makeActionCreator(
+		"equipPlayerPets",
+		function(playerName: string, petNames: { [string]: number })
+			return {
+				playerName = playerName,
+				petsToEquip = petNames,
+				shouldSave = true,
+			}
+		end
+	),
 	unequipPlayerPets = makeActionCreator(
 		"unequipPlayerPets",
 		function(playerName: string, petNames: { [string]: number })

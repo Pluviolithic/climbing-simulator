@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Immut = require(ReplicatedStorage.Common.lib.Immut)
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
@@ -11,7 +11,8 @@ local dumbells = ReplicatedStorage.Dumbells
 return Rodux.createReducer({}, {
 	addPlayer = function(state, action)
 		return produce(state, function(draft)
-			draft[action.playerName] = Dict.mergeDeep(defaultStates.DumbellData, action.profileData.DumbellData)
+			draft[action.playerName] =
+				Dict.mergeDeep(defaultStates.DumbellData, action.profileData.DumbellData)
 		end)
 	end,
 	removePlayer = function(state, action)
@@ -63,7 +64,7 @@ return Rodux.createReducer({}, {
 				if dumbellName == "-" then
 					continue
 				end
-				if dumbells[dumbellName]:FindFirstChild "Price" then
+				if dumbells[dumbellName]:FindFirstChild("Price") then
 					draft[action.playerName].OwnedDumbells[dumbellName] = nil
 				elseif dumbells[dumbellName].Damage.Value > bestDumbellDamage then
 					bestDumbellName = dumbellName

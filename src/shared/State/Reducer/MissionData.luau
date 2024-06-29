@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Immut = require(ReplicatedStorage.Common.lib.Immut)
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
@@ -12,7 +12,8 @@ local missionRequirements = ReplicatedStorage.Missions
 return Rodux.createReducer({}, {
 	addPlayer = function(state, action)
 		return produce(state, function(draft)
-			draft[action.playerName] = Dict.mergeDeep(defaultStates.MissionData, action.profileData.MissionData)
+			draft[action.playerName] =
+				Dict.mergeDeep(defaultStates.MissionData, action.profileData.MissionData)
 		end)
 	end,
 	removePlayer = function(state, action)
@@ -58,10 +59,11 @@ return Rodux.createReducer({}, {
 			if not playerRegion or not state[action.playerName][playerRegion].Active then
 				return
 			end
-			local currentMissionRequirements =
-				missionRequirements[playerRegion][tostring(state[action.playerName][playerRegion].CurrentMissionNumber)]
+			local currentMissionRequirements = missionRequirements[playerRegion][tostring(
+				state[action.playerName][playerRegion].CurrentMissionNumber
+			)]
 
-			if not currentMissionRequirements:FindFirstChild "Enemy" then
+			if not currentMissionRequirements:FindFirstChild("Enemy") then
 				return
 			end
 
@@ -80,10 +82,11 @@ return Rodux.createReducer({}, {
 			if not playerRegion or not state[action.playerName][playerRegion].Active then
 				return
 			end
-			local currentMissionRequirements =
-				missionRequirements[playerRegion][tostring(state[action.playerName][playerRegion].CurrentMissionNumber)]
+			local currentMissionRequirements = missionRequirements[playerRegion][tostring(
+				state[action.playerName][playerRegion].CurrentMissionNumber
+			)]
 
-			if not currentMissionRequirements:FindFirstChild "Weapon" then
+			if not currentMissionRequirements:FindFirstChild("Weapon") then
 				return
 			end
 
@@ -101,9 +104,10 @@ return Rodux.createReducer({}, {
 			if not playerRegion or not state[action.playerName][playerRegion].Active then
 				return
 			end
-			local currentMissionRequirements =
-				missionRequirements[playerRegion][tostring(state[action.playerName][playerRegion].CurrentMissionNumber)]
-			if currentMissionRequirements:FindFirstChild "AnyPet" then
+			local currentMissionRequirements = missionRequirements[playerRegion][tostring(
+				state[action.playerName][playerRegion].CurrentMissionNumber
+			)]
+			if currentMissionRequirements:FindFirstChild("AnyPet") then
 				if
 					draft[action.playerName][playerRegion].CurrentMissionProgress
 					~= currentMissionRequirements.Requirements.Value
@@ -115,7 +119,7 @@ return Rodux.createReducer({}, {
 					draft[action.playerName][playerRegion].CurrentMissionProgress,
 					currentMissionRequirements.Requirements.Value
 				)
-			elseif currentMissionRequirements:FindFirstChild "PetRarity" then
+			elseif currentMissionRequirements:FindFirstChild("PetRarity") then
 				for _, rarity in action.petRarities do
 					if rarity ~= currentMissionRequirements.PetRarity.Value then
 						continue

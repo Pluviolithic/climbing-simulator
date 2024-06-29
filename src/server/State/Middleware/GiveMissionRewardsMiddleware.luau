@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
-local ServerScriptService = game:GetService "ServerScriptService"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 local server = ServerScriptService.Server
 
@@ -24,8 +24,9 @@ return function(nextDispatch, store)
 		end
 
 		if oldMissionData.CurrentMissionNumber ~= newMissionData.CurrentMissionNumber then
-			local missionReward =
-				missionRequirements[regionUtils.getPlayerLocationName(action.playerName)][oldMissionData.CurrentMissionNumber].Gems.Value
+			local missionReward = missionRequirements[regionUtils.getPlayerLocationName(
+				action.playerName
+			)][oldMissionData.CurrentMissionNumber].Gems.Value
 			store:dispatch(actions.incrementPlayerStat(action.playerName, "Gems", missionReward))
 		end
 	end

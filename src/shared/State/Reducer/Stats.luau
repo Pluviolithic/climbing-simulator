@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Immut = require(ReplicatedStorage.Common.lib.Immut)
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
@@ -16,7 +16,8 @@ return Rodux.createReducer({}, {
 		return produce(state, function(draft)
 			draft[action.playerName] = Dict.mergeDeep(defaultStates.Stats, action.profileData.Stats)
 			if
-				draft[action.playerName].CurrentFearMeter == draft[action.playerName].MaxFearMeter
+				draft[action.playerName].CurrentFearMeter
+					== draft[action.playerName].MaxFearMeter
 				and (os.time() - draft[action.playerName].LastScaredTimestamp) > 120
 			then
 				draft[action.playerName].CurrentFearMeter = 0
@@ -37,17 +38,26 @@ return Rodux.createReducer({}, {
 		return produce(state, function(draft)
 			draft[action.playerName][action.statName] += (action.incrementAmount or 1)
 			if action.statName == "Strength" then
-				draft[action.playerName].Rank = rankUtils.getRankFromStrength(draft[action.playerName][action.statName])
-				draft[action.playerName].RequiredFear = baseRequiredFear * draft[action.playerName][action.statName]
+				draft[action.playerName].Rank =
+					rankUtils.getRankFromStrength(draft[action.playerName][action.statName])
+				draft[action.playerName].RequiredFear = baseRequiredFear
+					* draft[action.playerName][action.statName]
 			elseif action.statName == "CurrentFearMeter" then
-				if draft[action.playerName].CurrentFearMeter == draft[action.playerName].MaxFearMeter then
+				if
+					draft[action.playerName].CurrentFearMeter
+					== draft[action.playerName].MaxFearMeter
+				then
 					draft[action.playerName].LastScaredTimestamp = os.time()
 				else
 					draft[action.playerName].LastScaredTimestamp = -1
 				end
 			end
 
-			if action.statName == "Strength" or action.statName == "Kills" or action.statName == "Rebirths" then
+			if
+				action.statName == "Strength"
+				or action.statName == "Kills"
+				or action.statName == "Rebirths"
+			then
 				local monthlyTimestamp = clockUtils.getMonthlyTimestamp()
 				draft[action.playerName][action.statName .. monthlyTimestamp] = (
 					draft[action.playerName][action.statName .. monthlyTimestamp] or 0
@@ -59,15 +69,24 @@ return Rodux.createReducer({}, {
 		return produce(state, function(draft)
 			draft[action.playerName][action.statName] = action.value
 			if action.statName == "Strength" then
-				draft[action.playerName].Rank = rankUtils.getRankFromStrength(draft[action.playerName][action.statName])
-				draft[action.playerName].RequiredFear = baseRequiredFear * draft[action.playerName][action.statName]
+				draft[action.playerName].Rank =
+					rankUtils.getRankFromStrength(draft[action.playerName][action.statName])
+				draft[action.playerName].RequiredFear = baseRequiredFear
+					* draft[action.playerName][action.statName]
 			elseif action.statName == "CurrentFearMeter" then
-				if draft[action.playerName].CurrentFearMeter == draft[action.playerName].MaxFearMeter then
+				if
+					draft[action.playerName].CurrentFearMeter
+					== draft[action.playerName].MaxFearMeter
+				then
 					draft[action.playerName].LastScaredTimestamp = os.time()
 				end
 			end
 
-			if action.statName == "Strength" or action.statName == "Kills" or action.statName == "Rebirths" then
+			if
+				action.statName == "Strength"
+				or action.statName == "Kills"
+				or action.statName == "Rebirths"
+			then
 				local monthlyTimestamp = clockUtils.getMonthlyTimestamp()
 				draft[action.playerName][action.statName .. monthlyTimestamp] = action.value
 			end
@@ -76,7 +95,7 @@ return Rodux.createReducer({}, {
 	givePlayerPets = function(state, action)
 		local addedPetCount = 0
 		for petName, quantity in action.petsToGive do
-			if petUtils.getPet(petName):FindFirstChild "PermaLock" then
+			if petUtils.getPet(petName):FindFirstChild("PermaLock") then
 				continue
 			end
 			addedPetCount += quantity
@@ -88,7 +107,7 @@ return Rodux.createReducer({}, {
 	deletePlayerPets = function(state, action)
 		local removedPetCount = 0
 		for petName, quantity in action.petsToDelete do
-			if petUtils.getPet(petName):FindFirstChild "PermaLock" then
+			if petUtils.getPet(petName):FindFirstChild("PermaLock") then
 				continue
 			end
 			removedPetCount -= quantity
@@ -124,7 +143,8 @@ return Rodux.createReducer({}, {
 			draft[action.playerName].MaxFearMeter = defaultStates.Stats.MaxFearMeter
 			draft[action.playerName].CurrentFearMeter = defaultStates.Stats.CurrentFearMeter
 			draft[action.playerName].RequiredFear = baseRequiredFear * defaultStates.Stats.Strength
-			draft[action.playerName].Rank = rankUtils.getRankFromStrength(defaultStates.Stats.Strength)
+			draft[action.playerName].Rank =
+				rankUtils.getRankFromStrength(defaultStates.Stats.Strength)
 		end)
 	end,
 })

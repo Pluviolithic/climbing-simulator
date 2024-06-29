@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Immut = require(ReplicatedStorage.Common.lib.Immut)
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
@@ -11,7 +11,8 @@ local produce = Immut.produce
 return Rodux.createReducer({}, {
 	addPlayer = function(state, action)
 		return produce(state, function(draft)
-			draft[action.playerName] = Dict.mergeDeep(defaultStates.PetData, action.profileData.PetData)
+			draft[action.playerName] =
+				Dict.mergeDeep(defaultStates.PetData, action.profileData.PetData)
 		end)
 	end,
 	removePlayer = function(state, action)
@@ -27,8 +28,9 @@ return Rodux.createReducer({}, {
 	givePlayerPets = function(state, action)
 		return produce(state, function(draft)
 			for petName, quantity in action.petsToGive do
-				draft[action.playerName].OwnedPets[petName] = (state[action.playerName].OwnedPets[petName] or 0)
-					+ quantity
+				draft[action.playerName].OwnedPets[petName] = (
+					state[action.playerName].OwnedPets[petName] or 0
+				) + quantity
 				draft[action.playerName].FoundPets[petName] = true
 			end
 		end)
@@ -46,8 +48,9 @@ return Rodux.createReducer({}, {
 	equipPlayerPets = function(state, action)
 		return produce(state, function(draft)
 			for petName, quantity in action.petsToEquip do
-				draft[action.playerName].EquippedPets[petName] = (draft[action.playerName].EquippedPets[petName] or 0)
-					+ quantity
+				draft[action.playerName].EquippedPets[petName] = (
+					draft[action.playerName].EquippedPets[petName] or 0
+				) + quantity
 			end
 		end)
 	end,
@@ -64,18 +67,19 @@ return Rodux.createReducer({}, {
 	lockPlayerPets = function(state, action)
 		return produce(state, function(draft)
 			for petName, quantity in action.petsToLock do
-				if petUtils.getPet(petName):FindFirstChild "PermaLock" and action.fromEquip then
+				if petUtils.getPet(petName):FindFirstChild("PermaLock") and action.fromEquip then
 					continue
 				end
-				draft[action.playerName].LockedPets[petName] = (draft[action.playerName].LockedPets[petName] or 0)
-					+ quantity
+				draft[action.playerName].LockedPets[petName] = (
+					draft[action.playerName].LockedPets[petName] or 0
+				) + quantity
 			end
 		end)
 	end,
 	unlockPlayerPets = function(state, action)
 		return produce(state, function(draft)
 			for petName, quantity in action.petsToUnlock do
-				if petUtils.getPet(petName):FindFirstChild "PermaLock" and not action.force then
+				if petUtils.getPet(petName):FindFirstChild("PermaLock") and not action.force then
 					continue
 				end
 				if not draft[action.playerName].LockedPets[petName] then

@@ -1,9 +1,9 @@
-local Players = game:GetService "Players"
-local ServerStorage = game:GetService "ServerStorage"
-local DataStoreService = game:GetService "DataStoreService"
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
-local CollectionService = game:GetService "CollectionService"
-local ServerScriptService = game:GetService "ServerScriptService"
+local Players = game:GetService("Players")
+local ServerStorage = game:GetService("ServerStorage")
+local DataStoreService = game:GetService("DataStoreService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local CollectionService = game:GetService("CollectionService")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 local store = require(ServerScriptService.Server.State.Store)
 local actions = require(ServerScriptService.Server.State.Actions)
@@ -15,9 +15,9 @@ local permissionList = require(ReplicatedStorage.Common.PermissionList)
 local profiles = require(ServerScriptService.Server.PlayerManager.Profiles)
 
 local globalLeaderboardStores = {
-	Kills = DataStoreService:GetOrderedDataStore "GlobalKills",
-	Strength = DataStoreService:GetOrderedDataStore "GlobalStrength",
-	Rebirths = DataStoreService:GetOrderedDataStore "Rebirths",
+	Kills = DataStoreService:GetOrderedDataStore("GlobalKills"),
+	Strength = DataStoreService:GetOrderedDataStore("GlobalStrength"),
+	Rebirths = DataStoreService:GetOrderedDataStore("Rebirths"),
 }
 
 local monthlyTopTen = {
@@ -29,7 +29,7 @@ local monthlyTopTen = {
 	RebirthsLoaded = false,
 }
 
-local _, podiums = next(CollectionService:GetTagged "Podiums")
+local _, podiums = next(CollectionService:GetTagged("Podiums"))
 local leaderboardEntry = ServerStorage.Templates.LeaderboardEntry
 local playerNameTemplate = ReplicatedStorage.PlayerName:Clone()
 local leaderboardPetName = ReplicatedStorage.Config.Misc.LeaderboardPet.Value
@@ -48,14 +48,15 @@ local function updateGlobalLeaderboardDisplays(): ()
 		local pages = globalLeaderboardStore:GetSortedAsync(false, 99)
 		local leaderboardDisplays = {}
 
-		for _, leaderboardDisplay in CollectionService:GetTagged "GlobalLeaderboard" do
+		for _, leaderboardDisplay in CollectionService:GetTagged("GlobalLeaderboard") do
 			if leaderboardDisplay.Name == statName then
 				table.insert(leaderboardDisplays, leaderboardDisplay)
 			end
 		end
 
 		for rank, score in pages:GetCurrentPage() do
-			local success, playerName = pcall(Players.GetNameFromUserIdAsync, Players, tonumber(score.key))
+			local success, playerName =
+				pcall(Players.GetNameFromUserIdAsync, Players, tonumber(score.key))
 
 			for _, leaderboardDisplay in leaderboardDisplays do
 				local entry = leaderboardDisplay:FindFirstChild(tostring(rank))
@@ -70,9 +71,13 @@ local function updateGlobalLeaderboardDisplays(): ()
 			end
 
 			if rank == 1 then
-				globalPodium.Rig.Humanoid:ApplyDescription(Players:GetHumanoidDescriptionFromUserId(score.key))
+				globalPodium.Rig.Humanoid:ApplyDescription(
+					Players:GetHumanoidDescriptionFromUserId(score.key)
+				)
 				playerNameTemplate:Clone().Parent = globalPodium.Rig.Head
-				globalPodium.Rig.Head.PlayerName.Frame.PlayerName.Text = if success then playerName else score.key
+				globalPodium.Rig.Head.PlayerName.Frame.PlayerName.Text = if success
+					then playerName
+					else score.key
 			end
 		end
 
@@ -83,7 +88,9 @@ local function updateGlobalLeaderboardDisplays(): ()
 
 	local monthlyGlobalLeaderboardStores = {
 		Kills = DataStoreService:GetOrderedDataStore(monthlyTimestamp .. "MonthlyGlobalKills"),
-		Strength = DataStoreService:GetOrderedDataStore(monthlyTimestamp .. "MonthlyGlobalStrength"),
+		Strength = DataStoreService:GetOrderedDataStore(
+			monthlyTimestamp .. "MonthlyGlobalStrength"
+		),
 		Rebirths = DataStoreService:GetOrderedDataStore(monthlyTimestamp .. "MonthlyRebirths"),
 	}
 
@@ -92,7 +99,7 @@ local function updateGlobalLeaderboardDisplays(): ()
 		local pages = monthlyGlobalLeaderboardStore:GetSortedAsync(false, 99)
 		local leaderboardDisplays = {}
 
-		for _, leaderboardDisplay in CollectionService:GetTagged "MonthlyGlobalLeaderboard" do
+		for _, leaderboardDisplay in CollectionService:GetTagged("MonthlyGlobalLeaderboard") do
 			if leaderboardDisplay.Name == statName then
 				table.insert(leaderboardDisplays, leaderboardDisplay)
 			end
@@ -100,7 +107,8 @@ local function updateGlobalLeaderboardDisplays(): ()
 
 		local newTopTen = {}
 		for rank, score in pages:GetCurrentPage() do
-			local success, playerName = pcall(Players.GetNameFromUserIdAsync, Players, tonumber(score.key))
+			local success, playerName =
+				pcall(Players.GetNameFromUserIdAsync, Players, tonumber(score.key))
 
 			for _, leaderboardDisplay in leaderboardDisplays do
 				local entry = leaderboardDisplay:FindFirstChild(tostring(rank))
@@ -118,9 +126,13 @@ local function updateGlobalLeaderboardDisplays(): ()
 				end
 
 				if rank == 1 then
-					monthlyPodium.Rig.Humanoid:ApplyDescription(Players:GetHumanoidDescriptionFromUserId(score.key))
+					monthlyPodium.Rig.Humanoid:ApplyDescription(
+						Players:GetHumanoidDescriptionFromUserId(score.key)
+					)
 					playerNameTemplate:Clone().Parent = monthlyPodium.Rig.Head
-					monthlyPodium.Rig.Head.PlayerName.Frame.PlayerName.Text = if success then playerName else score.key
+					monthlyPodium.Rig.Head.PlayerName.Frame.PlayerName.Text = if success
+						then playerName
+						else score.key
 				end
 			end
 		end
@@ -133,7 +145,11 @@ end
 
 local function updateGlobalLeaderboardStores(): ()
 	for _, player in Players:GetPlayers() do
-		if not profiles[player.Name] or permissionList.Admins[player.UserId] or player.UserId < 0 then
+		if
+			not profiles[player.Name]
+			or permissionList.Admins[player.UserId]
+			or player.UserId < 0
+		then
 			continue
 		end
 		for statName, globalLeaderboard in globalLeaderboardStores do
@@ -152,7 +168,9 @@ local function updateGlobalLeaderboardStores(): ()
 
 		local monthlyGlobalLeaderboardStores = {
 			Kills = DataStoreService:GetOrderedDataStore(monthlyTimestamp .. "MonthlyGlobalKills"),
-			Strength = DataStoreService:GetOrderedDataStore(monthlyTimestamp .. "MonthlyGlobalStrength"),
+			Strength = DataStoreService:GetOrderedDataStore(
+				monthlyTimestamp .. "MonthlyGlobalStrength"
+			),
 			Rebirths = DataStoreService:GetOrderedDataStore(monthlyTimestamp .. "MonthlyRebirths"),
 		}
 
@@ -164,7 +182,10 @@ local function updateGlobalLeaderboardStores(): ()
 				monthlyGlobalLeaderboard.SetAsync,
 				monthlyGlobalLeaderboard,
 				tostring(player.UserId),
-				math.floor(selectors.getStat(store:getState(), player.Name, statName .. monthlyTimestamp) or 0)
+				math.floor(
+					selectors.getStat(store:getState(), player.Name, statName .. monthlyTimestamp)
+						or 0
+				)
 			)
 		end
 	end
@@ -198,7 +219,9 @@ local function checkPlayer(player: Player)
 			store:dispatch(actions.unequipPlayerPets(player.Name, { [leaderboardPetName] = 1 }))
 		end
 		if selectors.getLockedPets(store:getState(), player.Name)[leaderboardPetName] then
-			store:dispatch(actions.unlockPlayerPets(player.Name, { [leaderboardPetName] = 1 }, true))
+			store:dispatch(
+				actions.unlockPlayerPets(player.Name, { [leaderboardPetName] = 1 }, true)
+			)
 		end
 		pets.equipBestPets(player)
 	end

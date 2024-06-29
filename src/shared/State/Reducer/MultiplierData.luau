@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Immut = require(ReplicatedStorage.Common.lib.Immut)
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
@@ -28,7 +28,8 @@ return Rodux.createReducer({}, {
 			if not draft[action.playerName][action.multiplierName] then
 				draft[action.playerName][action.multiplierName] = 0
 			end
-			local multiplierWholePartCount = draft[action.playerName][action.multiplierName .. "Count"] or 0
+			local multiplierWholePartCount = draft[action.playerName][action.multiplierName .. "Count"]
+				or 0
 			draft[action.playerName][action.multiplierName] += action.incrementAmount
 			if action.incrementAmount > 1 then
 				multiplierWholePartCount += 1

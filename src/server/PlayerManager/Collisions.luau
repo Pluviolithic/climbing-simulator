@@ -1,10 +1,10 @@
-local Players = game:GetService "Players"
+local Players = game:GetService("Players")
 
 local registeredListeners = {}
 
 local function disableCharacterCollisions(character: Model)
 	for _, part in character:GetDescendants() do
-		if part:IsA "BasePart" then
+		if part:IsA("BasePart") then
 			part.CollisionGroup = "PlayerCharacters"
 		end
 	end

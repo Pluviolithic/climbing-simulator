@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
-local ServerScriptService = game:GetService "ServerScriptService"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 local server = ServerScriptService.Server
 
 local store = require(server.State.Store)
@@ -13,8 +13,15 @@ return function(_, player: Player)
 	end
 	local areaName = regionUtils.getPlayerLocationName(player.Name)
 	local currentMissionData = selectors.getMissionData(store:getState(), player.Name)[areaName]
-	local gemReward = ReplicatedStorage.Missions[areaName][tostring(currentMissionData.CurrentMissionNumber)].Gems.Value
+	local gemReward = ReplicatedStorage.Missions[areaName][tostring(
+		currentMissionData.CurrentMissionNumber
+	)].Gems.Value
 	store:dispatch(
-		actions.completeMission(player.Name, regionUtils.getPlayerLocationName(player.Name), gemReward, true)
+		actions.completeMission(
+			player.Name,
+			regionUtils.getPlayerLocationName(player.Name),
+			gemReward,
+			true
+		)
 	)
 end

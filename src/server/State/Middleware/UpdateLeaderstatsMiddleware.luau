@@ -1,5 +1,5 @@
-local Players = game:GetService "Players"
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local selectors = require(ReplicatedStorage.Common.State.selectors)
 local formatter = require(ReplicatedStorage.Common.Utils.Formatter)
@@ -10,7 +10,10 @@ local zeroWidthSpace = "​"
 return function(nextDispatch, store)
 	return function(action)
 		nextDispatch(action)
-		if not action.playerName or not selectors.isPlayerLoaded(store:getState(), action.playerName) then
+		if
+			not action.playerName
+			or not selectors.isPlayerLoaded(store:getState(), action.playerName)
+		then
 			return
 		end
 
@@ -20,17 +23,18 @@ return function(nextDispatch, store)
 			return
 		end
 
-		local leaderstats = actionPlayer:FindFirstChild "leaderstats"
+		local leaderstats = actionPlayer:FindFirstChild("leaderstats")
 
 		if leaderstats then
 			for _, stat in leaderstats:GetChildren() do
-				stat.Value =
-					formatter.formatNumberWithSuffix(selectors.getStat(store:getState(), actionPlayer.Name, stat.Name))
+				stat.Value = formatter.formatNumberWithSuffix(
+					selectors.getStat(store:getState(), actionPlayer.Name, stat.Name)
+				)
 			end
 
 			local playerStrengthInfo = {}
 			for _, player in Players:GetPlayers() do
-				if not player:FindFirstChild "leaderstats" then
+				if not player:FindFirstChild("leaderstats") then
 					continue
 				end
 

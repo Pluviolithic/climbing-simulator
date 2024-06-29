@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local GamepassIDs = ReplicatedStorage.Config.GamepassData.IDs
 
@@ -17,7 +17,9 @@ return {
 		if not state.PurchaseData[playerName] then
 			return false
 		elseif GamepassIDs:FindFirstChild(gamepass) then
-			return state.PurchaseData[playerName].AwardedGamepasses[tostring(GamepassIDs[gamepass].Value)]
+			return state.PurchaseData[playerName].AwardedGamepasses[tostring(
+				GamepassIDs[gamepass].Value
+			)]
 		end
 		return state.PurchaseData[playerName].AwardedGamepasses[tostring(gamepass)]
 	end,
@@ -34,7 +36,8 @@ return {
 		return state.PetData[playerName].LockedPets[petName]
 	end,
 	getCurrentTarget = function(state, playerName)
-		return state.CombatData[playerName].CurrentEnemy or state.CombatData[playerName].CurrentPunchingBag
+		return state.CombatData[playerName].CurrentEnemy
+			or state.CombatData[playerName].CurrentPunchingBag
 	end,
 	getEquippedPets = function(state, playerName)
 		return state.PetData[playerName].EquippedPets

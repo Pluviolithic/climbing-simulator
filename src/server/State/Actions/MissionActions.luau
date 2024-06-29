@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
 local makeActionCreator = Rodux.makeActionCreator
 
@@ -31,13 +31,16 @@ return {
 			}
 		end
 	),
-	logKilledEnemyType = makeActionCreator("logKilledEnemyType", function(playerName: string, enemyType: string)
-		return {
-			enemyType = enemyType,
-			playerName = playerName,
-			shouldSave = true,
-		}
-	end),
+	logKilledEnemyType = makeActionCreator(
+		"logKilledEnemyType",
+		function(playerName: string, enemyType: string)
+			return {
+				enemyType = enemyType,
+				playerName = playerName,
+				shouldSave = true,
+			}
+		end
+	),
 	logPurchasedWeaponType = makeActionCreator(
 		"logPurchasedWeaponType",
 		function(playerName: string, weaponType: string)

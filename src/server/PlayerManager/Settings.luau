@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
-local ServerScriptService = game:GetService "ServerScriptService"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 local Remotes = require(ReplicatedStorage.Common.Remotes)
 local store = require(ServerScriptService.Server.State.Store)
@@ -14,7 +14,7 @@ Remotes.Server:Get("SwitchSetting"):Connect(function(player, setting)
 		if not selectors.hasGamepass(store:getState(), player.Name, "2xSpeed") then
 			return
 		end
-	elseif setting:match "Vip" then
+	elseif setting:match("Vip") then
 		if not selectors.hasGamepass(store:getState(), player.Name, "VIP") then
 			return
 		end

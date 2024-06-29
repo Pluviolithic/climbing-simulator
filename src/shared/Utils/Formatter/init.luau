@@ -13,7 +13,7 @@ function Formatter.formatNumberWithSuffix(n: number): string
 	end
 
 	local nString = tostring(n / 10 ^ (power * 3))
-	local truncatedString = nString:match "%." and nString:sub(1, 4) or nString:sub(1, 3)
+	local truncatedString = nString:match("%.") and nString:sub(1, 4) or nString:sub(1, 3)
 
 	return truncatedString:gsub("%.0*$", "") .. (suffixes[power] or "")
 end
@@ -28,9 +28,11 @@ end
 
 -- taken from https://stackoverflow.com/questions/10989788/format-integer-in-lua
 function Formatter.formatNumberWithCommas(n: number, decimalDigits: number?): string
-	local _, _, minus, int, fraction = tostring(n):find "([-]?)(%d+)([.]?%d*)"
+	local _, _, minus, int, fraction = tostring(n):find("([-]?)(%d+)([.]?%d*)")
 	int = int:reverse():gsub("(%d%d%d)", "%1,")
-	return minus .. int:reverse():gsub("^,", "") .. fraction:sub(1, if decimalDigits then decimalDigits + 1 else 2)
+	return minus
+		.. int:reverse():gsub("^,", "")
+		.. fraction:sub(1, if decimalDigits then decimalDigits + 1 else 2)
 end
 
 local tweenBuffers = {}

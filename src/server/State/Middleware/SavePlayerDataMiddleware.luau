@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
-local ServerScriptService = game:GetService "ServerScriptService"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 local selectors = require(ReplicatedStorage.Common.State.selectors)
 local profiles = require(ServerScriptService.Server.PlayerManager.Profiles)
@@ -24,7 +24,7 @@ local function getFilteredState(playerName, state)
 			continue
 		end
 		for key in entry do
-			if key:match "Multiplier" then
+			if key:match("Multiplier") then
 				continue
 			end
 			if type(profileTemplate[field][key]) == "nil" then

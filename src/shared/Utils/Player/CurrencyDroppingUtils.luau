@@ -1,14 +1,15 @@
-local Players = game:GetService "Players"
-local RunService = game:GetService "RunService"
-local TweenService = game:GetService "TweenService"
-local StarterPlayer = game:GetService "StarterPlayer"
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local StarterPlayer = game:GetService("StarterPlayer")
 
 if RunService:IsServer() then
-	warn "Attempted to load client-only module on server."
+	warn("Attempted to load client-only module on server.")
 	return 0
 end
 
-local playSoundEffect = require(StarterPlayer.StarterPlayerScripts.Client.GameAtmosphere.SoundEffects)
+local playSoundEffect =
+	require(StarterPlayer.StarterPlayerScripts.Client.GameAtmosphere.SoundEffects)
 
 local random = Random.new()
 local player = Players.LocalPlayer
@@ -41,14 +42,18 @@ return {
 		for _, currencyObjectCopy in currencyObjects do
 			task.delay(random:NextNumber(0.05, 0.5), function()
 				currencyObjectCopy.Anchored = true
-				local tween = TweenService:Create(currencyObjectCopy, TweenInfo.new(0.25, Enum.EasingStyle.Linear), {
-					CFrame = player.Character.HumanoidRootPart.CFrame,
-				})
+				local tween = TweenService:Create(
+					currencyObjectCopy,
+					TweenInfo.new(0.25, Enum.EasingStyle.Linear),
+					{
+						CFrame = player.Character.HumanoidRootPart.CFrame,
+					}
+				)
 				tween:Play()
 				tween.Completed:Wait()
 				tween:Destroy()
 				currencyObjectCopy:Destroy()
-				playSoundEffect "Gems"
+				playSoundEffect("Gems")
 			end)
 		end
 	end,

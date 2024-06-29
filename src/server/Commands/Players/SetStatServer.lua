@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
-local ServerScriptService = game:GetService "ServerScriptService"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 local server = ServerScriptService.Server
 
 local store = require(server.State.Store)
@@ -8,7 +8,10 @@ local profileTemplate = require(server.PlayerManager.ProfileTemplate)
 local selectors = require(ReplicatedStorage.Common.State.selectors)
 
 return function(_, player: Player, stat: string, value: number)
-	if not selectors.isPlayerLoaded(store:getState(), player.Name) or not profileTemplate.Stats[stat] then
+	if
+		not selectors.isPlayerLoaded(store:getState(), player.Name)
+		or not profileTemplate.Stats[stat]
+	then
 		return
 	end
 	store:dispatch(actions.setPlayerStat(player.Name, stat, value))

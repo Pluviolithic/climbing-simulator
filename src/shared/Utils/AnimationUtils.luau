@@ -1,11 +1,12 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
-local ServerScriptService = game:GetService "ServerScriptService"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 local store = require(ServerScriptService.Server.State.Store)
 local selectors = require(ReplicatedStorage.Common.State.selectors)
 
 local playerAttackSpeed = ReplicatedStorage.Config.Combat.PlayerAttackSpeed.Value
-local doubleAttackSpeedID = tostring(ReplicatedStorage.Config.GamepassData.IDs["2xAttackSpeed"].Value)
+local doubleAttackSpeedID =
+	tostring(ReplicatedStorage.Config.GamepassData.IDs["2xAttackSpeed"].Value)
 
 local animationUtilities
 animationUtilities = {
@@ -19,7 +20,7 @@ animationUtilities = {
 	end,
 	sortAnimationListByName = function(animationInstances)
 		table.sort(animationInstances, function(a, b)
-			return tonumber(a.Name:match "%d+") < tonumber(b.Name:match "%d+")
+			return tonumber(a.Name:match("%d+")) < tonumber(b.Name:match("%d+"))
 		end)
 	end,
 	filterAndSortAnimationInstances = function(animationInstances)

@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Immut = require(ReplicatedStorage.Common.lib.Immut)
 local Rodux = require(ReplicatedStorage.Common.lib.Rodux)
@@ -10,7 +10,8 @@ local produce = Immut.produce
 return Rodux.createReducer({}, {
 	addPlayer = function(state, action)
 		return produce(state, function(draft)
-			draft[action.playerName] = Dict.mergeDeep(defaultStates.MilestonesData, action.profileData.MilestonesData)
+			draft[action.playerName] =
+				Dict.mergeDeep(defaultStates.MilestonesData, action.profileData.MilestonesData)
 		end)
 	end,
 	removePlayer = function(state, action)

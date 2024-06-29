@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService "ReplicatedStorage"
-local ServerScriptService = game:GetService "ServerScriptService"
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
 
 local PlayerStatusUI = {}
 PlayerStatusUI.__index = PlayerStatusUI
@@ -66,7 +66,7 @@ function PlayerStatusUI:_applyUI(character: Model)
 		self:_updateUIFields(newState)
 	end)
 
-	self._activePlayerUI.Parent = character:WaitForChild "Head"
+	self._activePlayerUI.Parent = character:WaitForChild("Head")
 end
 
 function PlayerStatusUI:enable()

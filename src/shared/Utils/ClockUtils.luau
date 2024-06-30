@@ -4,10 +4,10 @@ local monthlyTimestampOverride = nil
 local chestTimerLength = ReplicatedStorage.Config.DevProductData.Chests.ChestTimerLength.Value
 
 return {
-	hasTimeLeft = function(startTime, duration)
+	hasTimeLeft = function(startTime: number, duration: number): boolean
 		return (os.time() - startTime) <= duration
 	end,
-	getFormattedRemainingTime = function(startTime, duration)
+	getFormattedRemainingTime = function(startTime: number, duration: number): string
 		local timeLeft = duration - (os.time() - startTime)
 		local minutes = math.floor(timeLeft / 60)
 
@@ -17,7 +17,7 @@ return {
 			return minutes .. "m"
 		end
 	end,
-	getFormattedChestTimer = function(startTime)
+	getFormattedChestTimer = function(startTime: number): string
 		local timeLeft = chestTimerLength - (os.time() - startTime)
 		local hours = math.floor(timeLeft / 3600)
 		local minutes = math.floor((timeLeft - (hours * 3600)) / 60)
@@ -29,7 +29,7 @@ return {
 
 		return string.format("%02d:%02d:%02d", hours, minutes, seconds)
 	end,
-	getFormattedGiftTime = function(timeLeft)
+	getFormattedGiftTime = function(timeLeft: number): string
 		local hours = math.floor(timeLeft / 3600)
 		local minutes = math.floor((timeLeft - (hours * 3600)) / 60)
 		local seconds = timeLeft - (hours * 3600) - (minutes * 60)
@@ -43,7 +43,7 @@ return {
 	setMonthlyTimestampOverride = function(overrideValue: string)
 		monthlyTimestampOverride = overrideValue
 	end,
-	getMonthlyTimestamp = function()
+	getMonthlyTimestamp = function(): string
 		return monthlyTimestampOverride or os.date("*t").month .. os.date("*t").year
 	end,
 }

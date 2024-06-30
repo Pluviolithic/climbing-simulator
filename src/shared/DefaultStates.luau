@@ -1,4 +1,8 @@
-return {
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Dictionary = require(ReplicatedStorage.Common.lib.Sift).Dictionary
+
+local profileDataTemplate = {
 	Stats = {
 		Wins = 0,
 		Rebirths = 0,
@@ -87,4 +91,11 @@ return {
 		ClaimedGifts = {},
 		SkippedAll = false,
 	},
+}
+
+local allDataTemplate = Dictionary.mergeDeep(profileDataTemplate, {})
+
+return {
+	ProfileDataTemplate = profileDataTemplate,
+	AllDataTemplate = allDataTemplate,
 }

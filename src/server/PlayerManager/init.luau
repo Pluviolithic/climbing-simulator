@@ -3,7 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
 local ProfileService = require(ServerScriptService.Server.lib.ProfileService)
--- local profileTemplate = require(ServerScriptService.Server.PlayerManager.ProfileTemplate)
+local profileTemplate = require(ReplicatedStorage.Common.DefaultStates).ProfileDataTemplate
 local profiles = require(ServerScriptService.Server.PlayerManager.Profiles)
 local formatter = require(ReplicatedStorage.Common.Utils.Formatter)
 -- local PlayerStatusUI = require(ServerScriptService.Server.PlayerManager.PlayerStatusUI)
@@ -123,6 +123,7 @@ end)
 --require(script.Gifts)
 
 require(script.Badges)
+require(script.DataSaver)
 require(script.ReflexBroadcaster)
 
 return 0

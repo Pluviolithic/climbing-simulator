@@ -23,7 +23,7 @@ local initialState: StatsState = {}
 local statsSlice = Reflex.createProducer(initialState, {
 	addPlayerData = function(state: StatsState, id: string, data: any): StatsState
 		return Immut.produce(state, function(draft)
-			draft[id] = data.stats
+			draft[id] = data.Stats
 			return
 		end) :: StatsState
 	end,

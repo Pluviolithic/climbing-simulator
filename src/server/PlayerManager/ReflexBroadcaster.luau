@@ -19,6 +19,15 @@ local broadcaster = Reflex.createBroadcaster({
 		end
 		return action
 	end,
+	beforeHydrate = function(player, state)
+		local newState = {}
+
+		newState.Stats = {
+			[player.Name] = state.Stats[player.Name],
+		}
+
+		return newState
+	end,
 })
 
 start:On(function(player)

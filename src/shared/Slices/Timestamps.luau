@@ -22,7 +22,7 @@ local initialState: TimestampsState = {}
 local timestampsSlice = Reflex.createProducer(initialState, {
 	addPlayerData = function(state: TimestampsState, id: string, data: any): TimestampsState
 		return Immut.produce(state, function(draft)
-			draft[id] = data.timestamps
+			draft[id] = data.Timestamps
 			return
 		end) :: TimestampsState
 	end,

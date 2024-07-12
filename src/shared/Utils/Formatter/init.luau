@@ -1,6 +1,13 @@
 local suffixes = require(script.Suffixes)
 local Formatter = {}
 
+export type tweenBufferConfig = {
+	["startValue"]: number,
+	["endValue"]: number,
+	["duration"]: number,
+	["formatter"]: ((number) -> string)?,
+}
+
 local function getPower(n: number): number
 	return math.floor(math.log(math.abs(n) + 1) / math.log(10))
 end
@@ -29,14 +36,18 @@ end
 -- taken from https://stackoverflow.com/questions/10989788/format-integer-in-lua
 function Formatter.formatNumberWithCommas(n: number, decimalDigits: number?): string
 	local _, _, minus, int, fraction = tostring(n):find("([-]?)(%d+)([.]?%d*)")
+	if typeof(minus) ~= "string" or typeof(int) ~= "string" or typeof(fraction) ~= "string" then
+		warn("Failed to format string correctly.")
+		return ""
+	end
 	int = int:reverse():gsub("(%d%d%d)", "%1,")
 	return minus
 		.. int:reverse():gsub("^,", "")
 		.. fraction:sub(1, if decimalDigits then decimalDigits + 1 else 2)
 end
 
-local tweenBuffers = {}
-function Formatter.tweenFormattedTextNumber(textLabel, config)
+local tweenBuffers: { [TextLabel]: tweenBufferConfig | boolean } = {}
+function Formatter.tweenFormattedTextNumber(textLabel: TextLabel, config: tweenBufferConfig)
 	if tweenBuffers[textLabel] then
 		tweenBuffers[textLabel] = table.clone(config)
 		return
@@ -44,37 +55,36 @@ function Formatter.tweenFormattedTextNumber(textLabel, config)
 	tweenBuffers[textLabel] = true
 
 	local startTime = os.clock()
-	local startNumber, endNumber, duration, customFormatter = table.unpack(config)
-	local difference = endNumber - startNumber
+	local difference = config.endValue - config.startValue
 
 	task.spawn(function()
 		repeat
 			local timePassed = os.clock() - startTime
-			local progress = timePassed / duration
-			local currentNumber = startNumber + difference * progress
+			local progress = timePassed / config.duration
+			local currentNumber = config.startValue + difference * progress
 
-			if startNumber > endNumber then
-				currentNumber = math.clamp(currentNumber, endNumber, startNumber)
+			if config.startValue > config.endValue then
+				currentNumber = math.clamp(currentNumber, config.endValue, config.startValue)
 			else
-				currentNumber = math.clamp(currentNumber, startNumber, endNumber)
+				currentNumber = math.clamp(currentNumber, config.startValue, config.endValue)
 			end
-			if customFormatter then
-				textLabel.Text = customFormatter(currentNumber)
+			if config.formatter then
+				textLabel.Text = config.formatter(currentNumber)
 			else
 				textLabel.Text = Formatter.formatNumberWithSuffix(currentNumber)
 			end
 			task.wait()
-		until timePassed >= duration
+		until timePassed >= config.duration
 
-		if customFormatter then
-			textLabel.Text = customFormatter(endNumber)
+		if config.formatter then
+			textLabel.Text = config.formatter(config.endValue)
 		else
-			textLabel.Text = Formatter.formatNumberWithSuffix(endNumber)
+			textLabel.Text = Formatter.formatNumberWithSuffix(config.endValue)
 		end
 
 		local bufferData = tweenBuffers[textLabel]
 		tweenBuffers[textLabel] = nil
-		if type(bufferData) == "table" then
+		if typeof(bufferData) == "table" then
 			Formatter.tweenFormattedTextNumber(textLabel, bufferData)
 		end
 	end)

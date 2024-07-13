@@ -1,19 +1,7 @@
-local RunService = game:GetService("RunService")
-local StarterPlayer = game:GetService("StarterPlayer")
-local ServerScriptService = game:GetService("ServerScriptService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- local producer
---
--- if RunService:IsServer() then
---     producer = require(ServerScriptService.Server.Producer)
--- else
---     producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
--- end
---
+local Sift = require(ReplicatedStorage.Common.lib.Sift)
+local stats = require(script.Stats)
+local players = require(script.Players)
 
--- local function selectStats(state: producer.RootState)
--- end
---
--- return {
---     selectStats = selectStats,
--- }
+return Sift.Dictionary.merge(stats, players) :: typeof(stats) & typeof(players)

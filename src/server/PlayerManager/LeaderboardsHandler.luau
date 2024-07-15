@@ -2,9 +2,6 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 
-local ProfileService = require(ServerScriptService.Server.lib.ProfileService)
-local profileTemplate = require(ReplicatedStorage.Common.DefaultStates).ProfileDataTemplate
-local profiles = require(ServerScriptService.Server.PlayerManager.Profiles)
 local formatter = require(ReplicatedStorage.Common.Utils.Formatter)
 local producer = require(ServerScriptService.Server.Producer)
 local selectors = require(ReplicatedStorage.Common.Selectors)

@@ -56,12 +56,13 @@ local function selectPlayerData(playerName: string)
 		selectPlayerStats(playerName),
 		selectPlayerTimestamps(playerName),
 		function(stats: playersSlice.PlayerStats?, timestamps: playersSlice.PlayerTimestamps?)
-			if not stats then
+			if not stats or not timestamps then
 				return
 			end
 
 			return {
 				Stats = stats,
+				Timestamps = timestamps,
 			}
 		end
 	)

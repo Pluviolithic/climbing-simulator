@@ -3,6 +3,14 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Dictionary = require(ReplicatedStorage.Common.lib.Sift).Dictionary
 
 local profileDataTemplate = {
+	Timestamps = {
+		LastLogOn = -1,
+		LastLogOff = -1,
+
+		LastClaimedAGift = -1,
+		GiftCycleBegan = -1,
+	},
+
 	Stats = {
 		Wins = 0,
 		Rebirths = 0,
@@ -16,12 +24,6 @@ local profileDataTemplate = {
 
 		LogInCount = 0,
 		TimePlayed = 0,
-
-		LastLogOn = -1,
-		LastLogOff = -1,
-
-		LastClaimedAGiftTimestamp = -1,
-		GiftCycleBeganTimestamp = -1,
 
 		VIPChestAwardIndex = 1,
 		GroupChestAwardIndex = 1,

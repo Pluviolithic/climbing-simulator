@@ -5,38 +5,11 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ProfileService = require(ServerScriptService.Server.lib.ProfileService)
 local profileTemplate = require(ReplicatedStorage.Common.DefaultStates).ProfileDataTemplate
 local profiles = require(ServerScriptService.Server.PlayerManager.Profiles)
-local formatter = require(ReplicatedStorage.Common.Utils.Formatter)
 -- local PlayerStatusUI = require(ServerScriptService.Server.PlayerManager.PlayerStatusUI)
 local producer = require(ServerScriptService.Server.Producer)
+local leaderboardsHandler = require(script.LeaderboardsHandler)
 
 local profileStore = ProfileService.GetProfileStore("PlayerData", profileTemplate)
-
-local function initializeLeaderboard(player: Player, data)
-	local leaderstats = Instance.new("Folder")
-	leaderstats.Name = "leaderstats"
-
-	local strength = Instance.new("StringValue")
-	strength.Name = "Strength"
-	strength.Value = formatter.formatNumberWithSuffix(data.Stats.Strength)
-	strength.Parent = leaderstats
-
-	-- local rank = Instance.new "StringValue"
-	-- rank.Name = "Rank"
-	-- rank.Value = formatter.formatNumberWithSuffix(data.Stats.Rank)
-	-- rank.Parent = leaderstats
-
-	local kills = Instance.new("StringValue")
-	kills.Name = "Wins"
-	kills.Value = formatter.formatNumberWithSuffix(data.Stats.Wins)
-	kills.Parent = leaderstats
-
-	local Rebirths = Instance.new("StringValue")
-	Rebirths.Name = "Rebirths"
-	Rebirths.Value = formatter.formatNumberWithSuffix(data.Stats.Rebirths)
-	Rebirths.Parent = leaderstats
-
-	leaderstats.Parent = player
-end
 
 local function onPlayerAdded(player: Player)
 	local profile = profileStore:LoadProfileAsync("Player_" .. player.UserId)
@@ -52,7 +25,7 @@ local function onPlayerAdded(player: Player)
 		return
 	end)
 
-	initializeLeaderboard(player, profile.Data)
+	leaderboardsHandler.initializeRobloxLeaderboard(player, profile.Data)
 	-- PlayerStatusUI.new(player):enable()
 
 	if player:IsDescendantOf(Players) then

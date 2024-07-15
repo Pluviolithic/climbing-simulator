@@ -23,7 +23,8 @@ local broadcaster = Reflex.createBroadcaster({
 		local newState = {}
 
 		newState.Stats = {
-			[player.Name] = state.Stats[player.Name],
+			[player.Name] = state.Players.Stats[player.Name],
+			[player.Name] = state.Players.Timestamps[player.Name],
 		}
 
 		return newState

@@ -22,6 +22,7 @@ end
 asyncUtils.waitForChild(player, "PlayerGui"):andThen(function(PlayerGui: PlayerGui)
 	local HUD = PlayerGui:WaitForChild("HUD") :: ScreenGui
 	asyncUtils.waitForPlayerStats(player):andThen(function(stats)
+		stats = stats[player.Name]
 		updateHUD(
 			HUD,
 			{ Strength = stats.Strength, Wins = stats.Wins, Rebirths = stats.Rebirths },

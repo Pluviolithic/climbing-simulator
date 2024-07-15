@@ -1,14 +1,11 @@
-local stats = require(script.Stats)
-local timestamps = require(script.Timestamps)
+local players = require(script.Players)
 
 export type SharedState = {
-	Stats: stats.StatsState,
-	Timestamps: timestamps.TimestampsState,
+	Players: players.PlayersState,
 }
 
-export type SharedActions = stats.StatsActions & timestamps.TimestampsActions
+export type SharedActions = players.PlayersActions
 
 return {
-	Stats = stats.StatsSlice,
-	Timestamps = timestamps.TimestampsSlice,
+	Players = players.PlayersSlice,
 }

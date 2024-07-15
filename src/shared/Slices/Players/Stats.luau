@@ -2,54 +2,53 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Immut = require(ReplicatedStorage.Common.lib.Immut)
 local Reflex = require(ReplicatedStorage.Common.lib.Reflex)
+local types = require(ReplicatedStorage.Common.Slices.Players.Types)
 
 export type StatsProducer = Reflex.Producer<StatsState, StatsActions>
 
 export type StatsState = {
-	[string]: {
-		[string]: number,
-	},
+	[string]: types.PlayerStats?,
 }
 
 export type StatsActions = {
-	addPlayerData: (id: string, data: { [any]: any }) -> (),
-	removePlayerData: (id: string) -> (),
-	incrementStat: (id: string, stat: string, amount: number) -> (),
-	setStat: (id: string, stat: string, amount: number) -> (),
+	addPlayerData: (name: string, data: { [any]: any }) -> (),
+	removePlayerData: (name: string) -> (),
+	incrementStat: (name: string, stat: string, amount: number) -> (),
+	setStat: (name: string, stat: string, amount: number) -> (),
 }
 
 local initialState: StatsState = {}
 
 local statsSlice = Reflex.createProducer(initialState, {
-	addPlayerData = function(state: StatsState, id: string, data: any): StatsState
+	addPlayerData = function(state: StatsState, name: string, data: any): StatsState
 		return Immut.produce(state, function(draft)
-			draft[id] = data.Stats
+			draft[name] = data.Stats
 			return
 		end) :: StatsState
 	end,
-	removePlayerData = function(state: StatsState, id: string): StatsState
+	removePlayerData = function(state: StatsState, name: string): StatsState
 		return Immut.produce(state, function(draft)
-			draft[id] = nil
+			draft[name] = nil
 			return
 		end) :: StatsState
 	end,
 	incrementStat = function(
 		state: StatsState,
-		id: string,
+		name: string,
 		stat: string,
 		amount: number
 	): StatsState
 		return Immut.produce(state, function(draft)
-			if draft[id] then
-				draft[id][stat] = (draft[id][stat] or 0) + amount
+			if draft[name] then
+				draft[name][stat] = (draft[name][stat] or 0) + amount
 			end
 			return
 		end) :: StatsState
 	end,
-	setStat = function(state: StatsState, id: string, stat: string, amount: number): StatsState
+	setStat = function(state: StatsState, name: string, stat: string, amount: number): StatsState
 		return Immut.produce(state, function(draft)
-			if draft[id] then
-				draft[id][stat] = amount
+			if draft[name] then
+				draft[name][stat] = amount
 			end
 			return
 		end) :: StatsState

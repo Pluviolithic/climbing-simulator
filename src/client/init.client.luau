@@ -1,4 +1,7 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 
-require(StarterPlayer.StarterPlayerScripts.Client.UI.HUD)
-require(StarterPlayer.StarterPlayerScripts.Client.ReflexReceiver)
+local client = StarterPlayer.StarterPlayerScripts.Client
+
+require(client.UI.HUD)
+require(client.ReflexReceiver)
+require(client.Cmdr)

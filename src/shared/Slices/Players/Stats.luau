@@ -1,6 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Immut = require(ReplicatedStorage.Common.lib.Immut)
+local Sift = require(ReplicatedStorage.Common.lib.Sift)
 local Reflex = require(ReplicatedStorage.Common.lib.Reflex)
 local types = require(ReplicatedStorage.Common.Slices.Players.Types)
 
@@ -21,16 +21,10 @@ local initialState: StatsState = {}
 
 local statsSlice = Reflex.createProducer(initialState, {
 	addPlayerData = function(state: StatsState, name: string, data: any): StatsState
-		return Immut.produce(state, function(draft)
-			draft[name] = data.Stats
-			return
-		end) :: StatsState
+		return Sift.Dictionary.merge(state, { [name] = data.Stats })
 	end,
 	removePlayerData = function(state: StatsState, name: string): StatsState
-		return Immut.produce(state, function(draft)
-			draft[name] = nil
-			return
-		end) :: StatsState
+		return Sift.Dictionary.removeKey(state, name)
 	end,
 	incrementStat = function(
 		state: StatsState,
@@ -38,22 +32,13 @@ local statsSlice = Reflex.createProducer(initialState, {
 		stat: string,
 		amount: number
 	): StatsState
-		return Immut.produce(state, function(draft)
-			if draft[name] then
-				draft[name][stat] = (draft[name][stat] or 0) + amount
-			end
-			return
-		end) :: StatsState
+		local currentValue = if state[name] then state[name][stat] else 0
+		return Sift.Dictionary.mergeDeep(state, { [name] = { [stat] = currentValue + amount } })
 	end,
 	setStat = function(state: StatsState, name: string, stat: string, amount: number): StatsState
-		return Immut.produce(state, function(draft)
-			if draft[name] then
-				draft[name][stat] = amount
-			end
-			return
-		end) :: StatsState
+		return Sift.Dictionary.mergeDeep(state, { [name] = { [stat] = amount } })
 	end,
-}) :: StatsProducer
+})
 
 return {
 	StatsSlice = statsSlice,

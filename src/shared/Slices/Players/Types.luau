@@ -21,9 +21,7 @@ export type PlayerStats = {
 	["GroupChestAwardIndex"]: number,
 
 	["MaxPetCount"]: number,
-	["CurrentPetCount"]: number,
 	["MaxPetEquipCount"]: number,
-	["CurrentPetEquipCount"]: number,
 }
 
 export type PlayerTimestamps = {
@@ -33,4 +31,12 @@ export type PlayerTimestamps = {
 	["LastLogOff"]: number,
 }
 
-return nil
+export type Pet = {
+	Equipped: boolean,
+	Name: string,
+	Rarity: string,
+}
+
+export type PlayerPets = { Pet? }
+
+return 0

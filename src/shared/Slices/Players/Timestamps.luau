@@ -1,6 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Immut = require(ReplicatedStorage.Common.lib.Immut)
+local Sift = require(ReplicatedStorage.Common.lib.Sift)
 local Reflex = require(ReplicatedStorage.Common.lib.Reflex)
 
 export type TimestampsProducer = Reflex.Producer<TimestampsState, TimestampsActions>
@@ -21,16 +21,10 @@ local initialState: TimestampsState = {}
 
 local timestampsSlice = Reflex.createProducer(initialState, {
 	addPlayerData = function(state: TimestampsState, name: string, data: any): TimestampsState
-		return Immut.produce(state, function(draft)
-			draft[name] = data.Timestamps
-			return
-		end) :: TimestampsState
+		return Sift.Dictionary.merge(state, { [name] = data.Timestamps })
 	end,
 	removePlayerData = function(state: TimestampsState, name: string): TimestampsState
-		return Immut.produce(state, function(draft)
-			draft[name] = nil
-			return
-		end) :: TimestampsState
+		return Sift.Dictionary.removeKey(state, name)
 	end,
 	setTimestamp = function(
 		state: TimestampsState,
@@ -38,12 +32,7 @@ local timestampsSlice = Reflex.createProducer(initialState, {
 		stat: string,
 		amount: number
 	): TimestampsState
-		return Immut.produce(state, function(draft)
-			if draft[name] then
-				draft[name][stat] = amount
-			end
-			return
-		end) :: TimestampsState
+		return Sift.Dictionary.mergeDeep(state, { [name] = { [stat] = amount } })
 	end,
 })
 

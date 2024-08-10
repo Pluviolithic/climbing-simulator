@@ -61,7 +61,7 @@ local profileDataTemplate = {
 		},
 	},
 
-	PetData = {},
+	Pets = {},
 
 	DumbellData = {
 		OwnedDumbells = {

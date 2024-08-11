@@ -7,7 +7,6 @@ registry = "https://github.com/upliftgames/wally-index"
 
 [dependencies]
 Sift = "csqrl/sift@0.0.3"
-Immut = "solarhorizon/immut@0.4.4"
 Reflex = "littensy/reflex@4.3.1"
 
 Red = "red-blox/red@2.0.0"

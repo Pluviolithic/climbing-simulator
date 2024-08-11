@@ -48,14 +48,14 @@ local petsSlice = Reflex.createProducer(initialState, {
 			[name] = Sift.Array.removeIndex(state[name], index),
 		})
 	end,
-	equipPet = function(state, PetState, name: string, index: number): PetsState
+	equipPet = function(state: PetsState, name: string, index: number): PetsState
 		if not state[name] or not state[name][index] then
 			return state
 		end
 
 		return Sift.Dictionary.mergeDeep(state, { [name] = { [index] = { Equipped = true } } })
 	end,
-	unEquipPet = function(state, PetState, name: string, index: number): PetsState
+	unEquipPet = function(state: PetsState, name: string, index: number): PetsState
 		if not state[name] or not state[name][index] then
 			return state
 		end

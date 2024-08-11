@@ -9,7 +9,9 @@ local Observer = Fusion.Observer
 local player = Players.LocalPlayer
 
 local function getHipAttachment(): Attachment?
-	local rootPart = if player.Character then player.Character.RootPart else nil
+	local rootPart = if player.Character
+		then player.Character:FindFirstChild("HumanoidRootPart")
+		else nil
 
 	if not rootPart then
 		return nil
@@ -19,11 +21,12 @@ local function getHipAttachment(): Attachment?
 end
 
 local function getOrCreateConstraints(attachment: Attachment): (AlignPosition, AlignOrientation)
-	local alignPosition = attachment:FindFirstChild("AlignPosition")
-	local alignOrientation = attachment:FindFirstChild("AlignOrientation")
+	local alignPosition = attachment:FindFirstChild("AlignPosition") :: AlignPosition?
+	local alignOrientation = attachment:FindFirstChild("AlignOrientation") :: AlignOrientation?
 
 	if not alignPosition then
 		alignPosition = Instance.new("AlignPosition")
+		alignPosition.RigidityEnabled = true
 		alignPosition.Mode = Enum.PositionAlignmentMode.OneAttachment
 		alignPosition.Position = attachment.WorldCFrame.Position
 		alignPosition.Attachment0 = attachment
@@ -32,6 +35,7 @@ local function getOrCreateConstraints(attachment: Attachment): (AlignPosition, A
 
 	if not alignOrientation then
 		alignOrientation = Instance.new("AlignOrientation")
+		alignOrientation.RigidityEnabled = true
 		alignOrientation.Mode = Enum.OrientationAlignmentMode.OneAttachment
 		alignOrientation.CFrame = attachment.WorldCFrame
 		alignOrientation.Attachment0 = attachment
@@ -47,7 +51,14 @@ return function(node: Fusion.Value<BasePart?>, completed: () -> ())
 		local nodeObj = node:get()
 		local attachment = getHipAttachment()
 
-		if not nodeObj or not attachment then
+		if not attachment then
+			return
+		end
+
+		if not nodeObj then
+			local alignPosition, alignOrientation = getOrCreateConstraints(attachment)
+			alignPosition:Destroy()
+			alignOrientation:Destroy()
 			return
 		end
 
@@ -55,18 +66,9 @@ return function(node: Fusion.Value<BasePart?>, completed: () -> ())
 		local mapName = (nodeObj.Parent :: Instance).Name
 		local timeValue = ReplicatedStorage.Config.MapTimes[`{mapName}TimePerStud`].Value
 
-		local override = tonumber(nodeObj:GetAttribute("Override") :: string?)
-
-		if override then
-			if override == 0 then
-				currentOverride = nil
-			else
-				currentOverride = override
-			end
-		end
-
 		local goalPosition = nodeObj.Position + Vector3.yAxis * humanoid.HipHeight
 		local alignPosition, alignOrientation = getOrCreateConstraints(attachment)
+
 		local tweenPosition = TweenService:Create(
 			alignPosition,
 			TweenInfo.new(
@@ -90,13 +92,34 @@ return function(node: Fusion.Value<BasePart?>, completed: () -> ())
 			}
 		)
 
-		tweenPosition:Play()
-		tweenOrientation:Play()
+		if nodeObj.Name == "1" then
+			alignPosition.Position = goalPosition
+			alignOrientation.CFrame = nodeObj.CFrame
 
-		tweenPosition.Completed:Wait()
+			humanoid.RootPart:PivotTo(
+				CFrame.new(goalPosition) * (nodeObj.CFrame - nodeObj.CFrame.Position)
+			)
+
+			task.wait(0.5)
+		else
+			tweenPosition:Play()
+			tweenOrientation:Play()
+
+			tweenPosition.Completed:Wait()
+		end
 
 		tweenOrientation:Destroy()
 		tweenPosition:Destroy()
+
+		local override = tonumber(nodeObj:GetAttribute("Override") :: string?)
+
+		if override then
+			if override == 0 then
+				currentOverride = nil
+			else
+				currentOverride = override
+			end
+		end
 
 		completed()
 	end)

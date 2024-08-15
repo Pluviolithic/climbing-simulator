@@ -22,7 +22,7 @@ return function(props)
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BackgroundTransparency = 1,
 		BorderColor3 = Color3.fromRGB(27, 42, 53),
-		Image = rarityImages[pet.Rarity.Value],
+		Image = rarityImages[pet.RarityName.Value],
 		Position = UDim2.fromScale(-9.06e-08, 0),
 		Selectable = false,
 		Size = UDim2.fromScale(-0.726, 0.3),

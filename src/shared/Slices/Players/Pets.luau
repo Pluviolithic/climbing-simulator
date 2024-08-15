@@ -11,6 +11,7 @@ export type PetsState = {
 }
 
 export type PetsActions = {
+	wipeData: (name: string) -> (),
 	addPlayerData: (name: string, data: { [any]: any }) -> (),
 	removePlayerData: (name: string) -> (),
 	addPet: (name: string, petName: string, rarity: string) -> (),
@@ -22,20 +23,23 @@ export type PetsActions = {
 local initialState: PetsState = {}
 
 local petsSlice = Reflex.createProducer(initialState, {
+	wipeData = function(state: PetsState, name: string)
+		return Sift.Dictionary.set(state, name, {})
+	end,
 	addPlayerData = function(state: PetsState, name: string, data: any): PetsState
 		return Sift.Dictionary.merge(state, { [name] = data.Pets })
 	end,
 	removePlayerData = function(state: PetsState, name: string): PetsState
 		return Sift.Dictionary.removeKey(state, name)
 	end,
-	addPet = function(state: PetsState, name: string, petName: string): PetsState
+	addPet = function(state: PetsState, name: string, petName: string, rarity: string): PetsState
 		if not state[name] then
 			return state
 		end
 		return Sift.Dictionary.merge(state, {
 			[name] = Sift.Array.append(state[name], {
 				Name = petName,
-				Rarity = "",
+				Rarity = rarity,
 				Equipped = false,
 			}),
 		})

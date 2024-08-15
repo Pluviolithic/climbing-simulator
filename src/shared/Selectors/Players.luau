@@ -36,6 +36,12 @@ local function selectPlayerTimestamps(playerName: string)
 	end
 end
 
+local function selectPlayerPets(playerName: string)
+	return function(state: slices.SharedState)
+		return state.Players.Pets[playerName]
+	end
+end
+
 local function selectPlayerDisplayStats(playerName: string)
 	return Reflex.createSelector(
 		selectPlayerStatValue(playerName, "Strength"),
@@ -55,12 +61,18 @@ local function selectPlayerData(playerName: string)
 	return Reflex.createSelector(
 		selectPlayerStats(playerName),
 		selectPlayerTimestamps(playerName),
-		function(stats: playersSlice.PlayerStats?, timestamps: playersSlice.PlayerTimestamps?)
-			if not stats or not timestamps then
+		selectPlayerPets(playerName),
+		function(
+			stats: playersSlice.PlayerStats?,
+			timestamps: playersSlice.PlayerTimestamps?,
+			pets: playersSlice.PlayerPets
+		)
+			if not stats or not timestamps or not pets then
 				return
 			end
 
 			return {
+				Pets = pets,
 				Stats = stats,
 				Timestamps = timestamps,
 			}
@@ -77,4 +89,5 @@ return {
 	selectStats = selectStats,
 	selectTimestamps = selectTimestamps,
 	selectPlayerStatValue = selectPlayerStatValue,
+	selectPlayerPets = selectPlayerPets,
 }

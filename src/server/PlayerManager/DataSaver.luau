@@ -9,6 +9,8 @@ producer:observe(selectors.selectStats, selectors.selectPlayerName, function(_, 
 	local unsubscribe = producer:subscribe(selectors.selectPlayerData(index), function(data)
 		if profiles[index] then
 			profiles[index].Data.Stats = data.Stats
+			profiles[index].Data.Pets = data.Pets
+			profiles[index].Data.Timestamps = data.Timestamps
 		end
 	end)
 	return unsubscribe

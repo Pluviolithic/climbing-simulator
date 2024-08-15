@@ -1,5 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local defaultStates = require(ReplicatedStorage.Common.DefaultStates)
 local Sift = require(ReplicatedStorage.Common.lib.Sift)
 local Reflex = require(ReplicatedStorage.Common.lib.Reflex)
 local types = require(ReplicatedStorage.Common.Slices.Players.Types)
@@ -11,6 +12,7 @@ export type StatsState = {
 }
 
 export type StatsActions = {
+	wipeData: (name: string) -> (),
 	addPlayerData: (name: string, data: { [any]: any }) -> (),
 	removePlayerData: (name: string) -> (),
 	incrementStat: (name: string, stat: string, amount: number) -> (),
@@ -20,6 +22,13 @@ export type StatsActions = {
 local initialState: StatsState = {}
 
 local statsSlice = Reflex.createProducer(initialState, {
+	wipeData = function(state: StatsState, name: string)
+		return Sift.Dictionary.set(
+			state,
+			name,
+			table.clone(defaultStates.ProfileDataTemplate.Stats)
+		)
+	end,
 	addPlayerData = function(state: StatsState, name: string, data: any): StatsState
 		return Sift.Dictionary.merge(state, { [name] = data.Stats })
 	end,

@@ -35,9 +35,27 @@ local function calculatePosition(rootPart, numPets, i)
 	return petCFrame.Position, lookVector
 end
 
+export type PetModel = Model & {
+	ImageId: StringValue,
+	Multiplier: NumberValue,
+	Rarity: NumberValue,
+	RarityName: StringValue,
+	Mesh: MeshPart,
+	PetUI: BillboardGui & {
+		Frame: Frame & {
+			PetName: TextLabel & {
+				UIGradient: UIGradient,
+			},
+			PetRarity: TextLabel & {
+				UIGradient: UIGradient,
+			},
+		},
+	},
+}
+
 local petUtils
 petUtils = {
-	getPet = function(petName: string): Instance?
+	getPet = function(petName: string): PetModel?
 		local pets
 		if petName:match("Evolved") then
 			pets = ReplicatedStorage.EvolvedPets
@@ -65,13 +83,6 @@ petUtils = {
 			end
 		end
 		return multiplier, multiplierWholePartCount
-	end,
-	countPetsInDict = function(dict): number
-		local counter = 0
-		for _, quantity in dict do
-			counter += quantity
-		end
-		return counter
 	end,
 	getPetRarities = function(petNames: { string }): { string }
 		local rarities = {}

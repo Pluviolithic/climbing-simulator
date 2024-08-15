@@ -7,6 +7,7 @@ local timestamps = require(script.Timestamps)
 local types = require(script.Types)
 
 export type PlayerData = types.PlayerData
+export type PlayerPets = types.PlayerPets
 export type PlayerStats = types.PlayerStats
 export type PlayerTimestamps = types.PlayerTimestamps
 

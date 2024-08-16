@@ -3,6 +3,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Reflex = require(ReplicatedStorage.Common.lib.Reflex)
 local slices = require(ReplicatedStorage.Common.Slices)
 local playersSlice = require(ReplicatedStorage.Common.Slices.Players)
+local Types = require(ReplicatedStorage.Common.Slices.Players.Types)
+local Sift = require(ReplicatedStorage.Common.lib.Sift)
 
 local function selectPlayerName(_, name: string)
 	return name
@@ -65,7 +67,7 @@ local function selectPlayerData(playerName: string)
 		function(
 			stats: playersSlice.PlayerStats?,
 			timestamps: playersSlice.PlayerTimestamps?,
-			pets: playersSlice.PlayerPets
+			pets: playersSlice.PlayerPets?
 		)
 			if not stats or not timestamps or not pets then
 				return
@@ -80,7 +82,19 @@ local function selectPlayerData(playerName: string)
 	)
 end
 
+local function selectEquippedPets(playerName: string)
+	return Reflex.createSelector(
+		selectPlayerPets(playerName),
+		function(pets: playersSlice.PlayerPets?)
+			return Sift.Array.filter(pets, function(pet: Types.Pet)
+				return pet.Equipped
+			end)
+		end
+	)
+end
+
 return {
+	selectEquippedPets = selectEquippedPets,
 	selectPlayerData = selectPlayerData,
 	selectPlayerName = selectPlayerName,
 	selectPlayerStats = selectPlayerStats,

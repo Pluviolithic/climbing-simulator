@@ -29,9 +29,7 @@ local profileDataTemplate = {
 		GroupChestAwardIndex = 1,
 
 		MaxPetCount = 30,
-		CurrentPetCount = 0,
 		MaxPetEquipCount = 3,
-		CurrentPetEquipCount = 0,
 	},
 
 	MultiplierData = {

@@ -22,7 +22,7 @@ baseBodyGyro.P = petConfig.Aggressiveness.Value
 baseBodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
 
 export type PetModel = Model & {
-	ImageId: StringValue,
+	ImageID: StringValue,
 	Multiplier: NumberValue,
 	Rarity: NumberValue,
 	RarityName: StringValue,

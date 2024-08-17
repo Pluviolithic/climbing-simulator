@@ -1,10 +1,15 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local StarterPlayer = game:GetService("StarterPlayer")
 
+local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
 local petUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
+local OnEvent = Fusion.OnEvent
 local Children = Fusion.Children
+
+local SelectedPetData = SharedValues.SelectedPetData
 
 local rarityImages = {
 	Common = "http://www.roblox.com/asset/?id=18215905706",
@@ -15,10 +20,9 @@ local rarityImages = {
 }
 
 return function(props)
-	local pet = petUtils.getPet(props.PetName) :: petUtils.PetModel
+	local pet = petUtils.getPet(props.Pet.Name) :: petUtils.PetModel
 	return New("ImageButton")({
-		Name = "Legendary",
-		Active = false,
+		Name = props.Pet.Name,
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BackgroundTransparency = 1,
 		BorderColor3 = Color3.fromRGB(27, 42, 53),
@@ -27,13 +31,17 @@ return function(props)
 		Selectable = false,
 		Size = UDim2.fromScale(-0.726, 0.3),
 
+		[OnEvent("Activated")] = function()
+			SelectedPetData:set({ Idx = props.PetIndex, Pet = props.Pet })
+		end,
+
 		[Children] = {
 			New("ImageLabel")({
 				Name = "PetImage",
 				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 				BackgroundTransparency = 1,
 				BorderColor3 = Color3.fromRGB(27, 42, 53),
-				Image = "http://www.roblox.com/asset/?id=15261225493",
+				Image = pet.ImageID.Value,
 				Position = UDim2.fromScale(0.196, 0.0756),
 				Size = UDim2.fromScale(0.602, 0.55),
 			}),
@@ -46,7 +54,7 @@ return function(props)
 				FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json"),
 				Position = UDim2.fromScale(0.041, 0.68),
 				Size = UDim2.fromScale(0.918, 0.263),
-				Text = props.PetName,
+				Text = props.Pet.Name,
 				TextColor3 = Color3.fromRGB(255, 255, 255),
 				TextScaled = true,
 				TextSize = 14,

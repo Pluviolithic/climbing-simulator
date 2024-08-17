@@ -1,30 +1,23 @@
-local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterPlayer = game:GetService("StarterPlayer")
 
+local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
 local petTemplate = require(script.PetTemplate)
-local selectors = require(ReplicatedStorage.Common.Selectors)
-local Types = require(ReplicatedStorage.Common.Slices.Players.Types)
-local producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
-local Value = Fusion.Value
-local ForValues = Fusion.ForValues
+local ForPairs = Fusion.ForPairs
 local Children = Fusion.Children
 
-local player = Players.LocalPlayer
-local playerPets: Fusion.Value<Types.PlayerPets> = Value({})
-local playerPetButtons = ForValues(playerPets, function(pet)
-	return petTemplate({
-		PetName = (pet :: Types.Pet).Name,
-	})
-end, function(petButton)
-	petButton:Destroy()
-end)
+local PlayerPets = SharedValues.PlayerPets
 
-producer:subscribe(selectors.selectPlayerPets(player.Name), function(pets)
-	playerPets:set(pets)
+local playerPetButtons = ForPairs(PlayerPets, function(index, pet)
+	return index, petTemplate({
+		PetIndex = index,
+		Pet = pet :: any,
+	})
+end, function(_, petButton)
+	petButton:Destroy()
 end)
 
 return New("ScrollingFrame")({

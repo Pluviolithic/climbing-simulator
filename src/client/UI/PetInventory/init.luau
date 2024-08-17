@@ -17,6 +17,7 @@ AsyncHandlers.waitForChild(player, "PlayerGui"):andThen(function(PlayerGui: Play
 
 		[Children] = {
 			require(script.Background),
+			require(script.RightFrame),
 		},
 	}).Parent =
 		PlayerGui

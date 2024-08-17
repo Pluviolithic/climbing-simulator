@@ -2,10 +2,10 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterPlayer = game:GetService("StarterPlayer")
 
-local selectors = require(ReplicatedStorage.Common.Selectors)
-local Types = require(ReplicatedStorage.Common.Slices.Players.Types)
+local Selectors = require(ReplicatedStorage.Common.Selectors)
+local Producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
 local petUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
-local producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
+local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
@@ -16,27 +16,23 @@ local Children = Fusion.Children
 local player = Players.LocalPlayer
 
 local maxPetCount: Fusion.Value<number> = Value(0)
-local currentPetCount: Fusion.Value<number> = Value(0)
 local maxPetEquipCount: Fusion.Value<number> = Value(0)
-local currentEquippedPetCount: Fusion.Value<number> = Value(0)
+
+local PlayerPets = SharedValues.PlayerPets
 
 local storageText = Computed(function()
-	return `{currentPetCount:get()}/{maxPetCount:get()}`
+	return `{petUtils.countPets(PlayerPets:get())}/{maxPetCount:get()}`
 end)
+
 local equippedText = Computed(function()
-	return `{currentEquippedPetCount:get()}/{maxPetEquipCount:get()}`
+	return `{petUtils.countEquippedPets(PlayerPets:get())}/{maxPetEquipCount:get()}`
 end)
 
-producer:subscribe(selectors.selectPlayerPets(player.Name), function(pets)
-	currentPetCount:set(petUtils.countPets(pets :: Types.PlayerPets))
-	currentEquippedPetCount:set(petUtils.countEquippedPets(pets :: Types.PlayerPets))
-end)
-
-producer:subscribe(selectors.selectPlayerStatValue(player.Name, "MaxPetCount"), function(count)
+Producer:subscribe(Selectors.selectPlayerStatValue(player.Name, "MaxPetCount"), function(count)
 	maxPetCount:set(count)
 end)
 
-producer:subscribe(selectors.selectPlayerStatValue(player.Name, "MaxPetEquipCount"), function(count)
+Producer:subscribe(Selectors.selectPlayerStatValue(player.Name, "MaxPetEquipCount"), function(count)
 	maxPetEquipCount:set(count)
 end)
 

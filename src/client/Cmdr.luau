@@ -1,5 +1,5 @@
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService "Players"
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local Promise = require(ReplicatedStorage.Common.lib.Promise)
 local permissionList = require(ReplicatedStorage.Common.PermissionList)
@@ -11,10 +11,10 @@ if not permissionList.Admins[player.UserId] then
 end
 
 Promise.new(function(resolve)
-	local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient")) :: any
+	local Cmdr = require(ReplicatedStorage:WaitForChild "CmdrClient") :: any
 	resolve(Cmdr)
 end):andThen(function(Cmdr)
-	Cmdr:SetActivationKeys({ Enum.KeyCode.F2 })
+	Cmdr:SetActivationKeys { Enum.KeyCode.F2 }
 
 	Players.LocalPlayer.Chatted:Connect(function(message)
 		if message == "/gameconsole" then

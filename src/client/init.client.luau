@@ -1,4 +1,4 @@
-local StarterPlayer = game:GetService("StarterPlayer")
+local StarterPlayer = game:GetService "StarterPlayer"
 
 local client = StarterPlayer.StarterPlayerScripts.Client
 

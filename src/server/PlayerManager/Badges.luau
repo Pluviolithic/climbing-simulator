@@ -1,6 +1,6 @@
-local Players = game:GetService("Players")
-local BadgeService = game:GetService("BadgeService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService "Players"
+local BadgeService = game:GetService "BadgeService"
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local regionUtils = require(ReplicatedStorage.Common.Utils.Player.RegionUtils)
 

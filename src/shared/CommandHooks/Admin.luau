@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local permissionList = require(ReplicatedStorage.Common.PermissionList)
 
 return function(registry)

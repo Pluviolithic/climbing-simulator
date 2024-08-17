@@ -1,132 +1,42 @@
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local StarterPlayer = game:GetService "StarterPlayer"
 
-local SharedValues = require(script.Parent.SharedValues)
+local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
 local OnEvent = Fusion.OnEvent
+local Computed = Fusion.Computed
 local Children = Fusion.Children
 
 local PetsToDelete = SharedValues.PetsToDelete
+local ConfirmingDelete = SharedValues.ConfirmingDelete
 local DeleteModeEnabled = SharedValues.DeleteModeEnabled
 
+local amountText = Computed(function()
+	return `Are you sure you want to delete these {#PetsToDelete:get()} pets?`
+end)
+
 return New "ImageLabel" {
-	Name = "Background",
+	Name = "DeleteConfirm",
 	BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 	BackgroundTransparency = 1,
 	BorderColor3 = Color3.fromRGB(27, 42, 53),
-	Image = "http://www.roblox.com/asset/?id=16865012439",
-	Position = UDim2.fromScale(0.235, 0.197),
-	Size = UDim2.fromScale(0.53, 0.655),
+	Image = "http://www.roblox.com/asset/?id=17005093656",
+	Position = UDim2.fromScale(0.333, 0.37),
+	Size = UDim2.fromScale(0.334, 0.333),
+	Visible = ConfirmingDelete,
 
 	[Children] = {
-		require(script.PetFrame),
-		require(script.BottomFrame),
-		New "ImageButton" {
-			Name = "Close",
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1,
-			BorderColor3 = Color3.fromRGB(27, 42, 53),
-			Image = "http://www.roblox.com/asset/?id=16865012833",
-			Position = UDim2.fromScale(0.947, 0.0281),
-			Size = UDim2.fromScale(0.0695, 0.0968),
-		},
-		New "ImageButton" {
-			Name = "DeletePets",
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1,
-			BorderColor3 = Color3.fromRGB(27, 42, 53),
-			HoverImage = "http://www.roblox.com/asset/?id=16995329121",
-			Image = "http://www.roblox.com/asset/?id=16995330301",
-			Position = UDim2.fromScale(0.925, 0.131),
-			Size = UDim2.fromScale(0.0486, 0.0677),
-
-			[OnEvent "Activated"] = function()
-				PetsToDelete:set {}
-				DeleteModeEnabled:set(not DeleteModeEnabled:get())
-			end,
-		},
-		New "ImageButton" {
-			Name = "EquipBest",
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1,
-			BorderColor3 = Color3.fromRGB(27, 42, 53),
-			Image = "http://www.roblox.com/asset/?id=16865012947",
-			Position = UDim2.fromScale(0.54, 0.122),
-			Size = UDim2.fromScale(0.188, 0.0845),
-
-			[Children] = {
-				New "TextLabel" {
-					Name = "Text",
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(27, 42, 53),
-					FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
-					Position = UDim2.fromScale(0.0455, 0.235),
-					Size = UDim2.fromScale(0.909, 0.53),
-					Text = "EVOLVE ALL",
-					TextColor3 = Color3.fromRGB(255, 255, 255),
-					TextScaled = true,
-					TextSize = 14,
-					TextStrokeColor3 = Color3.fromRGB(30, 30, 30),
-					TextStrokeTransparency = 0,
-					TextWrapped = true,
-					ZIndex = 0,
-
-					[Children] = {
-						New "UIStroke" {
-							Name = "UIStroke",
-							Color = Color3.fromRGB(24, 24, 24),
-						},
-					},
-				},
-			},
-		},
-		New "ImageButton" {
-			Name = "UnequipAll",
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1,
-			BorderColor3 = Color3.fromRGB(27, 42, 53),
-			Image = "http://www.roblox.com/asset/?id=16865012220",
-			Position = UDim2.fromScale(0.73, 0.122),
-			Size = UDim2.fromScale(0.188, 0.0841),
-
-			[Children] = {
-				New "TextLabel" {
-					Name = "Text",
-					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-					BackgroundTransparency = 1,
-					BorderColor3 = Color3.fromRGB(27, 42, 53),
-					FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
-					Position = UDim2.fromScale(0.0456, 0.199),
-					Size = UDim2.fromScale(0.909, 0.602),
-					Text = "UNEQUIP ALL",
-					TextColor3 = Color3.fromRGB(255, 255, 255),
-					TextScaled = true,
-					TextSize = 14,
-					TextStrokeColor3 = Color3.fromRGB(30, 30, 30),
-					TextStrokeTransparency = 0,
-					TextWrapped = true,
-					ZIndex = 0,
-
-					[Children] = {
-						New "UIStroke" {
-							Name = "UIStroke",
-							Color = Color3.fromRGB(24, 24, 24),
-						},
-					},
-				},
-			},
-		},
 		New "TextLabel" {
-			Name = "Text",
+			Name = "Amount",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
 			BorderColor3 = Color3.fromRGB(27, 42, 53),
 			FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
-			Position = UDim2.fromScale(0.362, 0.00961),
-			Size = UDim2.fromScale(0.277, 0.101),
-			Text = "PETS",
+			Position = UDim2.fromScale(0.062, 0.112),
+			Size = UDim2.fromScale(0.884, 0.534),
+			Text = amountText,
 			TextColor3 = Color3.fromRGB(255, 255, 255),
 			TextScaled = true,
 			TextSize = 14,
@@ -139,6 +49,92 @@ return New "ImageLabel" {
 					Name = "UIStroke",
 					Color = Color3.fromRGB(24, 24, 24),
 					Thickness = 2,
+				},
+			},
+		},
+
+		New "ImageButton" {
+			Name = "Cancel",
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundTransparency = 1,
+			BorderColor3 = Color3.fromRGB(27, 42, 53),
+			Image = "http://www.roblox.com/asset/?id=17005094861",
+			Position = UDim2.fromScale(0.518, 0.723),
+			Size = UDim2.fromScale(0.275, 0.188),
+			ZIndex = 2,
+
+			[OnEvent "Activated"] = function()
+				DeleteModeEnabled:set(false)
+				PetsToDelete:set {}
+				ConfirmingDelete:set(false)
+			end,
+
+			[Children] = {
+				New "TextLabel" {
+					Name = "Text",
+					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+					BackgroundTransparency = 1,
+					BorderColor3 = Color3.fromRGB(27, 42, 53),
+					FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
+					Position = UDim2.fromScale(0.0455, 0.0861),
+					Size = UDim2.fromScale(0.909, 0.796),
+					Text = "No",
+					TextColor3 = Color3.fromRGB(255, 255, 255),
+					TextScaled = true,
+					TextSize = 14,
+					TextStrokeColor3 = Color3.fromRGB(30, 30, 30),
+					TextStrokeTransparency = 0,
+					TextWrapped = true,
+					ZIndex = 0,
+
+					[Children] = {
+						New "UIStroke" {
+							Name = "UIStroke",
+							Color = Color3.fromRGB(24, 24, 24),
+							Thickness = 1.2,
+						},
+					},
+				},
+			},
+		},
+
+		New "ImageButton" {
+			Name = "Confirm",
+			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+			BackgroundTransparency = 1,
+			BorderColor3 = Color3.fromRGB(27, 42, 53),
+			Image = "http://www.roblox.com/asset/?id=17005094372",
+			Position = UDim2.fromScale(0.214, 0.723),
+			Size = UDim2.fromScale(0.275, 0.188),
+			ZIndex = 2,
+
+			[OnEvent "Activated"] = function() end,
+
+			[Children] = {
+				New "TextLabel" {
+					Name = "Text",
+					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+					BackgroundTransparency = 1,
+					BorderColor3 = Color3.fromRGB(27, 42, 53),
+					FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
+					Position = UDim2.fromScale(0.0455, 0.0861),
+					Size = UDim2.fromScale(0.909, 0.796),
+					Text = "Yes",
+					TextColor3 = Color3.fromRGB(255, 255, 255),
+					TextScaled = true,
+					TextSize = 14,
+					TextStrokeColor3 = Color3.fromRGB(30, 30, 30),
+					TextStrokeTransparency = 0,
+					TextWrapped = true,
+					ZIndex = 0,
+
+					[Children] = {
+						New "UIStroke" {
+							Name = "UIStroke",
+							Color = Color3.fromRGB(24, 24, 24),
+							Thickness = 1.2,
+						},
+					},
 				},
 			},
 		},

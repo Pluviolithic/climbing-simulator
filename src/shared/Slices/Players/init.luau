@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local Reflex = require(ReplicatedStorage.Common.lib.Reflex)
 local pets = require(script.Pets)
@@ -21,11 +21,11 @@ export type PlayersState = {
 
 export type PlayersActions = stats.StatsActions & timestamps.TimestampsActions & pets.PetsActions
 
-local playersSlice: PlayersProducer = Reflex.combineProducers({
+local playersSlice: PlayersProducer = Reflex.combineProducers {
 	Stats = stats.StatsSlice,
 	Pets = pets.PetsSlice,
 	Timestamps = timestamps.TimestampsSlice,
-})
+}
 
 return {
 	PlayersSlice = playersSlice,

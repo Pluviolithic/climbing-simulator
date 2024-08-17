@@ -1,6 +1,6 @@
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local StarterPlayer = game:GetService("StarterPlayer")
+local Players = game:GetService "Players"
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local StarterPlayer = game:GetService "StarterPlayer"
 
 local producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
 local selectors = require(ReplicatedStorage.Common.Selectors)
@@ -17,8 +17,10 @@ export type petAndIdx = {
 }
 
 local DeleteModeEnabled: Fusion.Value<boolean> = Value(false)
-local PlayerPets: Fusion.Value<Types.PlayerPets> = Value({})
+local PlayerPets: Fusion.Value<Types.PlayerPets> = Value {}
 local SelectedPetData: Fusion.Value<petAndIdx?> = Value(nil)
+local PetsToDelete: Fusion.Value<{ number }> = Value {}
+local ConfirmingDelete: Fusion.Value<boolean> = Value(false)
 
 producer:subscribe(selectors.selectPlayerPets(player.Name), function(pets)
 	PlayerPets:set(pets)
@@ -28,4 +30,6 @@ return {
 	DeleteModeEnabled = DeleteModeEnabled,
 	PlayerPets = PlayerPets,
 	SelectedPetData = SelectedPetData,
+	PetsToDelete = PetsToDelete,
+	ConfirmingDelete = ConfirmingDelete,
 }

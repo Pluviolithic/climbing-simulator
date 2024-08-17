@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local StarterPlayer = game:GetService("StarterPlayer")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local StarterPlayer = game:GetService "StarterPlayer"
 
 local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
 local petTemplate = require(script.PetTemplate)
@@ -12,15 +12,15 @@ local Children = Fusion.Children
 local PlayerPets = SharedValues.PlayerPets
 
 local playerPetButtons = ForPairs(PlayerPets, function(index, pet)
-	return index, petTemplate({
+	return index, petTemplate {
 		PetIndex = index,
 		Pet = pet :: any,
-	})
+	}
 end, function(_, petButton)
 	petButton:Destroy()
 end)
 
-return New("ScrollingFrame")({
+return New "ScrollingFrame" {
 	Name = "PetFrame",
 	Active = true,
 	AutomaticCanvasSize = Enum.AutomaticSize.Y,
@@ -35,12 +35,12 @@ return New("ScrollingFrame")({
 	Size = UDim2.fromScale(0.636, 0.722),
 
 	[Children] = {
-		New("UIGridLayout")({
+		New "UIGridLayout" {
 			Name = "UIGridLayout",
 			CellPadding = UDim2.fromScale(0.015, 0.025),
 			CellSize = UDim2.fromScale(0.234, 0.32),
 			SortOrder = Enum.SortOrder.LayoutOrder,
-		}),
+		},
 		playerPetButtons :: any,
 	},
-})
+}

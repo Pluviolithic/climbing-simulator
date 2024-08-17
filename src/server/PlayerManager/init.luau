@@ -1,6 +1,6 @@
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerScriptService = game:GetService("ServerScriptService")
+local Players = game:GetService "Players"
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ServerScriptService = game:GetService "ServerScriptService"
 
 local ProfileService = require(ServerScriptService.Server.lib.ProfileService)
 local profileTemplate = require(ReplicatedStorage.Common.DefaultStates).ProfileDataTemplate
@@ -14,7 +14,7 @@ local profileStore = ProfileService.GetProfileStore("PlayerData", profileTemplat
 local function onPlayerAdded(player: Player)
 	local profile = profileStore:LoadProfileAsync("Player_" .. player.UserId)
 	if not profile then
-		player:Kick("Data failed to load correctly.")
+		player:Kick "Data failed to load correctly."
 		return
 	end
 	profile:AddUserId(player.UserId)

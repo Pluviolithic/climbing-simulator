@@ -1,11 +1,11 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
 local Children = Fusion.Children
 
-return New("Frame")({
+return New "Frame" {
 	Name = "RightFrame",
 	BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 	BackgroundTransparency = 1,
@@ -17,4 +17,4 @@ return New("Frame")({
 		require(script.DeleteFrame),
 		require(script.SelectionFrame),
 	},
-})
+}

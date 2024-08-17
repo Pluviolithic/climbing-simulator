@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local areaRequirements = ReplicatedStorage.Config.AreaRequirements
 local strengthRanksFolder = ReplicatedStorage.Config.StrengthRanks

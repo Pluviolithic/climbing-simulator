@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerScriptService = game:GetService("ServerScriptService")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ServerScriptService = game:GetService "ServerScriptService"
 
 local slices = require(ReplicatedStorage.Common.Slices)
 local Reflex = require(ReplicatedStorage.Common.lib.Reflex)
@@ -8,7 +8,7 @@ local producer = require(ServerScriptService.Server.Producer)
 local start = require(ReplicatedStorage.Common.RedEvents.Start):Server()
 local dispatch = require(ReplicatedStorage.Common.RedEvents.Dispatch):Server()
 
-local broadcaster = Reflex.createBroadcaster({
+local broadcaster = Reflex.createBroadcaster {
 	producers = slices,
 	dispatch = function(player, actions)
 		dispatch:Fire(player, actions)
@@ -32,7 +32,7 @@ local broadcaster = Reflex.createBroadcaster({
 
 		return newState
 	end,
-})
+}
 
 start:On(function(player)
 	broadcaster:start(player)

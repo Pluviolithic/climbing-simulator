@@ -1,13 +1,18 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local StarterPlayer = game:GetService("StarterPlayer")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local StarterPlayer = game:GetService "StarterPlayer"
 
+local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
 local sharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
+local OnEvent = Fusion.OnEvent
 local Children = Fusion.Children
 
-return New("Frame")({
+local PetsToDelete = SharedValues.PetsToDelete
+local DeleteModeEnabled = SharedValues.DeleteModeEnabled
+
+return New "Frame" {
 	Name = "DeleteFrame",
 	BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 	BackgroundTransparency = 1,
@@ -16,7 +21,7 @@ return New("Frame")({
 	Visible = sharedValues.DeleteModeEnabled,
 
 	[Children] = {
-		New("ImageLabel")({
+		New "ImageLabel" {
 			Name = "Image",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
@@ -25,9 +30,9 @@ return New("Frame")({
 			Position = UDim2.fromScale(0.227, 0.156),
 			Size = UDim2.fromScale(0.531, 0.273),
 			ZIndex = 2,
-		}),
+		},
 
-		New("ImageButton")({
+		New "ImageButton" {
 			Name = "Delete",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
@@ -37,12 +42,12 @@ return New("Frame")({
 			Size = UDim2.fromScale(0.708, 0.124),
 
 			[Children] = {
-				New("TextLabel")({
+				New "TextLabel" {
 					Name = "Text",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1,
 					BorderColor3 = Color3.fromRGB(27, 42, 53),
-					FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json"),
+					FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 					Position = UDim2.fromScale(0.0455, 0.0861),
 					Size = UDim2.fromScale(0.909, 0.796),
 					Text = "DELETE",
@@ -55,17 +60,17 @@ return New("Frame")({
 					ZIndex = 0,
 
 					[Children] = {
-						New("UIStroke")({
+						New "UIStroke" {
 							Name = "UIStroke",
 							Color = Color3.fromRGB(24, 24, 24),
 							Thickness = 1.2,
-						}),
+						},
 					},
-				}),
+				},
 			},
-		}),
+		},
 
-		New("ImageButton")({
+		New "ImageButton" {
 			Name = "Cancel",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
@@ -74,13 +79,18 @@ return New("Frame")({
 			Position = UDim2.fromScale(0.106, 0.842),
 			Size = UDim2.fromScale(0.78, 0.124),
 
+			[OnEvent "Activated"] = function()
+				PetsToDelete:set {}
+				DeleteModeEnabled:set(false)
+			end,
+
 			[Children] = {
-				New("TextLabel")({
+				New "TextLabel" {
 					Name = "Text",
 					BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 					BackgroundTransparency = 1,
 					BorderColor3 = Color3.fromRGB(27, 42, 53),
-					FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json"),
+					FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 					Position = UDim2.fromScale(0.0455, 0.0861),
 					Size = UDim2.fromScale(0.909, 0.796),
 					Text = "CANCEL",
@@ -93,22 +103,22 @@ return New("Frame")({
 					ZIndex = 0,
 
 					[Children] = {
-						New("UIStroke")({
+						New "UIStroke" {
 							Name = "UIStroke",
 							Color = Color3.fromRGB(24, 24, 24),
 							Thickness = 1.2,
-						}),
+						},
 					},
-				}),
+				},
 			},
-		}),
+		},
 
-		New("TextLabel")({
+		New "TextLabel" {
 			Name = "Text",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
 			BorderColor3 = Color3.fromRGB(27, 42, 53),
-			FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json"),
+			FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 			Position = UDim2.fromScale(0.0263, 0.0201),
 			Size = UDim2.fromScale(0.938, 0.101),
 			Text = "Multi Delete",
@@ -120,20 +130,20 @@ return New("Frame")({
 			TextWrapped = true,
 
 			[Children] = {
-				New("UIStroke")({
+				New "UIStroke" {
 					Name = "UIStroke",
 					Color = Color3.fromRGB(24, 24, 24),
 					Thickness = 2,
-				}),
+				},
 			},
-		}),
+		},
 
-		New("TextLabel")({
+		New "TextLabel" {
 			Name = "Selected",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
 			BorderColor3 = Color3.fromRGB(27, 42, 53),
-			FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json"),
+			FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 			Position = UDim2.fromScale(0.0263, 0.506),
 			Size = UDim2.fromScale(0.938, 0.101),
 			Text = "0 Selected",
@@ -145,12 +155,12 @@ return New("Frame")({
 			TextWrapped = true,
 
 			[Children] = {
-				New("UIStroke")({
+				New "UIStroke" {
 					Name = "UIStroke",
 					Color = Color3.fromRGB(24, 24, 24),
 					Thickness = 2,
-				}),
+				},
 			},
-		}),
+		},
 	},
-})
+}

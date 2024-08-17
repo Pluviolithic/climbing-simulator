@@ -1,5 +1,5 @@
-local Players = game:GetService("Players")
-local ServerScriptService = game:GetService("ServerScriptService")
+local Players = game:GetService "Players"
+local ServerScriptService = game:GetService "ServerScriptService"
 
 local producer = require(ServerScriptService.Server.Producer)
 

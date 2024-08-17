@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local AsyncHandlers = require(ReplicatedStorage.Common.Utils.Player.AsyncHandlers)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
@@ -37,7 +37,7 @@ AsyncHandlers.waitForChild(workspace.AreaStartModels, "ForestClimbStart"):andThe
 
 			-- TODO: Check for permissions / stats / whatever to do the climb
 
-			local nodes = workspace.Nodes[startModel.Name:match("(%w+)C")]
+			local nodes = workspace.Nodes[startModel.Name:match "(%w+)C"]
 			node:set(nodes["1"])
 
 			task.wait(0.5)

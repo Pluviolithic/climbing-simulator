@@ -1,6 +1,6 @@
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService "Players"
+local RunService = game:GetService "RunService"
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local Types = require(ReplicatedStorage.Common.Slices.Players.Types)
 local Janitor = require(ReplicatedStorage.Common.lib.Janitor)
@@ -10,8 +10,8 @@ local petConfig = ReplicatedStorage.Config.Pets
 local modelYOffset = petConfig.VerticalOffset.Value
 local leaderboardPetName = ReplicatedStorage.Config.Misc.LeaderboardPet.Value
 
-local baseBodyPosition = Instance.new("BodyPosition")
-local baseBodyGyro = Instance.new("BodyGyro")
+local baseBodyPosition = Instance.new "BodyPosition"
+local baseBodyGyro = Instance.new "BodyGyro"
 
 baseBodyPosition.D = petConfig.Dampening.Value
 baseBodyPosition.P = petConfig.Aggressiveness.Value
@@ -57,9 +57,9 @@ end
 
 local function getPet(petName: string): PetModel?
 	local pets
-	if petName:match("Evolved") then
+	if petName:match "Evolved" then
 		pets = ReplicatedStorage.EvolvedPets
-	elseif petName:match("Shiny") or petName == leaderboardPetName then
+	elseif petName:match "Shiny" or petName == leaderboardPetName then
 		pets = ReplicatedStorage.ShinyPets
 	else
 		pets = ReplicatedStorage.Pets
@@ -126,7 +126,7 @@ local function instantiatePets(playerName, equippedPets)
 		if not isServer then
 			return
 		end
-		petsModel = Instance.new("Model")
+		petsModel = Instance.new "Model"
 		petsModel.Name = playerName
 		petsModel.Parent = workspace.PetModels
 
@@ -137,7 +137,7 @@ local function instantiatePets(playerName, equippedPets)
 
 	task.spawn(function()
 		local character = Players[playerName].Character or Players[playerName].CharacterAdded:Wait()
-		local rootPart = character:WaitForChild("HumanoidRootPart")
+		local rootPart = character:WaitForChild "HumanoidRootPart"
 		local equippedPetModels = petsModel:GetChildren()
 		for petName, quantity in equippedPets do
 			for i = 1, quantity do

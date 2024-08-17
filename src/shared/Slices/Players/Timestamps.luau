@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local defaultStates = require(ReplicatedStorage.Common.DefaultStates)
 local Sift = require(ReplicatedStorage.Common.lib.Sift)

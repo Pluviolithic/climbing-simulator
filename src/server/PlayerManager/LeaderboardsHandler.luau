@@ -1,6 +1,6 @@
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerScriptService = game:GetService("ServerScriptService")
+local Players = game:GetService "Players"
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ServerScriptService = game:GetService "ServerScriptService"
 
 local formatter = require(ReplicatedStorage.Common.Utils.Formatter)
 local producer = require(ServerScriptService.Server.Producer)
@@ -10,10 +10,10 @@ local selectors = require(ReplicatedStorage.Common.Selectors)
 local zeroWidthSpace = "​"
 
 local function initializeRobloxLeaderboard(player: Player, data)
-	local leaderstats = Instance.new("Folder")
+	local leaderstats = Instance.new "Folder"
 	leaderstats.Name = "leaderstats"
 
-	local strength = Instance.new("StringValue")
+	local strength = Instance.new "StringValue"
 	strength.Name = "Strength"
 	strength.Value = formatter.formatNumberWithSuffix(data.Stats.Strength)
 	strength.Parent = leaderstats
@@ -23,12 +23,12 @@ local function initializeRobloxLeaderboard(player: Player, data)
 	-- rank.Value = formatter.formatNumberWithSuffix(data.Stats.Rank)
 	-- rank.Parent = leaderstats
 
-	local kills = Instance.new("StringValue")
+	local kills = Instance.new "StringValue"
 	kills.Name = "Wins"
 	kills.Value = formatter.formatNumberWithSuffix(data.Stats.Wins)
 	kills.Parent = leaderstats
 
-	local rebirths = Instance.new("StringValue")
+	local rebirths = Instance.new "StringValue"
 	rebirths.Name = "Rebirths"
 	rebirths.Value = formatter.formatNumberWithSuffix(data.Stats.Rebirths)
 	rebirths.Parent = leaderstats
@@ -40,7 +40,7 @@ local function fixListingOrder()
 	local playerStrengthInfo = {}
 
 	for _, player in ipairs(Players:GetPlayers()) do
-		local leaderstats = player:FindFirstChild("leaderstats")
+		local leaderstats = player:FindFirstChild "leaderstats"
 
 		if not leaderstats then
 			continue

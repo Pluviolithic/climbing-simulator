@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local monthlyTimestampOverride = nil
 local chestTimerLength = ReplicatedStorage.Config.DevProductData.Chests.ChestTimerLength.Value

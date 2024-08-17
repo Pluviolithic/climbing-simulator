@@ -1,4 +1,4 @@
-local ServerScriptService = game:GetService("ServerScriptService")
+local ServerScriptService = game:GetService "ServerScriptService"
 
 local producer = require(ServerScriptService.Server.Producer)
 

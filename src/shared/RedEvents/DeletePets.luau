@@ -3,8 +3,8 @@ local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local Red = require(ReplicatedStorage.Common.lib.Red)
 local Guard = require(ReplicatedStorage.Common.lib.Guard)
 
-local actionsCheck = Guard.List(Guard.Map(Guard.String, Guard.Any))
+local petsCheck = Guard.List(Guard.Number)
 
-return Red.Event("Dispatch", function(actions)
-	return actionsCheck(actions)
+return Red.Event("DeletePets", function(pets)
+	return petsCheck(pets)
 end)

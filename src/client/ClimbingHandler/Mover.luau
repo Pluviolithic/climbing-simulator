@@ -1,6 +1,6 @@
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService "Players"
+local TweenService = game:GetService "TweenService"
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
@@ -10,22 +10,22 @@ local player = Players.LocalPlayer
 
 local function getHipAttachment(): Attachment?
 	local rootPart = if player.Character
-		then player.Character:FindFirstChild("HumanoidRootPart")
+		then player.Character:FindFirstChild "HumanoidRootPart"
 		else nil
 
 	if not rootPart then
 		return nil
 	end
 
-	return rootPart:FindFirstChild("RootRigAttachment")
+	return rootPart:FindFirstChild "RootRigAttachment"
 end
 
 local function getOrCreateConstraints(attachment: Attachment): (AlignPosition, AlignOrientation)
-	local alignPosition = attachment:FindFirstChild("AlignPosition") :: AlignPosition?
-	local alignOrientation = attachment:FindFirstChild("AlignOrientation") :: AlignOrientation?
+	local alignPosition = attachment:FindFirstChild "AlignPosition" :: AlignPosition?
+	local alignOrientation = attachment:FindFirstChild "AlignOrientation" :: AlignOrientation?
 
 	if not alignPosition then
-		alignPosition = Instance.new("AlignPosition")
+		alignPosition = Instance.new "AlignPosition"
 		alignPosition.RigidityEnabled = true
 		alignPosition.Mode = Enum.PositionAlignmentMode.OneAttachment
 		alignPosition.Position = attachment.WorldCFrame.Position
@@ -34,7 +34,7 @@ local function getOrCreateConstraints(attachment: Attachment): (AlignPosition, A
 	end
 
 	if not alignOrientation then
-		alignOrientation = Instance.new("AlignOrientation")
+		alignOrientation = Instance.new "AlignOrientation"
 		alignOrientation.RigidityEnabled = true
 		alignOrientation.Mode = Enum.OrientationAlignmentMode.OneAttachment
 		alignOrientation.CFrame = attachment.WorldCFrame
@@ -111,7 +111,7 @@ return function(node: Fusion.Value<BasePart?>, completed: () -> ())
 		tweenOrientation:Destroy()
 		tweenPosition:Destroy()
 
-		local override = tonumber(nodeObj:GetAttribute("Override") :: string?)
+		local override = tonumber(nodeObj:GetAttribute "Override" :: string?)
 
 		if override then
 			if override == 0 then

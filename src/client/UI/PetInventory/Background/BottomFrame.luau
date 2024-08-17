@@ -1,6 +1,6 @@
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local StarterPlayer = game:GetService("StarterPlayer")
+local Players = game:GetService "Players"
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local StarterPlayer = game:GetService "StarterPlayer"
 
 local Selectors = require(ReplicatedStorage.Common.Selectors)
 local Producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
@@ -36,7 +36,7 @@ Producer:subscribe(Selectors.selectPlayerStatValue(player.Name, "MaxPetEquipCoun
 	maxPetEquipCount:set(count)
 end)
 
-return New("ImageLabel")({
+return New "ImageLabel" {
 	Name = "BottomFrame",
 	BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 	BackgroundTransparency = 1,
@@ -46,7 +46,7 @@ return New("ImageLabel")({
 	Size = UDim2.fromScale(0.455, 0.0965),
 
 	[Children] = {
-		New("ImageLabel")({
+		New "ImageLabel" {
 			Name = "Icon",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
@@ -54,9 +54,9 @@ return New("ImageLabel")({
 			Image = "http://www.roblox.com/asset/?id=16822536581",
 			Position = UDim2.fromScale(0.519, -0.0978),
 			Size = UDim2.fromScale(0.161, 1.09),
-		}),
+		},
 
-		New("ImageLabel")({
+		New "ImageLabel" {
 			Name = "Icon",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
@@ -64,23 +64,23 @@ return New("ImageLabel")({
 			Image = "http://www.roblox.com/asset/?id=16865308273",
 			Position = UDim2.fromScale(0.0162, 0.0588),
 			Size = UDim2.fromScale(0.102, 0.789),
-		}),
+		},
 
-		New("ImageButton")({
+		New "ImageButton" {
 			Name = "BuyInventory",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
 			Image = "http://www.roblox.com/asset/?id=16865262078",
 			Position = UDim2.fromScale(0.422, 0.165),
 			Size = UDim2.fromScale(0.0911, 0.618),
-		}),
+		},
 
-		New("TextLabel")({
+		New "TextLabel" {
 			Name = "PetStorage",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
 			BorderColor3 = Color3.fromRGB(27, 42, 53),
-			FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json"),
+			FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 			Position = UDim2.fromScale(0.131, 0.13),
 			Size = UDim2.fromScale(0.271, 0.69),
 			Text = storageText,
@@ -93,20 +93,20 @@ return New("ImageLabel")({
 			TextXAlignment = Enum.TextXAlignment.Left,
 
 			[Children] = {
-				New("UIStroke")({
+				New "UIStroke" {
 					Name = "UIStroke",
 					Color = Color3.fromRGB(24, 24, 24),
 					Thickness = 2,
-				}),
+				},
 			},
-		}),
+		},
 
-		New("TextLabel")({
+		New "TextLabel" {
 			Name = "PetEquipped",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
 			BorderColor3 = Color3.fromRGB(27, 42, 53),
-			FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json"),
+			FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 			Position = UDim2.fromScale(0.668, 0.13),
 			Size = UDim2.fromScale(0.235, 0.69),
 			Text = equippedText,
@@ -119,21 +119,21 @@ return New("ImageLabel")({
 			TextXAlignment = Enum.TextXAlignment.Left,
 
 			[Children] = {
-				New("UIStroke")({
+				New "UIStroke" {
 					Name = "UIStroke",
 					Color = Color3.fromRGB(24, 24, 24),
 					Thickness = 2,
-				}),
+				},
 			},
-		}),
+		},
 
-		New("ImageButton")({
+		New "ImageButton" {
 			Name = "BuyEquipped",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
 			Image = "http://www.roblox.com/asset/?id=16865262078",
 			Position = UDim2.fromScale(0.893, 0.165),
 			Size = UDim2.fromScale(0.0902, 0.618),
-		}),
+		},
 	},
-})
+}

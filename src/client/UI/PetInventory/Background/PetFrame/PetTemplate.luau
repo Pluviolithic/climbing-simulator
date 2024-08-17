@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local StarterPlayer = game:GetService("StarterPlayer")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local StarterPlayer = game:GetService "StarterPlayer"
 
 local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
 local petUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
@@ -7,9 +7,12 @@ local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
 local OnEvent = Fusion.OnEvent
+local Computed = Fusion.Computed
 local Children = Fusion.Children
 
+local PetsToDelete = SharedValues.PetsToDelete
 local SelectedPetData = SharedValues.SelectedPetData
+local DeleteModeEnabled = SharedValues.DeleteModeEnabled
 
 local rarityImages = {
 	Common = "http://www.roblox.com/asset/?id=18215905706",
@@ -21,7 +24,12 @@ local rarityImages = {
 
 return function(props)
 	local pet = petUtils.getPet(props.Pet.Name) :: petUtils.PetModel
-	return New("ImageButton")({
+
+	local toBeDeleted = Computed(function()
+		return table.find(PetsToDelete:get(), props.PetIndex) ~= nil
+	end)
+
+	return New "ImageButton" {
 		Name = props.Pet.Name,
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BackgroundTransparency = 1,
@@ -31,12 +39,25 @@ return function(props)
 		Selectable = false,
 		Size = UDim2.fromScale(-0.726, 0.3),
 
-		[OnEvent("Activated")] = function()
-			SelectedPetData:set({ Idx = props.PetIndex, Pet = props.Pet })
+		[OnEvent "Activated"] = function()
+			if DeleteModeEnabled:get() then
+				local petsToDelete = PetsToDelete:get()
+				local index = table.find(petsToDelete, props.PetIndex)
+
+				if index then
+					table.remove(petsToDelete, index)
+				else
+					table.insert(petsToDelete, props.PetIndex)
+				end
+
+				PetsToDelete:set(petsToDelete)
+			else
+				SelectedPetData:set { Idx = props.PetIndex, Pet = props.Pet }
+			end
 		end,
 
 		[Children] = {
-			New("ImageLabel")({
+			New "ImageLabel" {
 				Name = "PetImage",
 				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 				BackgroundTransparency = 1,
@@ -44,14 +65,14 @@ return function(props)
 				Image = pet.ImageID.Value,
 				Position = UDim2.fromScale(0.196, 0.0756),
 				Size = UDim2.fromScale(0.602, 0.55),
-			}),
+			},
 
-			New("TextLabel")({
+			New "TextLabel" {
 				Name = "PetName",
 				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 				BackgroundTransparency = 1,
 				BorderColor3 = Color3.fromRGB(27, 42, 53),
-				FontFace = Font.new("rbxasset://fonts/families/FredokaOne.json"),
+				FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 				Position = UDim2.fromScale(0.041, 0.68),
 				Size = UDim2.fromScale(0.918, 0.263),
 				Text = props.Pet.Name,
@@ -63,15 +84,15 @@ return function(props)
 				TextWrapped = true,
 
 				[Children] = {
-					New("UIStroke")({
+					New "UIStroke" {
 						Name = "UIStroke",
 						Color = Color3.fromRGB(24, 24, 24),
 						Thickness = 2,
-					}),
+					},
 				},
-			}),
+			},
 
-			New("ImageLabel")({
+			New "ImageLabel" {
 				Name = "Equipped",
 				Active = true,
 				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -83,9 +104,9 @@ return function(props)
 				Size = UDim2.fromScale(0.274, 0.275),
 				Visible = false,
 				ZIndex = 2,
-			}),
+			},
 
-			New("ImageLabel")({
+			New "ImageLabel" {
 				Name = "Delete",
 				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 				BackgroundTransparency = 1,
@@ -93,8 +114,8 @@ return function(props)
 				Image = "http://www.roblox.com/asset/?id=16995264624",
 				Position = UDim2.fromScale(0.196, 0.0519),
 				Size = UDim2.fromScale(0.602, 0.596),
-				Visible = false,
-			}),
+				Visible = toBeDeleted,
+			},
 		},
-	})
+	}
 end

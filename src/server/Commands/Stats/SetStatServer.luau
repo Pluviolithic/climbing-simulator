@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerScriptService = game:GetService("ServerScriptService")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ServerScriptService = game:GetService "ServerScriptService"
 
 local producer = require(ServerScriptService.Server.Producer)
 local statsList = require(ReplicatedStorage.Common.DefaultStates).ProfileDataTemplate.Stats

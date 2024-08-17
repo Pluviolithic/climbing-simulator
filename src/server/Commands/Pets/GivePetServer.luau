@@ -1,5 +1,5 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerScriptService = game:GetService("ServerScriptService")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local ServerScriptService = game:GetService "ServerScriptService"
 
 local petUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
 local producer = require(ServerScriptService.Server.Producer)

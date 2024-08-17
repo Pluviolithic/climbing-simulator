@@ -1,5 +1,5 @@
-local StarterPlayer = game:GetService("StarterPlayer")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local StarterPlayer = game:GetService "StarterPlayer"
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
 local Promise = require(ReplicatedStorage.Common.lib.Promise)

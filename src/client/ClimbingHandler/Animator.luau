@@ -1,6 +1,6 @@
-local Players = game:GetService("Players")
-local CollectionService = game:GetService("CollectionService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService "Players"
+local CollectionService = game:GetService "CollectionService"
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local AsyncHandlers = require(ReplicatedStorage.Common.Utils.Player.AsyncHandlers)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
@@ -52,7 +52,7 @@ local function loadAnimations()
 			pcall(Players.GetHumanoidDescriptionFromUserId, Players, player.UserId)
 
 		if not success then
-			humanoidDescription = Instance.new("HumanoidDescription")
+			humanoidDescription = Instance.new "HumanoidDescription"
 		end
 
 		for _, animation in ipairs(animationsArray) do
@@ -93,10 +93,10 @@ return function(node: Fusion.Value<BasePart?>): ()
 			end
 
 			local humanoid = if player.Character
-				then player.Character:FindFirstChild("Humanoid")
+				then player.Character:FindFirstChild "Humanoid"
 				else nil
 			local animator: Animator? = if humanoid
-				then humanoid:FindFirstChild("Animator") :: Animator
+				then humanoid:FindFirstChild "Animator" :: Animator
 				else nil
 
 			if not animator then
@@ -106,7 +106,7 @@ return function(node: Fusion.Value<BasePart?>): ()
 			disableAllStates(humanoid, { Enum.HumanoidStateType.Flying })
 
 			if not success then
-				local humanoidDescription = humanoid:FindFirstChild("HumanoidDescription")
+				local humanoidDescription = humanoid:FindFirstChild "HumanoidDescription"
 
 				if humanoidDescription then
 					for animationName in pairs(animations) do
@@ -139,7 +139,7 @@ return function(node: Fusion.Value<BasePart?>): ()
 					animationTrack:Stop()
 				end
 
-				local newAnimation = Instance.new("Animation")
+				local newAnimation = Instance.new "Animation"
 
 				obliterator:Add(newAnimation)
 				newAnimation.AnimationId = animations[animationName]

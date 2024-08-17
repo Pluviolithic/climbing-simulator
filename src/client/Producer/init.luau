@@ -1,4 +1,4 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local slices = require(ReplicatedStorage.Common.Slices)
 local Reflex = require(ReplicatedStorage.Common.lib.Reflex)

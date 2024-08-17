@@ -1,5 +1,5 @@
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService "Players"
+local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
 local Zone = require(ReplicatedStorage.Common.lib.ZonePlus)
 local missionZones = {}

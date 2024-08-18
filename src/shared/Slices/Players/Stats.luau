@@ -41,7 +41,7 @@ local statsSlice = Reflex.createProducer(initialState, {
 		stat: string,
 		amount: number
 	): StatsState
-		local currentValue = if state[name] then state[name][stat] else 0
+		local currentValue = if state[name] then (state[name] :: types.PlayerStats)[stat] else 0
 		return Sift.Dictionary.mergeDeep(state, { [name] = { [stat] = currentValue + amount } })
 	end,
 	setStat = function(state: StatsState, name: string, stat: string, amount: number): StatsState

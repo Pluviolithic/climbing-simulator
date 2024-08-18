@@ -95,6 +95,7 @@ end)
 --require(script.Tutorial)
 --require(script.Gifts)
 
+require(script.Pets)
 require(script.Badges)
 require(script.DataSaver)
 require(script.ReflexBroadcaster)

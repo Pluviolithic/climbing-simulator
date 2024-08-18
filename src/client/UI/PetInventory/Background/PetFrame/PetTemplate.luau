@@ -52,7 +52,14 @@ return function(props)
 
 				PetsToDelete:set(petsToDelete)
 			else
-				SelectedPetData:set { Idx = props.PetIndex, Pet = props.Pet }
+				if
+					SelectedPetData:get()
+					and (SelectedPetData:get() :: SharedValues.petAndIdx).Idx == props.PetIndex
+				then
+					SelectedPetData:set(nil)
+				else
+					SelectedPetData:set { Idx = props.PetIndex, Pet = props.Pet }
+				end
 			end
 		end,
 

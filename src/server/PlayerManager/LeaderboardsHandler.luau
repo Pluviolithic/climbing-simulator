@@ -82,7 +82,7 @@ producer:observe(selectors.selectStats, selectors.selectPlayerName, function(_, 
 				formatter.formatNumberWithSuffix(displayStats.Rebirths)
 
 			fixListingOrder()
-		end
+		end :: any
 	)
 
 	return unsubscribe

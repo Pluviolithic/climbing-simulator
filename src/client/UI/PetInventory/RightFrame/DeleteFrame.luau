@@ -7,10 +7,16 @@ local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
 local OnEvent = Fusion.OnEvent
+local Computed = Fusion.Computed
 local Children = Fusion.Children
 
 local PetsToDelete = SharedValues.PetsToDelete
+local ConfirmingDelete = SharedValues.ConfirmingDelete
 local DeleteModeEnabled = SharedValues.DeleteModeEnabled
+
+local selectedText = Computed(function()
+	return `{#PetsToDelete:get()} Selected`
+end)
 
 return New "Frame" {
 	Name = "DeleteFrame",
@@ -40,6 +46,12 @@ return New "Frame" {
 			Image = "http://www.roblox.com/asset/?id=16865011748",
 			Position = UDim2.fromScale(0.141, 0.7),
 			Size = UDim2.fromScale(0.708, 0.124),
+
+			[OnEvent "Activated"] = function()
+				if #PetsToDelete:get() > 0 then
+					ConfirmingDelete:set(true)
+				end
+			end,
 
 			[Children] = {
 				New "TextLabel" {
@@ -146,7 +158,7 @@ return New "Frame" {
 			FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 			Position = UDim2.fromScale(0.0263, 0.506),
 			Size = UDim2.fromScale(0.938, 0.101),
-			Text = "0 Selected",
+			Text = selectedText,
 			TextColor3 = Color3.fromRGB(255, 255, 255),
 			TextScaled = true,
 			TextSize = 14,

@@ -21,7 +21,7 @@ end
 local function selectPlayerStatValue(playerName: string, statName: string)
 	return function(state: slices.SharedState)
 		return if state.Players.Stats[playerName]
-			then state.Players.Stats[playerName][statName]
+			then (state.Players.Stats[playerName] :: Types.PlayerStats)[statName]
 			else nil
 	end
 end
@@ -86,7 +86,7 @@ local function selectEquippedPets(playerName: string)
 	return Reflex.createSelector(
 		selectPlayerPets(playerName),
 		function(pets: playersSlice.PlayerPets?)
-			return Sift.Array.filter(pets, function(pet: Types.Pet)
+			return Sift.Array.filter(pets :: any, function(pet: Types.Pet)
 				return pet.Equipped
 			end)
 		end

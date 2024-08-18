@@ -9,5 +9,12 @@ return function(_, targetPlayer: Player, name: string)
 	if not pet then
 		return
 	end
-	producer.addPet(targetPlayer.Name, name, pet.RarityName.Value)
+	producer.addPets(
+		targetPlayer.Name,
+		{ {
+			Name = name,
+			Equipped = false,
+			Rarity = pet.RarityName.Value,
+		} }
+	)
 end

@@ -10,6 +10,7 @@ local Computed = Fusion.Computed
 local Children = Fusion.Children
 
 local PetsToDelete = SharedValues.PetsToDelete
+local SelectedPetData = SharedValues.SelectedPetData
 local ConfirmingDelete = SharedValues.ConfirmingDelete
 local DeleteModeEnabled = SharedValues.DeleteModeEnabled
 
@@ -108,7 +109,16 @@ return New "ImageLabel" {
 			Size = UDim2.fromScale(0.275, 0.188),
 			ZIndex = 2,
 
-			[OnEvent "Activated"] = function() end,
+			[OnEvent "Activated"] = function()
+				require(ReplicatedStorage.Common.RedEvents.DeletePets)
+					:Client()
+					:Fire(PetsToDelete:get())
+
+				SelectedPetData:set(nil)
+				DeleteModeEnabled:set(false)
+				PetsToDelete:set {}
+				ConfirmingDelete:set(false)
+			end,
 
 			[Children] = {
 				New "TextLabel" {

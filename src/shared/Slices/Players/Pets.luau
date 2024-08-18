@@ -4,6 +4,7 @@ local Types = require(script.Parent.Types)
 local Sift = require(ReplicatedStorage.Common.lib.Sift)
 local Reflex = require(ReplicatedStorage.Common.lib.Reflex)
 local types = require(ReplicatedStorage.Common.Slices.Players.Types)
+local PetUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
 
 export type PetsProducer = Reflex.Producer<PetsState, PetsActions>
 
@@ -23,6 +24,22 @@ export type PetsActions = {
 
 local initialState: PetsState = {}
 
+local function sortPets(pets: types.PlayerPets)
+	-- table.sort(pets, function(a, b)
+	-- 	if a.Equipped and not b.Equipped then
+	-- 		return a
+	-- 	elseif b.Equipped and not a.Equipped then
+	-- 		return b
+	-- 	else
+	-- 		local petA = PetUtils.getPet(a.Name) :: PetUtils.PetModel
+	-- 		local petB = PetUtils.getPet(b.Name) :: PetUtils.PetModel
+
+	-- 		return petA.Multiplier.Value > petB.Multiplier.Value
+	-- 	end
+	-- end)
+	return pets
+end
+
 local petsSlice = Reflex.createProducer(initialState, {
 	wipeData = function(state: PetsState, name: string)
 		return Sift.Dictionary.set(state, name, {})
@@ -38,7 +55,7 @@ local petsSlice = Reflex.createProducer(initialState, {
 			return state
 		end
 		return Sift.Dictionary.merge(state, {
-			[name] = Sift.Array.concat(state[name], pets),
+			[name] = sortPets(Sift.Array.concat(state[name], pets)),
 		})
 	end,
 	deletePets = function(state: PetsState, name: string, indices: { number }): PetsState
@@ -55,12 +72,12 @@ local petsSlice = Reflex.createProducer(initialState, {
 		end
 
 		return Sift.Dictionary.mergeDeep(state, {
-			[name] = Sift.Array.map(state[name] :: any, function(value, index)
+			[name] = sortPets(Sift.Array.map(state[name] :: any, function(value, index)
 				if table.find(indices, index) then
 					value.Equipped = true
 				end
 				return value
-			end),
+			end)),
 		})
 	end,
 	unequipPets = function(state: PetsState, name: string, indices: { number }): PetsState
@@ -69,12 +86,12 @@ local petsSlice = Reflex.createProducer(initialState, {
 		end
 
 		return Sift.Dictionary.mergeDeep(state, {
-			[name] = Sift.Array.map(state[name] :: any, function(value, index)
+			[name] = sortPets(Sift.Array.map(state[name] :: any, function(value, index)
 				if table.find(indices, index) then
 					value.Equipped = false
 				end
 				return value
-			end),
+			end)),
 		})
 	end,
 })

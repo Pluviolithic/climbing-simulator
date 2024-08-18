@@ -1,19 +1,29 @@
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local StarterPlayer = game:GetService "StarterPlayer"
 
+local Formatter = require(ReplicatedStorage.Common.Utils.Formatter)
 local PetUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
 local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
+local OnEvent = Fusion.OnEvent
 local Computed = Fusion.Computed
 local Children = Fusion.Children
 
+local PlayerPets = SharedValues.PlayerPets
 local SelectedPetData = SharedValues.SelectedPetData
 local DeleteModeEnabled = SharedValues.DeleteModeEnabled
 
 local visible = Computed(function()
 	return SelectedPetData:get() ~= nil and not DeleteModeEnabled:get()
+end)
+
+local equippedText = Computed(function()
+	return if SelectedPetData:get()
+			and (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Equipped
+		then "UNEQUIP"
+		else "EQUIP"
 end)
 
 local petName = Computed(function()
@@ -35,6 +45,33 @@ local petImage = Computed(function()
 	return pet.ImageID.Value
 end)
 
+local petMultiplier = Computed(function()
+	local petData = SelectedPetData:get()
+	if not petData then
+		return ""
+	end
+
+	local pet = PetUtils.getPet(petData.Pet.Name) :: PetUtils.PetModel
+	return `x{Formatter.formatNumberWithSuffix(pet.Multiplier.Value)}`
+end)
+
+local evolveText = Computed(function()
+	local petData = SelectedPetData:get()
+	if not petData then
+		return ""
+	end
+
+	local requirement = 3
+
+	if petData.Pet.Name:match "Evolved" then
+		requirement = 5
+	elseif petData.Pet.Name:match "Shiny" then
+		return "MAX EVOLVED"
+	end
+
+	return `EVOLVE ({PetUtils.countPetByType(PlayerPets:get(), petData.Pet.Name)}/{requirement})`
+end)
+
 return New "Frame" {
 	Name = "SelectionFrame",
 	BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -53,6 +90,22 @@ return New "Frame" {
 			Position = UDim2.fromScale(0.141, 0.7),
 			Size = UDim2.fromScale(0.708, 0.124),
 
+			[OnEvent "Activated"] = function()
+				if (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Equipped then
+					require(ReplicatedStorage.Common.RedEvents.UnequipPets)
+						:Client()
+						:Fire { (SelectedPetData:get() :: SharedValues.petAndIdx).Idx }
+				else
+					require(ReplicatedStorage.Common.RedEvents.EquipPets)
+						:Client()
+						:Fire { (SelectedPetData:get() :: SharedValues.petAndIdx).Idx }
+				end
+
+				local selectedPetData = SelectedPetData:get() :: SharedValues.petAndIdx
+				selectedPetData.Pet.Equipped = not selectedPetData.Pet.Equipped
+				SelectedPetData:set(selectedPetData)
+			end,
+
 			[Children] = {
 				New "TextLabel" {
 					Name = "Text",
@@ -62,7 +115,7 @@ return New "Frame" {
 					FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 					Position = UDim2.fromScale(0.0455, 0.0861),
 					Size = UDim2.fromScale(0.909, 0.796),
-					Text = "EQUIP",
+					Text = equippedText,
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextScaled = true,
 					TextSize = 14,
@@ -100,7 +153,7 @@ return New "Frame" {
 					FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 					Position = UDim2.fromScale(0.0455, 0.0861),
 					Size = UDim2.fromScale(0.909, 0.796),
-					Text = "EVOLVE (0/3)",
+					Text = evolveText,
 					TextColor3 = Color3.fromRGB(255, 255, 255),
 					TextScaled = true,
 					TextSize = 14,
@@ -176,7 +229,7 @@ return New "Frame" {
 			FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 			Position = UDim2.fromScale(0.438, 0.528),
 			Size = UDim2.fromScale(0.453, 0.117),
-			Text = "x2k",
+			Text = petMultiplier,
 			TextColor3 = Color3.fromRGB(255, 255, 255),
 			TextScaled = true,
 			TextSize = 14,

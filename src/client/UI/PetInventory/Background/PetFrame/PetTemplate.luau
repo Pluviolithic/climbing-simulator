@@ -29,6 +29,10 @@ return function(props)
 		return table.find(PetsToDelete:get(), props.PetIndex) ~= nil
 	end)
 
+	local isEquipped = Computed(function()
+		return props.Pet.Equipped
+	end)
+
 	return New "ImageButton" {
 		Name = props.Pet.Name,
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -109,7 +113,7 @@ return function(props)
 				Position = UDim2.fromScale(0.723, -0.00386),
 				Selectable = true,
 				Size = UDim2.fromScale(0.274, 0.275),
-				Visible = false,
+				Visible = isEquipped,
 				ZIndex = 2,
 			},
 

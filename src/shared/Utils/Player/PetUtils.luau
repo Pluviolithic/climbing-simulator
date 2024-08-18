@@ -187,9 +187,16 @@ local function countEquippedPets(playerPets: Types.PlayerPets)
 	end)
 end
 
+local function countPetByType(playerPets: Types.PlayerPets, petName: string)
+	return Sift.Array.count(playerPets, function(pet: Types.Pet?)
+		return (pet :: Types.Pet).Name == petName
+	end)
+end
+
 return {
 	getPet = getPet,
 	countPets = countPets,
+	countPetByType = countPetByType,
 	getPetRarities = getPetRarities,
 	getBestPetNames = getBestPetNames,
 	instantiatePets = instantiatePets,

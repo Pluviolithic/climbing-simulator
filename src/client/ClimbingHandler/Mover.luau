@@ -21,8 +21,8 @@ local function getHipAttachment(): Attachment?
 end
 
 local function getOrCreateConstraints(attachment: Attachment): (AlignPosition, AlignOrientation)
-	local alignPosition = attachment:FindFirstChild "AlignPosition" :: AlignPosition?
-	local alignOrientation = attachment:FindFirstChild "AlignOrientation" :: AlignOrientation?
+	local alignPosition: any = attachment:FindFirstChild "AlignPosition"
+	local alignOrientation: any = attachment:FindFirstChild "AlignOrientation"
 
 	if not alignPosition then
 		alignPosition = Instance.new "AlignPosition"

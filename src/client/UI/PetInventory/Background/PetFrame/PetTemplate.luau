@@ -26,7 +26,7 @@ return function(props)
 	local pet = petUtils.getPet(props.Pet.Name) :: petUtils.PetModel
 
 	local toBeDeleted = Computed(function()
-		return table.find(PetsToDelete:get(), props.PetIndex) ~= nil
+		return table.find(PetsToDelete:get(), props.Pet.Id) ~= nil
 	end)
 
 	local isEquipped = Computed(function()
@@ -34,7 +34,7 @@ return function(props)
 	end)
 
 	return New "ImageButton" {
-		Name = props.Pet.Name,
+		Name = `{string.char(props.PetIndex)}{props.Pet.Name}`,
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BackgroundTransparency = 1,
 		BorderColor3 = Color3.fromRGB(27, 42, 53),
@@ -46,19 +46,19 @@ return function(props)
 		[OnEvent "Activated"] = function()
 			if DeleteModeEnabled:get() then
 				local petsToDelete = PetsToDelete:get()
-				local index = table.find(petsToDelete, props.PetIndex)
+				local index = table.find(petsToDelete, props.Pet.Id)
 
 				if index then
 					table.remove(petsToDelete, index)
 				else
-					table.insert(petsToDelete, props.PetIndex)
+					table.insert(petsToDelete, props.Pet.Id)
 				end
 
 				PetsToDelete:set(petsToDelete)
 			else
 				if
 					SelectedPetData:get()
-					and (SelectedPetData:get() :: SharedValues.petAndIdx).Idx == props.PetIndex
+					and (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Id == props.Pet.Id
 				then
 					SelectedPetData:set(nil)
 				else

@@ -30,6 +30,10 @@ local broadcaster = Reflex.createBroadcaster {
 			[player.Name] = state.Players.Timestamps[player.Name],
 		}
 
+		newState.Pets = {
+			[player.Name] = state.Players.Pets[player.Name],
+		}
+
 		return newState
 	end,
 }

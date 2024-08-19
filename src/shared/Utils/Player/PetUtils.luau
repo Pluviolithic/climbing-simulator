@@ -6,9 +6,10 @@ local Types = require(ReplicatedStorage.Common.Slices.Players.Types)
 local Janitor = require(ReplicatedStorage.Common.lib.Janitor)
 local Sift = require(ReplicatedStorage.Common.lib.Sift)
 
+local petCache = {}
+local currentId = 0
 local petConfig = ReplicatedStorage.Config.Pets
 local modelYOffset = petConfig.VerticalOffset.Value
-local leaderboardPetName = ReplicatedStorage.Config.Misc.LeaderboardPet.Value
 
 local baseBodyPosition = Instance.new "BodyPosition"
 local baseBodyGyro = Instance.new "BodyGyro"
@@ -21,6 +22,23 @@ baseBodyGyro.D = petConfig.Dampening.Value
 baseBodyGyro.P = petConfig.Aggressiveness.Value
 baseBodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
 
+task.spawn(function()
+	for _, map in ipairs(ReplicatedStorage.EvolvedPets:GetChildren()) do
+		for _, pet in ipairs(map:GetChildren()) do
+			petCache[pet.Name] = pet
+		end
+	end
+	for _, map in ipairs(ReplicatedStorage.ShinyPets:GetChildren()) do
+		for _, pet in ipairs(map:GetChildren()) do
+			petCache[pet.Name] = pet
+		end
+	end
+	for _, map in ipairs(ReplicatedStorage.Pets:GetChildren()) do
+		for _, pet in ipairs(map:GetChildren()) do
+			petCache[pet.Name] = pet
+		end
+	end
+end)
 export type PetModel = Model & {
 	ImageID: StringValue,
 	Multiplier: NumberValue,
@@ -56,21 +74,17 @@ local function calculatePosition(rootPart: BasePart, numPets: number, i: number)
 end
 
 local function getPet(petName: string): PetModel?
-	local pets
-	if petName:match "Evolved" then
-		pets = ReplicatedStorage.EvolvedPets
-	elseif petName:match "Shiny" or petName == leaderboardPetName then
-		pets = ReplicatedStorage.ShinyPets
-	else
-		pets = ReplicatedStorage.Pets
-	end
-	for _, area in pets:GetChildren() do
-		local pet = area:FindFirstChild(petName)
-		if pet then
-			return pet
-		end
-	end
-	return nil
+	return petCache[petName]
+end
+
+local function createPet(petName: string, rarity: string, equipped: boolean?): Types.Pet
+	currentId += 1
+	return {
+		Id = currentId,
+		Name = petName,
+		Rarity = rarity,
+		Equipped = equipped or false,
+	}
 end
 
 local function getEquippedPetsMultiplier(equippedPets): (number, number)
@@ -143,7 +157,7 @@ local function instantiatePets(playerName, equippedPets)
 			for i = 1, quantity do
 				local position, look = calculatePosition(rootPart, quantity, i)
 				local newPetIndex = nil
-				local newPet = nil
+				local newPet: any = nil
 
 				for index, pet in equippedPetModels do
 					if pet.Name == petName then
@@ -196,6 +210,7 @@ end
 return {
 	getPet = getPet,
 	countPets = countPets,
+	createPet = createPet,
 	countPetByType = countPetByType,
 	getPetRarities = getPetRarities,
 	getBestPetNames = getBestPetNames,

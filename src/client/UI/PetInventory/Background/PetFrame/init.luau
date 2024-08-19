@@ -39,7 +39,7 @@ return New "ScrollingFrame" {
 			Name = "UIGridLayout",
 			CellPadding = UDim2.fromScale(0.015, 0.025),
 			CellSize = UDim2.fromScale(0.234, 0.32),
-			SortOrder = Enum.SortOrder.LayoutOrder,
+			SortOrder = Enum.SortOrder.Name,
 		},
 		playerPetButtons :: any,
 	},

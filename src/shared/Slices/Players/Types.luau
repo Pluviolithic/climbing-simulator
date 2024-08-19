@@ -35,6 +35,7 @@ export type Pet = {
 	Equipped: boolean,
 	Name: string,
 	Rarity: string,
+	Id: number,
 }
 
 export type PlayerPets = { Pet? }

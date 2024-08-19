@@ -24,28 +24,16 @@ export type PetsActions = {
 
 local initialState: PetsState = {}
 
-local function sortPets(pets: types.PlayerPets)
-	-- table.sort(pets, function(a, b)
-	-- 	if a.Equipped and not b.Equipped then
-	-- 		return a
-	-- 	elseif b.Equipped and not a.Equipped then
-	-- 		return b
-	-- 	else
-	-- 		local petA = PetUtils.getPet(a.Name) :: PetUtils.PetModel
-	-- 		local petB = PetUtils.getPet(b.Name) :: PetUtils.PetModel
-
-	-- 		return petA.Multiplier.Value > petB.Multiplier.Value
-	-- 	end
-	-- end)
-	return pets
-end
-
 local petsSlice = Reflex.createProducer(initialState, {
 	wipeData = function(state: PetsState, name: string)
 		return Sift.Dictionary.set(state, name, {})
 	end,
 	addPlayerData = function(state: PetsState, name: string, data: any): PetsState
-		return Sift.Dictionary.merge(state, { [name] = data.Pets })
+		local newPets = {}
+		for _, pet in ipairs(data.Pets) do
+			table.insert(newPets, PetUtils.createPet(pet.Name, pet.Rarity, pet.Equipped))
+		end
+		return Sift.Dictionary.merge(state, { [name] = newPets })
 	end,
 	removePlayerData = function(state: PetsState, name: string): PetsState
 		return Sift.Dictionary.removeKey(state, name)
@@ -55,43 +43,45 @@ local petsSlice = Reflex.createProducer(initialState, {
 			return state
 		end
 		return Sift.Dictionary.merge(state, {
-			[name] = sortPets(Sift.Array.concat(state[name], pets)),
+			[name] = Sift.Array.concat(state[name], pets),
 		})
 	end,
-	deletePets = function(state: PetsState, name: string, indices: { number }): PetsState
+	deletePets = function(state: PetsState, name: string, Ids: { number }): PetsState
 		if not state[name] then
 			return state
 		end
 		return Sift.Dictionary.merge(state, {
-			[name] = Sift.Array.removeIndices(state[name] :: any, table.unpack(indices)),
+			[name] = Sift.Array.filter(state[name] :: any, function(pet)
+				return table.find(Ids, pet.Id) == nil
+			end),
 		})
 	end,
-	equipPets = function(state: PetsState, name: string, indices: { number }): PetsState
+	equipPets = function(state: PetsState, name: string, Ids: { number }): PetsState
 		if not state[name] then
 			return state
 		end
 
 		return Sift.Dictionary.mergeDeep(state, {
-			[name] = sortPets(Sift.Array.map(state[name] :: any, function(value, index)
-				if table.find(indices, index) then
-					value.Equipped = true
+			[name] = Sift.Array.map(state[name] :: any, function(pet)
+				if table.find(Ids, pet.Id) then
+					pet.Equipped = true
 				end
-				return value
-			end)),
+				return pet
+			end),
 		})
 	end,
-	unequipPets = function(state: PetsState, name: string, indices: { number }): PetsState
+	unequipPets = function(state: PetsState, name: string, Ids: { number }): PetsState
 		if not state[name] then
 			return state
 		end
 
 		return Sift.Dictionary.mergeDeep(state, {
-			[name] = sortPets(Sift.Array.map(state[name] :: any, function(value, index)
-				if table.find(indices, index) then
-					value.Equipped = false
+			[name] = Sift.Array.map(state[name] :: any, function(pet)
+				if table.find(Ids, pet.Id) then
+					pet.Equipped = false
 				end
-				return value
-			end)),
+				return pet
+			end),
 		})
 	end,
 })

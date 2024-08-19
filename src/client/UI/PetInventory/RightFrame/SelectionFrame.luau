@@ -94,16 +94,12 @@ return New "Frame" {
 				if (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Equipped then
 					require(ReplicatedStorage.Common.RedEvents.UnequipPets)
 						:Client()
-						:Fire { (SelectedPetData:get() :: SharedValues.petAndIdx).Idx }
+						:Fire { (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Id }
 				else
 					require(ReplicatedStorage.Common.RedEvents.EquipPets)
 						:Client()
-						:Fire { (SelectedPetData:get() :: SharedValues.petAndIdx).Idx }
+						:Fire { (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Id }
 				end
-
-				local selectedPetData = SelectedPetData:get() :: SharedValues.petAndIdx
-				selectedPetData.Pet.Equipped = not selectedPetData.Pet.Equipped
-				SelectedPetData:set(selectedPetData)
 			end,
 
 			[Children] = {

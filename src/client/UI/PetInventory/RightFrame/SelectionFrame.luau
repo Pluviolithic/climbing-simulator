@@ -13,6 +13,7 @@ local Children = Fusion.Children
 
 local PlayerPets = SharedValues.PlayerPets
 local SelectedPetData = SharedValues.SelectedPetData
+local MaxPetEquipCount = SharedValues.MaxPetEquipCount
 local DeleteModeEnabled = SharedValues.DeleteModeEnabled
 
 local visible = Computed(function()
@@ -72,6 +73,14 @@ local evolveText = Computed(function()
 	return `EVOLVE ({PetUtils.countPetByType(PlayerPets:get(), petData.Pet.Name)}/{requirement})`
 end)
 
+local canUseEquipButton = Computed(function()
+	if not SelectedPetData:get() then
+		return false
+	end
+	return PetUtils.countEquippedPets(PlayerPets:get()) < MaxPetEquipCount:get()
+		or (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Equipped
+end)
+
 return New "Frame" {
 	Name = "SelectionFrame",
 	BackgroundColor3 = Color3.fromRGB(255, 255, 255),
@@ -89,16 +98,17 @@ return New "Frame" {
 			Image = "http://www.roblox.com/asset/?id=16865012748",
 			Position = UDim2.fromScale(0.141, 0.7),
 			Size = UDim2.fromScale(0.708, 0.124),
+			Active = canUseEquipButton,
 
 			[OnEvent "Activated"] = function()
 				if (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Equipped then
-					require(ReplicatedStorage.Common.RedEvents.UnequipPets)
+					require(ReplicatedStorage.Common.RedEvents.UnequipPet)
 						:Client()
-						:Fire { (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Id }
+						:Fire((SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Id)
 				else
-					require(ReplicatedStorage.Common.RedEvents.EquipPets)
+					require(ReplicatedStorage.Common.RedEvents.EquipPet)
 						:Client()
-						:Fire { (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Id }
+						:Fire((SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Id)
 				end
 			end,
 

@@ -17,9 +17,9 @@ export type PetsActions = {
 	addPlayerData: (name: string, data: { [any]: any }) -> (),
 	removePlayerData: (name: string) -> (),
 	addPets: (name: string, pets: { Types.Pet }) -> (),
-	deletePets: (name: string, indices: { number }) -> (),
-	equipPets: (name: string, indices: { number }) -> (),
-	unequipPets: (name: string, indices: { number }) -> (),
+	deletePets: (name: string, Ids: { number }) -> (),
+	equipPets: (name: string, Ids: { number }) -> (),
+	unequipPets: (name: string, Ids: { number }) -> (),
 }
 
 local initialState: PetsState = {}

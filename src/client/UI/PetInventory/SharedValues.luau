@@ -2,8 +2,8 @@ local Players = game:GetService "Players"
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local StarterPlayer = game:GetService "StarterPlayer"
 
-local producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
-local selectors = require(ReplicatedStorage.Common.Selectors)
+local Producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
+local Selectors = require(ReplicatedStorage.Common.Selectors)
 local Types = require(ReplicatedStorage.Common.Slices.Players.Types)
 local PetUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
@@ -23,6 +23,7 @@ local PlayerPets: Fusion.Value<Types.PlayerPets> = Value {}
 local SelectedPetData: Fusion.Value<petAndIdx?> = Value(nil)
 local PetsToDelete: Fusion.Value<{ number }> = Value {}
 local ConfirmingDelete: Fusion.Value<boolean> = Value(false)
+local MaxPetEquipCount: Fusion.Value<number> = Value(0)
 
 local function sortPets(pets: Types.PlayerPets)
 	local sortedEquipped = Sift.Array.filter(
@@ -48,7 +49,7 @@ local function sortPets(pets: Types.PlayerPets)
 	return Sift.Array.concat(sortedEquipped, sortedUnequipped)
 end
 
-producer:subscribe(selectors.selectPlayerPets(player.Name), function(pets: any)
+Producer:subscribe(Selectors.selectPlayerPets(player.Name), function(pets: any)
 	local sortedPets = sortPets(pets)
 	PlayerPets:set(sortedPets)
 
@@ -63,10 +64,15 @@ producer:subscribe(selectors.selectPlayerPets(player.Name), function(pets: any)
 	end
 end)
 
+Producer:subscribe(Selectors.selectPlayerStatValue(player.Name, "MaxPetEquipCount"), function(count)
+	MaxPetEquipCount:set(count)
+end)
+
 return {
 	DeleteModeEnabled = DeleteModeEnabled,
 	PlayerPets = PlayerPets,
 	SelectedPetData = SelectedPetData,
 	PetsToDelete = PetsToDelete,
 	ConfirmingDelete = ConfirmingDelete,
+	MaxPetEquipCount = MaxPetEquipCount,
 }

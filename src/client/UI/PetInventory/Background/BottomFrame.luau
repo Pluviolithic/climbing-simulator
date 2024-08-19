@@ -16,24 +16,20 @@ local Children = Fusion.Children
 local player = Players.LocalPlayer
 
 local maxPetCount: Fusion.Value<number> = Value(0)
-local maxPetEquipCount: Fusion.Value<number> = Value(0)
 
 local PlayerPets = SharedValues.PlayerPets
+local MaxPetEquipCount = SharedValues.MaxPetEquipCount
 
 local storageText = Computed(function()
 	return `{petUtils.countPets(PlayerPets:get())}/{maxPetCount:get()}`
 end)
 
 local equippedText = Computed(function()
-	return `{petUtils.countEquippedPets(PlayerPets:get())}/{maxPetEquipCount:get()}`
+	return `{petUtils.countEquippedPets(PlayerPets:get())}/{MaxPetEquipCount:get()}`
 end)
 
 Producer:subscribe(Selectors.selectPlayerStatValue(player.Name, "MaxPetCount"), function(count)
 	maxPetCount:set(count)
-end)
-
-Producer:subscribe(Selectors.selectPlayerStatValue(player.Name, "MaxPetEquipCount"), function(count)
-	maxPetEquipCount:set(count)
 end)
 
 return New "ImageLabel" {

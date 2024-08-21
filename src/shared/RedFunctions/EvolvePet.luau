@@ -5,8 +5,4 @@ local Guard = require(ReplicatedStorage.Common.lib.Guard)
 
 local petIdCheck = Guard.Optional(Guard.Number)
 
-local function petNameAndIdCheck(petName, petId)
-	return Guard.String(petName), Guard.Number(petId)
-end
-
-return Red.Function("EvolvePet", petNameAndIdCheck, petIdCheck)
+return Red.Function("EvolvePet", petIdCheck, petIdCheck)

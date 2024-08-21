@@ -1,16 +1,29 @@
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local ServerScriptService = game:GetService "ServerScriptService"
 
+local EvolveAllPets = require(ReplicatedStorage.Common.RedEvents.EvolveAllPets)
+local UnequipAllPets = require(ReplicatedStorage.Common.RedEvents.UnequipAllPets)
 local Selectors = require(ReplicatedStorage.Common.Selectors)
 local Producer = require(ServerScriptService.Server.Producer)
 
 local EvolvePet = require(ReplicatedStorage.Common.RedFunctions.EvolvePet)
 local Types = require(ReplicatedStorage.Common.Slices.Players.Types)
 local PetUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
+local Ratelimit = require(ReplicatedStorage.Common.lib.Ratelimit)
 local Sift = require(ReplicatedStorage.Common.lib.Sift)
-local EquipPet = require(ReplicatedStorage.Common.RedEvents.EquipPet):Server()
-local DeletePets = require(ReplicatedStorage.Common.RedEvents.DeletePets):Server()
-local UnequipPet = require(ReplicatedStorage.Common.RedEvents.UnequipPet):Server()
+local EquipPet = require(ReplicatedStorage.Common.RedEvents.EquipPet)
+local DeletePets = require(ReplicatedStorage.Common.RedEvents.DeletePets)
+local UnequipPet = require(ReplicatedStorage.Common.RedEvents.UnequipPet)
+
+local function getEvolutionRequirement(petName: string): number
+	if petName:match "Shiny" then
+		return 0
+	elseif petName:match "Evolved" then
+		return 5
+	else
+		return 3
+	end
+end
 
 local function getEvolvedName(petName: string): string
 	if petName:match "Shiny" then
@@ -18,7 +31,7 @@ local function getEvolvedName(petName: string): string
 	elseif petName:match "Evolved" then
 		return petName:gsub("Shiny", "Evolved")
 	else
-		return `Evovled {petName}`
+		return `Evolved {petName}`
 	end
 end
 
@@ -26,7 +39,7 @@ local function getPetsOfTypeForEvolve(
 	playerPets: Types.PlayerPets,
 	petName: string,
 	maximum: boolean?
-): { number }?
+): { number }
 	local filteredPetIds = Sift.Array.map(
 		Sift.Array.filter(playerPets, function(pet)
 			return (pet :: Types.Pet).Name == petName
@@ -35,39 +48,37 @@ local function getPetsOfTypeForEvolve(
 			return (pet :: Types.Pet).Id
 		end
 	)
+	local requirement = getEvolutionRequirement(petName)
 
-	if petName:match "Shiny" then
-		return nil
-	elseif petName:match "Evolved" then
-		local maxEvolves = #filteredPetIds // 5
-		if maxEvolves < 1 then
-			return nil
-		end
-
-		if maximum then
-			return Sift.Array.slice(filteredPetIds, 5 * maxEvolves)
-		else
-			return Sift.Array.slice(filteredPetIds, 5)
-		end
+	if requirement == 0 then
+		return {}
 	else
-		local maxEvolves = #filteredPetIds // 3
+		local maxEvolves = #filteredPetIds // requirement
 		if maxEvolves < 1 then
-			return nil
+			return {}
 		end
 
 		if maximum then
-			return Sift.Array.slice(filteredPetIds, 3 * maxEvolves)
+			return Sift.Array.slice(filteredPetIds, requirement * maxEvolves)
 		else
-			return Sift.Array.slice(filteredPetIds, 3)
+			return Sift.Array.slice(filteredPetIds, requirement)
 		end
 	end
 end
 
-DeletePets:On(function(player, petIds)
+local deleteLimit = Ratelimit(5, 1)
+DeletePets:Server():On(function(player, petIds)
+	if not deleteLimit(player.UserId) then
+		return
+	end
 	Producer.deletePets(player.Name, petIds)
 end)
 
-EquipPet:On(function(player, petId)
+local equipLimit = Ratelimit(5, 1)
+EquipPet:Server():On(function(player, petId)
+	if not equipLimit(player.UserId) then
+		return
+	end
 	if
 		#Producer:getState(Selectors.selectEquippedPets(player.Name) :: any)
 		< Producer:getState(Selectors.selectPlayerStatValue(player.Name, "MaxPetEquipCount"))
@@ -76,11 +87,19 @@ EquipPet:On(function(player, petId)
 	end
 end)
 
-UnequipPet:On(function(player, petId)
+local unequipLimit = Ratelimit(5, 1)
+UnequipPet:Server():On(function(player, petId)
+	if not unequipLimit(player.UserId) then
+		return
+	end
 	Producer.unequipPets(player.Name, { petId })
 end)
 
+local evolveLimit = Ratelimit(5, 1)
 EvolvePet:SetCallback(function(player, petId)
+	if not evolveLimit(player.UserId) then
+		return
+	end
 	local playerPets =
 		Producer:getState(Selectors.selectPlayerPets(player.Name)) :: Types.PlayerPets
 	local petIndex = Sift.Array.findWhere(playerPets :: any, function(pet)
@@ -104,6 +123,46 @@ EvolvePet:SetCallback(function(player, petId)
 	Producer.addPets(player.Name, { newPet })
 
 	return newPet.Id
+end)
+
+UnequipAllPets:Server():On(function(player)
+	if not unequipLimit(player.UserId) then
+		return
+	end
+	Producer.unequipAllPets(player.Name)
+end)
+
+EvolveAllPets:Server():On(function(player)
+	if not evolveLimit(player.UserId) then
+		return
+	end
+	local foundPets = {}
+	local playerPets =
+		Producer:getState(Selectors.selectPlayerPets(player.Name)) :: Types.PlayerPets
+	local uniquePetsList = Sift.Array.filter(playerPets, function(pet: any)
+		if foundPets[pet.Name] then
+			return false
+		end
+		foundPets[pet.Name] = true
+		return true
+	end)
+
+	for _, pet: any in ipairs(uniquePetsList) do
+		local requirement = getEvolutionRequirement(pet.Name)
+		local petsToDelete = getPetsOfTypeForEvolve(playerPets, pet.Name)
+
+		if #petsToDelete == 0 then
+			continue
+		end
+
+		local newPets = {}
+		for _ = 1, #petsToDelete / requirement do
+			table.insert(newPets, PetUtils.createPet(getEvolvedName(pet.Name), pet.Rarity))
+		end
+
+		Producer.deletePets(player.Name, petsToDelete)
+		Producer.addPets(player.Name, newPets)
+	end
 end)
 
 return 0

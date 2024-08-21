@@ -20,6 +20,7 @@ export type PetsActions = {
 	deletePets: (name: string, Ids: { number }) -> (),
 	equipPets: (name: string, Ids: { number }) -> (),
 	unequipPets: (name: string, Ids: { number }) -> (),
+	unequipAllPets: (name: string) -> (),
 }
 
 local initialState: PetsState = {}
@@ -80,6 +81,18 @@ local petsSlice = Reflex.createProducer(initialState, {
 				if table.find(Ids, pet.Id) then
 					pet.Equipped = false
 				end
+				return pet
+			end),
+		})
+	end,
+	unequipAllPets = function(state: PetsState, name: string): PetsState
+		if not state[name] then
+			return state
+		end
+
+		return Sift.Dictionary.mergeDeep(state, {
+			[name] = Sift.Array.map(state[name] :: any, function(pet)
+				pet.Equipped = false
 				return pet
 			end),
 		})

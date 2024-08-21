@@ -14,6 +14,7 @@ Guard = "red-blox/guard@1.0.1"
 Fusion = "elttob/fusion@0.2.0"
 Promise = "jsdotlua/promise@3.5.2"
 ZonePlus = "legendoj1/zoneplus@3.2.2"
+Ratelimit = "red-blox/ratelimit@^1.0.0"
 Janitor = "howmanysmall/janitor@1.13.14"
 
 [server-dependencies]

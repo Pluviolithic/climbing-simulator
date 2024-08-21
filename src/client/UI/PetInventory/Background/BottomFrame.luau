@@ -5,7 +5,8 @@ local StarterPlayer = game:GetService "StarterPlayer"
 local Selectors = require(ReplicatedStorage.Common.Selectors)
 local Producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
 local petUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
-local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
+local PetInventoryValues =
+	require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.PetInventoryValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
@@ -17,8 +18,8 @@ local player = Players.LocalPlayer
 
 local maxPetCount: Fusion.Value<number> = Value(0)
 
-local PlayerPets = SharedValues.PlayerPets
-local MaxPetEquipCount = SharedValues.MaxPetEquipCount
+local PlayerPets = PetInventoryValues.PlayerPets
+local MaxPetEquipCount = PetInventoryValues.MaxPetEquipCount
 
 local storageText = Computed(function()
 	return `{petUtils.countPets(PlayerPets:get())}/{maxPetCount:get()}`

@@ -1,20 +1,23 @@
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local StarterPlayer = game:GetService "StarterPlayer"
 
+local Types = require(ReplicatedStorage.Common.Slices.Players.Types)
 local Formatter = require(ReplicatedStorage.Common.Utils.Formatter)
 local PetUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
-local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
+local PetInventoryValues =
+	require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.PetInventoryValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
+local Sift = require(ReplicatedStorage.Common.lib.Sift)
 
 local New = Fusion.New
 local OnEvent = Fusion.OnEvent
 local Computed = Fusion.Computed
 local Children = Fusion.Children
 
-local PlayerPets = SharedValues.PlayerPets
-local SelectedPetData = SharedValues.SelectedPetData
-local MaxPetEquipCount = SharedValues.MaxPetEquipCount
-local DeleteModeEnabled = SharedValues.DeleteModeEnabled
+local PlayerPets = PetInventoryValues.PlayerPets
+local SelectedPetData = PetInventoryValues.SelectedPetData
+local MaxPetEquipCount = PetInventoryValues.MaxPetEquipCount
+local DeleteModeEnabled = PetInventoryValues.DeleteModeEnabled
 
 local visible = Computed(function()
 	return SelectedPetData:get() ~= nil and not DeleteModeEnabled:get()
@@ -22,7 +25,7 @@ end)
 
 local equippedText = Computed(function()
 	return if SelectedPetData:get()
-			and (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Equipped
+			and (SelectedPetData:get() :: PetInventoryValues.petAndIdx).Pet.Equipped
 		then "UNEQUIP"
 		else "EQUIP"
 end)
@@ -78,7 +81,24 @@ local canUseEquipButton = Computed(function()
 		return false
 	end
 	return PetUtils.countEquippedPets(PlayerPets:get()) < MaxPetEquipCount:get()
-		or (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Equipped
+		or (SelectedPetData:get() :: PetInventoryValues.petAndIdx).Pet.Equipped
+end)
+
+local canUseEvolveButton = Computed(function()
+	local petData = SelectedPetData:get()
+	if not petData then
+		return false
+	end
+
+	local requirement = 3
+
+	if petData.Pet.Name:match "Evolved" then
+		requirement = 5
+	elseif petData.Pet.Name:match "Shiny" then
+		return false
+	end
+
+	return PetUtils.countPetByType(PlayerPets:get(), petData.Pet.Name) >= requirement
 end)
 
 return New "Frame" {
@@ -101,14 +121,14 @@ return New "Frame" {
 			Active = canUseEquipButton,
 
 			[OnEvent "Activated"] = function()
-				if (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Equipped then
+				if (SelectedPetData:get() :: PetInventoryValues.petAndIdx).Pet.Equipped then
 					require(ReplicatedStorage.Common.RedEvents.UnequipPet)
 						:Client()
-						:Fire((SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Id)
+						:Fire((SelectedPetData:get() :: PetInventoryValues.petAndIdx).Pet.Id)
 				else
 					require(ReplicatedStorage.Common.RedEvents.EquipPet)
 						:Client()
-						:Fire((SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Id)
+						:Fire((SelectedPetData:get() :: PetInventoryValues.petAndIdx).Pet.Id)
 				end
 			end,
 
@@ -149,6 +169,28 @@ return New "Frame" {
 			Image = "http://www.roblox.com/asset/?id=16992643775",
 			Position = UDim2.fromScale(0.106, 0.842),
 			Size = UDim2.fromScale(0.78, 0.124),
+			Active = canUseEvolveButton,
+
+			[OnEvent "Activated"] = function()
+				local petData = SelectedPetData:get() :: PetInventoryValues.petAndIdx
+				local _, newId = require(ReplicatedStorage.Common.RedFunctions.EvolvePet)
+					:Call(petData.Pet.Id)
+					:Await()
+
+				if newId then
+					local index = nil
+					repeat
+						task.wait(0.1)
+						index = Sift.Array.findWhere(PlayerPets:get(), function(pet)
+							return (pet :: Types.Pet).Id == newId
+						end)
+					until index
+					SelectedPetData:set {
+						Idx = index,
+						Pet = PlayerPets:get()[index :: number],
+					}
+				end
+			end,
 
 			[Children] = {
 				New "TextLabel" {

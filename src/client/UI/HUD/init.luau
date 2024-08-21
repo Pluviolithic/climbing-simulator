@@ -36,6 +36,7 @@ AsyncHandlers.waitForChild(player, "PlayerGui"):andThen(function(PlayerGui: Play
 				Size = UDim2.fromScale(0.0971, 0.0735),
 				Position = UDim2.fromScale(0.583, 0.0181),
 			},
+			require(script.Pets),
 		},
 	}).Parent =
 		PlayerGui

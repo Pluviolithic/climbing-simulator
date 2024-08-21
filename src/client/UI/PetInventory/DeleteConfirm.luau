@@ -1,7 +1,8 @@
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local StarterPlayer = game:GetService "StarterPlayer"
 
-local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
+local PetInventoryValues =
+	require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.PetInventoryValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
@@ -9,10 +10,10 @@ local OnEvent = Fusion.OnEvent
 local Computed = Fusion.Computed
 local Children = Fusion.Children
 
-local PetsToDelete = SharedValues.PetsToDelete
-local SelectedPetData = SharedValues.SelectedPetData
-local ConfirmingDelete = SharedValues.ConfirmingDelete
-local DeleteModeEnabled = SharedValues.DeleteModeEnabled
+local PetsToDelete = PetInventoryValues.PetsToDelete
+local SelectedPetData = PetInventoryValues.SelectedPetData
+local ConfirmingDelete = PetInventoryValues.ConfirmingDelete
+local DeleteModeEnabled = PetInventoryValues.DeleteModeEnabled
 
 local amountText = Computed(function()
 	return `Are you sure you want to delete these {#PetsToDelete:get()} pets?`

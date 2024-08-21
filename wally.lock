@@ -50,7 +50,7 @@ dependencies = [["Promise", "evaera/promise@4.0.0"]]
 [[package]]
 name = "pluviolithic/climbing-simulator"
 version = "1.0.0"
-dependencies = [["Fusion", "elttob/fusion@0.2.0"], ["Guard", "red-blox/guard@1.0.1"], ["Janitor", "howmanysmall/janitor@1.15.7"], ["Promise", "jsdotlua/promise@3.5.2"], ["Red", "red-blox/red@2.3.2"], ["Reflex", "littensy/reflex@4.3.1"], ["Sift", "csqrl/sift@0.0.3"], ["ZonePlus", "legendoj1/zoneplus@3.2.2"], ["Cmdr", "evaera/cmdr@1.12.0"], ["ProfileService", "grilme99/profileservice@1.0.0"]]
+dependencies = [["Fusion", "elttob/fusion@0.2.0"], ["Guard", "red-blox/guard@1.0.1"], ["Janitor", "howmanysmall/janitor@1.15.7"], ["Promise", "jsdotlua/promise@3.5.2"], ["Ratelimit", "red-blox/ratelimit@1.0.1"], ["Red", "red-blox/red@2.3.2"], ["Reflex", "littensy/reflex@4.3.1"], ["Sift", "csqrl/sift@0.0.3"], ["ZonePlus", "legendoj1/zoneplus@3.2.2"], ["Cmdr", "evaera/cmdr@1.12.0"], ["ProfileService", "grilme99/profileservice@1.0.0"]]
 
 [[package]]
 name = "red-blox/future"
@@ -59,6 +59,11 @@ dependencies = [["Spawn", "red-blox/spawn@1.1.0"]]
 
 [[package]]
 name = "red-blox/guard"
+version = "1.0.1"
+dependencies = []
+
+[[package]]
+name = "red-blox/ratelimit"
 version = "1.0.1"
 dependencies = []
 

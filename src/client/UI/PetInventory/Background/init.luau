@@ -1,14 +1,16 @@
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
-local SharedValues = require(script.Parent.SharedValues)
+local PetInventoryValues = require(script.Parent.PetInventoryValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
 local OnEvent = Fusion.OnEvent
 local Children = Fusion.Children
 
-local PetsToDelete = SharedValues.PetsToDelete
-local DeleteModeEnabled = SharedValues.DeleteModeEnabled
+local Open = PetInventoryValues.Open
+local PetsToDelete = PetInventoryValues.PetsToDelete
+local SelectedPetData = PetInventoryValues.SelectedPetData
+local DeleteModeEnabled = PetInventoryValues.DeleteModeEnabled
 
 return New "ImageLabel" {
 	Name = "Background",
@@ -30,6 +32,10 @@ return New "ImageLabel" {
 			Image = "http://www.roblox.com/asset/?id=16865012833",
 			Position = UDim2.fromScale(0.947, 0.0281),
 			Size = UDim2.fromScale(0.0695, 0.0968),
+
+			[OnEvent "Activated"] = function()
+				Open:set(false)
+			end,
 		},
 		New "ImageButton" {
 			Name = "DeletePets",
@@ -47,13 +53,18 @@ return New "ImageLabel" {
 			end,
 		},
 		New "ImageButton" {
-			Name = "EquipBest",
+			Name = "EvolveAll",
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1,
 			BorderColor3 = Color3.fromRGB(27, 42, 53),
 			Image = "http://www.roblox.com/asset/?id=16865012947",
 			Position = UDim2.fromScale(0.54, 0.122),
 			Size = UDim2.fromScale(0.188, 0.0845),
+
+			[OnEvent "Activated"] = function()
+				require(ReplicatedStorage.Common.RedEvents.EvolveAllPets):Client():Fire()
+				SelectedPetData:set(nil)
+			end,
 
 			[Children] = {
 				New "TextLabel" {
@@ -90,6 +101,10 @@ return New "ImageLabel" {
 			Image = "http://www.roblox.com/asset/?id=16865012220",
 			Position = UDim2.fromScale(0.73, 0.122),
 			Size = UDim2.fromScale(0.188, 0.0841),
+
+			[OnEvent "Activated"] = function()
+				require(ReplicatedStorage.Common.RedEvents.UnequipAllPets):Client():Fire()
+			end,
 
 			[Children] = {
 				New "TextLabel" {

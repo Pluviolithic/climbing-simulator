@@ -1,7 +1,8 @@
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local StarterPlayer = game:GetService "StarterPlayer"
 
-local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
+local PetInventoryValues =
+	require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.PetInventoryValues)
 local petUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
@@ -10,9 +11,9 @@ local OnEvent = Fusion.OnEvent
 local Computed = Fusion.Computed
 local Children = Fusion.Children
 
-local PetsToDelete = SharedValues.PetsToDelete
-local SelectedPetData = SharedValues.SelectedPetData
-local DeleteModeEnabled = SharedValues.DeleteModeEnabled
+local PetsToDelete = PetInventoryValues.PetsToDelete
+local SelectedPetData = PetInventoryValues.SelectedPetData
+local DeleteModeEnabled = PetInventoryValues.DeleteModeEnabled
 
 local rarityImages = {
 	Common = "http://www.roblox.com/asset/?id=18215905706",
@@ -58,7 +59,8 @@ return function(props)
 			else
 				if
 					SelectedPetData:get()
-					and (SelectedPetData:get() :: SharedValues.petAndIdx).Pet.Id == props.Pet.Id
+					and (SelectedPetData:get() :: PetInventoryValues.petAndIdx).Pet.Id
+						== props.Pet.Id
 				then
 					SelectedPetData:set(nil)
 				else

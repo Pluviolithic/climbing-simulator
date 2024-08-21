@@ -24,6 +24,7 @@ local SelectedPetData: Fusion.Value<petAndIdx?> = Value(nil)
 local PetsToDelete: Fusion.Value<{ number }> = Value {}
 local ConfirmingDelete: Fusion.Value<boolean> = Value(false)
 local MaxPetEquipCount: Fusion.Value<number> = Value(0)
+local Open: Fusion.Value<boolean> = Value(false)
 
 local function sortPets(pets: Types.PlayerPets)
 	local sortedEquipped = Sift.Array.filter(
@@ -69,6 +70,7 @@ Producer:subscribe(Selectors.selectPlayerStatValue(player.Name, "MaxPetEquipCoun
 end)
 
 return {
+	Open = Open,
 	DeleteModeEnabled = DeleteModeEnabled,
 	PlayerPets = PlayerPets,
 	SelectedPetData = SelectedPetData,

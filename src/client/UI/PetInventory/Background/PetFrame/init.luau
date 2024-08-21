@@ -1,7 +1,8 @@
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local StarterPlayer = game:GetService "StarterPlayer"
 
-local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
+local PetInventoryValues =
+	require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.PetInventoryValues)
 local petTemplate = require(script.PetTemplate)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
@@ -9,7 +10,7 @@ local New = Fusion.New
 local ForPairs = Fusion.ForPairs
 local Children = Fusion.Children
 
-local PlayerPets = SharedValues.PlayerPets
+local PlayerPets = PetInventoryValues.PlayerPets
 
 local playerPetButtons = ForPairs(PlayerPets, function(index, pet)
 	return index, petTemplate {

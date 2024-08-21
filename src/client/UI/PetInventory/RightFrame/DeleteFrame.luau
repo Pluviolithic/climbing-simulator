@@ -1,8 +1,8 @@
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local StarterPlayer = game:GetService "StarterPlayer"
 
-local SharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
-local sharedValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.SharedValues)
+local PetInventoryValues =
+	require(StarterPlayer.StarterPlayerScripts.Client.UI.PetInventory.PetInventoryValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
@@ -10,9 +10,9 @@ local OnEvent = Fusion.OnEvent
 local Computed = Fusion.Computed
 local Children = Fusion.Children
 
-local PetsToDelete = SharedValues.PetsToDelete
-local ConfirmingDelete = SharedValues.ConfirmingDelete
-local DeleteModeEnabled = SharedValues.DeleteModeEnabled
+local PetsToDelete = PetInventoryValues.PetsToDelete
+local ConfirmingDelete = PetInventoryValues.ConfirmingDelete
+local DeleteModeEnabled = PetInventoryValues.DeleteModeEnabled
 
 local selectedText = Computed(function()
 	return `{#PetsToDelete:get()} Selected`
@@ -24,7 +24,7 @@ return New "Frame" {
 	BackgroundTransparency = 1,
 	BorderColor3 = Color3.fromRGB(27, 42, 53),
 	Size = UDim2.fromScale(1, 1),
-	Visible = sharedValues.DeleteModeEnabled,
+	Visible = PetInventoryValues.DeleteModeEnabled,
 
 	[Children] = {
 		New "ImageLabel" {

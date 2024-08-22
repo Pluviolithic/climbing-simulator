@@ -125,6 +125,7 @@ return New "Frame" {
 					require(ReplicatedStorage.Common.RedEvents.UnequipPet)
 						:Client()
 						:Fire((SelectedPetData:get() :: PetInventoryValues.petAndIdx).Pet.Id)
+					SelectedPetData:set(nil)
 				else
 					require(ReplicatedStorage.Common.RedEvents.EquipPet)
 						:Client()

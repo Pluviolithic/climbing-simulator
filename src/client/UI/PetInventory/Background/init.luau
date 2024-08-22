@@ -104,6 +104,7 @@ return New "ImageLabel" {
 			Size = UDim2.fromScale(0.188, 0.0841),
 
 			[OnEvent "Activated"] = function()
+				SelectedPetData:set(nil)
 				require(ReplicatedStorage.Common.RedEvents.UnequipAllPets):Client():Fire()
 			end,
 

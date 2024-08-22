@@ -7,6 +7,8 @@ local petUtils = require(ReplicatedStorage.Common.Utils.Player.PetUtils)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
+local Value = Fusion.Value
+local Tween = Fusion.Tween
 local OnEvent = Fusion.OnEvent
 local Computed = Fusion.Computed
 local Children = Fusion.Children
@@ -24,7 +26,15 @@ local rarityImages = {
 }
 
 return function(props)
+	local darken = Value(false)
 	local pet = petUtils.getPet(props.Pet.Name) :: petUtils.PetModel
+
+	local selectedIconActive = Computed(function()
+		if not SelectedPetData:get() then
+			return false
+		end
+		return (SelectedPetData:get() :: PetInventoryValues.petAndIdx).Pet.Id == props.Pet.Id
+	end)
 
 	local toBeDeleted = Computed(function()
 		return table.find(PetsToDelete:get(), props.Pet.Id) ~= nil
@@ -33,6 +43,13 @@ return function(props)
 	local isEquipped = Computed(function()
 		return props.Pet.Equipped
 	end)
+
+	local darkenColor = Computed(function()
+		return if darken:get() then Color3.fromRGB(200, 200, 200) else Color3.fromRGB(255, 255, 255)
+	end)
+
+	local style = TweenInfo.new(0.25)
+	local animatedDarken = Tween(darkenColor, style)
 
 	return New "ImageButton" {
 		Name = `{string.char(props.PetIndex)}{props.Pet.Name}`,
@@ -43,6 +60,7 @@ return function(props)
 		Position = UDim2.fromScale(-9.06e-08, 0),
 		Selectable = false,
 		Size = UDim2.fromScale(-0.726, 0.3),
+		ImageColor3 = animatedDarken,
 
 		[OnEvent "Activated"] = function()
 			if DeleteModeEnabled:get() then
@@ -69,6 +87,14 @@ return function(props)
 			end
 		end,
 
+		[OnEvent "MouseEnter"] = function()
+			darken:set(true)
+		end,
+
+		[OnEvent "MouseLeave"] = function()
+			darken:set(false)
+		end,
+
 		[Children] = {
 			New "ImageLabel" {
 				Name = "PetImage",
@@ -78,6 +104,20 @@ return function(props)
 				Image = pet.ImageID.Value,
 				Position = UDim2.fromScale(0.196, 0.0756),
 				Size = UDim2.fromScale(0.602, 0.55),
+			},
+
+			New "ImageLabel" {
+				Name = "Selected",
+				Active = true,
+				BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+				BackgroundTransparency = 1,
+				BorderColor3 = Color3.fromRGB(27, 42, 53),
+				Image = "http://www.roblox.com/asset/?id=84233848124033",
+				Position = UDim2.fromScale(0.111, 0.0516),
+				Selectable = true,
+				Size = UDim2.fromScale(0.167, 0.155),
+				Visible = selectedIconActive,
+				ZIndex = 2,
 			},
 
 			New "TextLabel" {

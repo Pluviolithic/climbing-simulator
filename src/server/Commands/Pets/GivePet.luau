@@ -14,5 +14,10 @@ return {
 			Name = "Name",
 			Description = "The name of the pet to be given.",
 		},
+		{
+			Type = "number",
+			Name = "Quantity",
+			Description = "The amount to be given.",
+		},
 	},
 }

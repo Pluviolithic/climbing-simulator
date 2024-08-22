@@ -49,6 +49,7 @@ return New "ImageLabel" {
 
 			[OnEvent "Activated"] = function()
 				PetsToDelete:set {}
+				SelectedPetData:set(nil)
 				DeleteModeEnabled:set(not DeleteModeEnabled:get())
 			end,
 		},

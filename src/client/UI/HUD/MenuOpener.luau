@@ -10,7 +10,7 @@ local Children = Fusion.Children
 return function(props)
 	local clickLimiter = Ratelimit(1, 0.25)
 	return New "ImageButton" {
-		Name = "Store",
+		Name = `{props.Text}Opener`,
 		BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 		BackgroundTransparency = 1,
 		BorderColor3 = Color3.fromRGB(27, 42, 53),
@@ -45,7 +45,7 @@ return function(props)
 				FontFace = Font.new "rbxasset://fonts/families/FredokaOne.json",
 				Position = UDim2.fromScale(-0.078, 0.83),
 				Size = UDim2.fromScale(1.16, 0.261),
-				Text = "Store",
+				Text = props.Text,
 				TextColor3 = Color3.fromRGB(253, 253, 253),
 				TextScaled = true,
 				TextSize = 14,

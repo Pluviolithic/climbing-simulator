@@ -42,15 +42,18 @@ AsyncHandlers.waitForChild(player, "PlayerGui"):andThen(function(PlayerGui: Play
 				Position = UDim2.fromScale(0.583, 0.0181),
 			},
 			MenuOpener {
+				Text = "Pets",
 				Size = UDim2.fromScale(0.058, 0.099),
 				Position = UDim2.fromScale(0.0705, 0.442),
 				IconSize = UDim2.fromScale(1, 1),
 				IconImage = "http://www.roblox.com/asset/?id=16822536581",
 				Callback = function()
+					print "clicked"
 					PetInventoryOpen:set(not PetInventoryOpen:get())
 				end,
 			},
 			MenuOpener {
+				Text = "VIP",
 				Size = UDim2.fromScale(0.058, 0.099),
 				Position = UDim2.fromScale(0.0705, 0.678),
 				IconSize = UDim2.fromScale(0.597, 0.637),
@@ -59,6 +62,7 @@ AsyncHandlers.waitForChild(player, "PlayerGui"):andThen(function(PlayerGui: Play
 				Callback = function() end,
 			},
 			MenuOpener {
+				Text = "Store",
 				Size = UDim2.fromScale(0.058, 0.099),
 				Position = UDim2.fromScale(0.00694, 0.442),
 				IconSize = UDim2.fromScale(1, 1),
@@ -66,6 +70,32 @@ AsyncHandlers.waitForChild(player, "PlayerGui"):andThen(function(PlayerGui: Play
 				Callback = function()
 					PetInventoryOpen:set(not PetInventoryOpen:get())
 				end,
+			},
+			MenuOpener {
+				Text = "Rebirth",
+				Size = UDim2.fromScale(0.058, 0.099),
+				Position = UDim2.fromScale(0.007, 0.555),
+				IconSize = UDim2.fromScale(0.632, 0.637),
+				IconPosition = UDim2.fromScale(0.184, 0.181),
+				IconImage = "http://www.roblox.com/asset/?id=16632905202",
+				Callback = function() end,
+			},
+			MenuOpener {
+				Text = "Teleport",
+				Size = UDim2.fromScale(0.058, 0.099),
+				Position = UDim2.fromScale(0.07, 0.555),
+				IconSize = UDim2.fromScale(1, 1),
+				IconImage = "http://www.roblox.com/asset/?id=16821993560",
+				Callback = function() end,
+			},
+			MenuOpener {
+				Text = "Invite",
+				Size = UDim2.fromScale(0.058, 0.099),
+				Position = UDim2.fromScale(0.007, 0.678),
+				IconSize = UDim2.fromScale(0.632, 0.567),
+				IconPosition = UDim2.fromScale(0.21, 0.216),
+				IconImage = "http://www.roblox.com/asset/?id=16821455743",
+				Callback = function() end,
 			},
 		},
 	}).Parent =

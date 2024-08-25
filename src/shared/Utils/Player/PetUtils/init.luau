@@ -23,12 +23,17 @@ task.spawn(function()
 		end
 	end
 end)
+
 export type PetModel = Model & {
 	ImageID: StringValue,
 	Multiplier: NumberValue,
 	Rarity: NumberValue,
 	RarityName: StringValue,
-	Mesh: MeshPart,
+	Mesh: MeshPart & {
+		Attachment: Attachment,
+		AlignPosition: AlignPosition,
+		AlignOrientation: AlignOrientation,
+	},
 	PetUI: BillboardGui & {
 		Frame: Frame & {
 			PetName: TextLabel & {

@@ -18,6 +18,10 @@ local function selectTimestamps(state: slices.SharedState)
 	return state.Players.Timestamps
 end
 
+local function selectPets(state: slices.SharedState)
+	return state.Players.Pets
+end
+
 local function selectPlayerStatValue(playerName: string, statName: string)
 	return function(state: slices.SharedState)
 		return if state.Players.Stats[playerName]
@@ -104,4 +108,5 @@ return {
 	selectTimestamps = selectTimestamps,
 	selectPlayerStatValue = selectPlayerStatValue,
 	selectPlayerPets = selectPlayerPets,
+	selectPets = selectPets,
 }

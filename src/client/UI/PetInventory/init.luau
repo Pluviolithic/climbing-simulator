@@ -15,6 +15,8 @@ AsyncHandlers.waitForChild(player, "PlayerGui"):andThen(function(PlayerGui: Play
 	New "ScreenGui"({
 		Name = "PetInventory",
 		ResetOnSpawn = false,
+		IgnoreGuiInset = true,
+		ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets,
 		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 
 		Enabled = Open,

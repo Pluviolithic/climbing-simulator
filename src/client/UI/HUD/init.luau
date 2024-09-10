@@ -20,6 +20,8 @@ AsyncHandlers.waitForChild(player, "PlayerGui"):andThen(function(PlayerGui: Play
 	New "ScreenGui"({
 		Name = "HUD",
 		ResetOnSpawn = false,
+		IgnoreGuiInset = true,
+		ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets,
 		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
 
 		[Children] = {
@@ -39,7 +41,7 @@ AsyncHandlers.waitForChild(player, "PlayerGui"):andThen(function(PlayerGui: Play
 				Name = "Rebirths",
 				Icon = "http://www.roblox.com/asset/?id=16632905202",
 				Size = UDim2.fromScale(0.0971, 0.0735),
-				Position = UDim2.fromScale(0.583, 0.0181),
+				Position = UDim2.fromScale(0.583, 0.018),
 			},
 			MenuOpener {
 				Text = "Pets",

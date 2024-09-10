@@ -175,10 +175,7 @@ Producer:observe(Selectors.selectPets, Selectors.selectPlayerName, function(_, i
 	local petsFolder = Instance.new "Folder"
 	local obliterator = Janitor.new()
 
-	print(index)
-
 	local function updateModels(equippedPets)
-		print "boop"
 		obliterator:Cleanup()
 
 		local petModels = {}

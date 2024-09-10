@@ -6,22 +6,24 @@ local Zone = require(ReplicatedStorage.Common.lib.ZonePlus)
 
 local Value = Fusion.Value
 
-local node: Fusion.Value<BasePart?> = Value(nil)
+local nextNode: Fusion.Value<BasePart?> = Value(nil)
+local currentNode: Fusion.Value<BasePart?> = Value(nil)
 
-require(script.Animator)(node)
-require(script.Mover)(node, function()
-	local nodeObj = node:get()
+require(script.Animator)(currentNode)
+require(script.Mover)(nextNode, function()
+	local nextNodeObj = nextNode:get()
 
-	if not nodeObj then
+	if not nextNodeObj then
 		return
 	end
 
-	local nodeIndex = tonumber(nodeObj.Name) :: number
-	local nextNode = (nodeObj.Parent :: Folder):FindFirstChild(tostring(nodeIndex + 1))
+	local nextNodeIndex = tonumber(nextNodeObj.Name) :: number
+	local newNextNode = (nextNodeObj.Parent :: Folder):FindFirstChild(tostring(nextNodeIndex + 1))
 
-	--TODO: Do win condition stuff when nextNode is nil
+	--TODO: Do win condition stuff when newNextNode is nil
 
-	node:set(nextNode)
+	currentNode:set(nextNode:get())
+	nextNode:set(newNextNode)
 end)
 
 AsyncHandlers.waitForChild(workspace.AreaStartModels, "ForestClimbStart"):andThen(function()
@@ -38,7 +40,8 @@ AsyncHandlers.waitForChild(workspace.AreaStartModels, "ForestClimbStart"):andThe
 			-- TODO: Check for permissions / stats / whatever to do the climb
 
 			local nodes = workspace.Nodes[startModel.Name:match "(%w+)C"]
-			node:set(nodes["1"])
+			nextNode:set(nodes["1"])
+			currentNode:set(nodes["1"])
 
 			task.wait(0.5)
 			debounce = false
@@ -48,6 +51,6 @@ end)
 
 return {
 	Cancel = function()
-		node:set(nil)
+		nextNode:set(nil)
 	end,
 }

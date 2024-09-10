@@ -60,7 +60,14 @@ local function loadAnimations()
 		end
 
 		for _, node in ipairs(workspace.Nodes:GetDescendants()) do
-			local _, animationName = next(CollectionService:GetTags(node))
+			local tags = CollectionService:GetTags(node)
+			local animationName
+
+			for _, tag in ipairs(tags) do
+				if tag:match "Animation" then
+					animationName = tag
+				end
+			end
 
 			if not animationName then
 				continue
@@ -127,10 +134,17 @@ return function(node: Fusion.Value<BasePart?>): ()
 					end
 					resetAllStates(humanoid)
 				end, true)
-				return
+				task.wait(0.45)
 			end
 
-			local _, animationName = next(CollectionService:GetTags(lastNode))
+			local tags = CollectionService:GetTags(node:get())
+			local animationName
+
+			for _, tag in ipairs(tags) do
+				if tag:match "Animation" then
+					animationName = tag
+				end
+			end
 
 			if animationName and animationName ~= lastAnimationName then
 				obliterator:Cleanup()

@@ -96,6 +96,25 @@ return function(node: Fusion.Value<BasePart?>): ()
 			if node:get() == nil then
 				obliterator:Cleanup()
 				lastAnimationName = nil
+
+				local humanoid = if player.Character
+					then player.Character:FindFirstChild "Humanoid"
+					else nil
+
+				if humanoid then
+					resetAllStates(humanoid)
+				end
+
+				local animator: Animator? = if humanoid
+					then humanoid:FindFirstChild "Animator" :: Animator
+					else nil
+
+				if animator then
+					for _, animationTrack in ipairs(animator:GetPlayingAnimationTracks()) do
+						animationTrack:Stop()
+					end
+				end
+
 				return
 			end
 
@@ -127,13 +146,6 @@ return function(node: Fusion.Value<BasePart?>): ()
 			end
 
 			if not lastNode then
-				lastNode = node:get()
-				obliterator:Add(function()
-					for _, animationTrack in ipairs(animator:GetPlayingAnimationTracks()) do
-						animationTrack:Stop()
-					end
-					resetAllStates(humanoid)
-				end, true)
 				task.wait(0.45)
 			end
 

@@ -1,32 +1,48 @@
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local StarterPlayer = game:GetService "StarterPlayer"
 
+local ClimbingValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.Climbing.ClimbingValues)
 local AsyncHandlers = require(ReplicatedStorage.Common.Utils.Player.AsyncHandlers)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 local Zone = require(ReplicatedStorage.Common.lib.ZonePlus)
 
 local Value = Fusion.Value
 
+local Climbing = ClimbingValues.Climbing
+local ClickCount = ClimbingValues.ClickCount
+local ClimbProgress = ClimbingValues.ClimbProgress
+
 local nextNode: Fusion.Value<BasePart?> = Value(nil)
 local currentNode: Fusion.Value<BasePart?> = Value(nil)
+
+local function cleanup()
+	nextNode:set(nil)
+	currentNode:set(nil)
+	Climbing:set(false)
+	ClimbProgress:set(0)
+	ClickCount:set(0)
+end
 
 require(script.Animator)(currentNode)
 require(script.Mover)(nextNode, function()
 	local nextNodeObj = nextNode:get()
 
 	if not nextNodeObj then
+		cleanup()
 		return
 	end
 
 	local nextNodeIndex = tonumber(nextNodeObj.Name) :: number
 	local newNextNode = (nextNodeObj.Parent :: Folder):FindFirstChild(tostring(nextNodeIndex + 1))
 
-	--TODO: Do win condition stuff when newNextNode is nil
+	--TODO: Do win condition stuff when newNextNode is nil && node index is last
+	-- Also some checkpoint stuff here?
 
 	currentNode:set(nextNode:get())
 	nextNode:set(newNextNode)
 end)
 
-AsyncHandlers.waitForChild(workspace.AreaStartModels, "ForestClimbStart"):andThen(function()
+AsyncHandlers.waitForChild(workspace.AreaStartModels, "TreeClimbStart"):andThen(function()
 	for _, startModel in ipairs(workspace.AreaStartModels:GetChildren()) do
 		local zone = Zone.new(startModel)
 		local debounce = false
@@ -43,6 +59,8 @@ AsyncHandlers.waitForChild(workspace.AreaStartModels, "ForestClimbStart"):andThe
 			nextNode:set(nodes["1"])
 			currentNode:set(nodes["1"])
 
+			Climbing:set(true)
+
 			task.wait(0.5)
 			debounce = false
 		end)
@@ -50,7 +68,7 @@ AsyncHandlers.waitForChild(workspace.AreaStartModels, "ForestClimbStart"):andThe
 end)
 
 return {
-	Cancel = function()
-		nextNode:set(nil)
-	end,
+	Cancel = cleanup,
+	CurrentNode = currentNode,
+	NextNode = nextNode,
 }

@@ -1,10 +1,21 @@
 local Players = game:GetService "Players"
 local TweenService = game:GetService "TweenService"
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local StarterPlayer = game:GetService "StarterPlayer"
 
+local ClimbingValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.Climbing.ClimbingValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
+local Value = Fusion.Value
 local Observer = Fusion.Observer
+
+local NextNode: Fusion.Value<BasePart?> = Value(nil)
+local MapName = ClimbingValues.MapName
+local Climbing = ClimbingValues.Climbing
+local ClimbTarget = ClimbingValues.ClimbTarget
+local ClimbProgress = ClimbingValues.ClimbProgress
+local NextClimbLength = ClimbingValues.NextClimbLength
+local SpeedMultiplier = ClimbingValues.SpeedMultiplier
 
 local player = Players.LocalPlayer
 
@@ -45,13 +56,70 @@ local function getOrCreateConstraints(attachment: Attachment): (AlignPosition, A
 	return alignPosition, alignOrientation
 end
 
+local cleanup
+Observer(Climbing):onChange(function()
+	if Climbing:get() then
+		local nodes = workspace.Nodes[MapName:get()]
+		local nodeCount = #nodes:GetChildren()
+		local distances = table.create(nodeCount)
+		local currentDistance = 0
+
+		distances[1] = 0
+		for i = 2, nodeCount do
+			currentDistance += (nodes[i - 1].Position - nodes[i].Position).Magnitude
+			distances[i] = currentDistance
+		end
+
+		ClimbTarget:set(currentDistance)
+		cleanup = Observer(NextNode):onChange(function()
+			local node = NextNode:get()
+			if node then
+				NextClimbLength:set(
+					(distances[node.Name :: any + 1] or 0)
+						- distances[tonumber(node.Name) :: number]
+				)
+				ClimbProgress:set(distances[tonumber(node.Name) :: number])
+			else
+				ClimbProgress:set(currentDistance)
+			end
+		end)
+
+		-- 	connection = RunService.RenderStepped:Connect(function()
+		-- 		local node = NextNode:get()
+		-- 		if not node then
+		-- 			ClimbProgress:set(currentDistance)
+		-- 			return
+		-- 		end
+
+		-- 		local attachment = getHipAttachment()
+		-- 		if not attachment then
+		-- 			ClimbProgress:set(0)
+		-- 			return
+		-- 		end
+
+		-- 		ClimbProgress:set(
+		-- 			(distances[node.Name :: any - 1] or 0)
+		-- 			-- (node.Position - attachment.WorldPosition).Magnitude
+		-- 		)
+		-- 	end)
+		-- end
+		--
+	else
+		cleanup()
+	end
+end)
+
 return function(node: Fusion.Value<BasePart?>, completed: () -> ())
 	local currentOverride: number? = nil
 	Observer(node):onChange(function()
 		local nodeObj = node:get()
 		local attachment = getHipAttachment()
 
+		NextNode:set(node:get())
+
 		if not attachment then
+			completed()
+			currentOverride = nil
 			return
 		end
 
@@ -59,6 +127,8 @@ return function(node: Fusion.Value<BasePart?>, completed: () -> ())
 			local alignPosition, alignOrientation = getOrCreateConstraints(attachment)
 			alignPosition:Destroy()
 			alignOrientation:Destroy()
+			currentOverride = nil
+			completed()
 			return
 		end
 
@@ -73,7 +143,8 @@ return function(node: Fusion.Value<BasePart?>, completed: () -> ())
 			alignPosition,
 			TweenInfo.new(
 				(attachment.WorldCFrame.Position - goalPosition).Magnitude
-					* (currentOverride or timeValue),
+					* (currentOverride or timeValue)
+					/ SpeedMultiplier:get(),
 				Enum.EasingStyle.Linear
 			),
 			{
@@ -85,6 +156,7 @@ return function(node: Fusion.Value<BasePart?>, completed: () -> ())
 			TweenInfo.new(
 				(attachment.WorldCFrame.Position - goalPosition).Magnitude
 					* (currentOverride or timeValue)
+					/ SpeedMultiplier:get()
 					/ 2
 			),
 			{

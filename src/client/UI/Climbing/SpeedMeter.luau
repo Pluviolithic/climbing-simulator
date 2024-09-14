@@ -4,15 +4,44 @@ local ClimbingValues = require(script.Parent.ClimbingValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
+local Tween = Fusion.Tween
 local Computed = Fusion.Computed
 local Children = Fusion.Children
 
---local ClickCount = ClimbingValues.ClickCount
+local ClickProgress = ClimbingValues.ClickProgress
 local SpeedMultiplier = ClimbingValues.SpeedMultiplier
 
 local multiplierText = Computed(function()
 	return `{SpeedMultiplier:get()}x Speed`
 end)
+
+local activeList = {
+	Computed(function()
+		return SpeedMultiplier:get() == 1 and ClickProgress:get() ~= 0
+	end),
+	Computed(function()
+		return SpeedMultiplier:get() == 1.25 and ClickProgress:get() ~= 0
+	end),
+	Computed(function()
+		return SpeedMultiplier:get() == 1.5 and ClickProgress:get() ~= 0
+	end),
+	Computed(function()
+		return SpeedMultiplier:get() == 1.75 and ClickProgress:get() ~= 0
+	end),
+	Computed(function()
+		return SpeedMultiplier:get() == 2 and ClickProgress:get() ~= 0
+	end),
+	Computed(function()
+		return (SpeedMultiplier:get() == 2.25 or SpeedMultiplier:get() == 2.5)
+			and ClickProgress:get() ~= 0
+	end),
+}
+
+local meterSize = Computed(function()
+	return UDim2.fromScale(1, -1 * ClickProgress:get())
+end)
+
+local animatedMeterSize = Tween(meterSize, TweenInfo.new(0.2))
 
 return New "ImageLabel" {
 	Name = "SpeedMeter",
@@ -47,8 +76,8 @@ return New "ImageLabel" {
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
 					Position = UDim2.fromScale(0, 1),
-					Size = UDim2.fromScale(1, 0),
-					Visible = false,
+					Size = animatedMeterSize,
+					Visible = activeList[5],
 
 					[Children] = {
 						New "UIGradient" {
@@ -68,8 +97,8 @@ return New "ImageLabel" {
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
 					Position = UDim2.fromScale(0, 1),
-					Size = UDim2.fromScale(1, 0),
-					Visible = false,
+					Size = animatedMeterSize,
+					Visible = activeList[4],
 
 					[Children] = {
 						New "UIGradient" {
@@ -89,8 +118,8 @@ return New "ImageLabel" {
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
 					Position = UDim2.fromScale(0, 1),
-					Size = UDim2.fromScale(1, 0),
-					Visible = false,
+					Size = animatedMeterSize,
+					Visible = activeList[3],
 
 					[Children] = {
 						New "UIGradient" {
@@ -111,8 +140,8 @@ return New "ImageLabel" {
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
 					Position = UDim2.fromScale(0, 1),
-					Size = UDim2.fromScale(1, 0),
-					Visible = false,
+					Size = animatedMeterSize,
+					Visible = activeList[2],
 
 					[Children] = {
 						New "UIGradient" {
@@ -132,7 +161,8 @@ return New "ImageLabel" {
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
 					Position = UDim2.fromScale(0, 1),
-					Size = UDim2.fromScale(1, 0),
+					Size = animatedMeterSize,
+					Visible = activeList[1],
 
 					[Children] = {
 						New "UIGradient" {
@@ -152,8 +182,8 @@ return New "ImageLabel" {
 					BorderColor3 = Color3.fromRGB(0, 0, 0),
 					BorderSizePixel = 0,
 					Position = UDim2.fromScale(0, 1),
-					Size = UDim2.fromScale(1, 0),
-					Visible = false,
+					Size = animatedMeterSize,
+					Visible = activeList[6],
 
 					[Children] = {
 						New "UIGradient" {

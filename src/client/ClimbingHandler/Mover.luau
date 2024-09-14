@@ -1,6 +1,7 @@
 local Players = game:GetService "Players"
 local TweenService = game:GetService "TweenService"
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
+local RunService = game:GetService "RunService"
 local StarterPlayer = game:GetService "StarterPlayer"
 
 local ClimbingValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.Climbing.ClimbingValues)
@@ -14,7 +15,6 @@ local MapName = ClimbingValues.MapName
 local Climbing = ClimbingValues.Climbing
 local ClimbTarget = ClimbingValues.ClimbTarget
 local ClimbProgress = ClimbingValues.ClimbProgress
-local NextClimbLength = ClimbingValues.NextClimbLength
 local SpeedMultiplier = ClimbingValues.SpeedMultiplier
 
 local player = Players.LocalPlayer
@@ -56,7 +56,7 @@ local function getOrCreateConstraints(attachment: Attachment): (AlignPosition, A
 	return alignPosition, alignOrientation
 end
 
-local cleanup
+local connection
 Observer(Climbing):onChange(function()
 	if Climbing:get() then
 		local nodes = workspace.Nodes[MapName:get()]
@@ -71,41 +71,31 @@ Observer(Climbing):onChange(function()
 		end
 
 		ClimbTarget:set(currentDistance)
-		cleanup = Observer(NextNode):onChange(function()
+
+		connection = RunService.RenderStepped:Connect(function()
 			local node = NextNode:get()
-			if node then
-				NextClimbLength:set(
-					(distances[node.Name :: any + 1] or 0)
-						- distances[tonumber(node.Name) :: number]
-				)
-				ClimbProgress:set(distances[tonumber(node.Name) :: number])
-			else
+			if not node then
 				ClimbProgress:set(currentDistance)
+				return
 			end
+
+			local attachment = getHipAttachment()
+			local humanoid = if player.Character
+				then player.Character:FindFirstChild "Humanoid"
+				else nil
+
+			if not humanoid or not attachment then
+				return
+			end
+
+			local goalPosition = node.Position + Vector3.yAxis * humanoid.HipHeight
+			ClimbProgress:set(
+				distances[tonumber(node.Name) :: number]
+					- (goalPosition - attachment.WorldPosition).Magnitude
+			)
 		end)
-
-		-- 	connection = RunService.RenderStepped:Connect(function()
-		-- 		local node = NextNode:get()
-		-- 		if not node then
-		-- 			ClimbProgress:set(currentDistance)
-		-- 			return
-		-- 		end
-
-		-- 		local attachment = getHipAttachment()
-		-- 		if not attachment then
-		-- 			ClimbProgress:set(0)
-		-- 			return
-		-- 		end
-
-		-- 		ClimbProgress:set(
-		-- 			(distances[node.Name :: any - 1] or 0)
-		-- 			-- (node.Position - attachment.WorldPosition).Magnitude
-		-- 		)
-		-- 	end)
-		-- end
-		--
-	else
-		cleanup()
+	elseif connection then
+		connection:Disconnect()
 	end
 end)
 

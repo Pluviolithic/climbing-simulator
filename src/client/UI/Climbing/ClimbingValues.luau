@@ -26,8 +26,20 @@ local SpeedMultiplier = Computed(function()
 			return prevMultiplier
 		end
 	end
-
 	return 1
+end)
+
+local ClickProgress = Computed(function()
+	local clickCount = ClickCount:get()
+	for i = 1, #meterLevels:GetChildren() do
+		local level = meterLevels[tostring(i)]
+		if clickCount >= level.Clicks.Value then
+			clickCount -= level.Clicks.Value
+		else
+			return clickCount / level.Clicks.Value
+		end
+	end
+	return 0
 end)
 
 return {
@@ -36,6 +48,7 @@ return {
 	ClickCount = ClickCount,
 	ClimbTarget = ClimbTarget,
 	ClimbProgress = ClimbProgress,
+	ClickProgress = ClickProgress,
 	NextClimbLength = NextClimbLength,
 	SpeedMultiplier = SpeedMultiplier,
 }

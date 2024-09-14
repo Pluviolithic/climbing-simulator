@@ -17,19 +17,84 @@ local percentage = Computed(function()
 	return ClimbProgress:get() / target
 end)
 
+local barSizes = {
+	Computed(function()
+		local target = ClimbTarget:get()
+		if not target then
+			return UDim2.fromScale(0, 0.697)
+		end
+		if percentage:get() < 0.25 then
+			return UDim2.fromScale(0.238 * percentage:get() * 4, 0.697)
+		end
+		return UDim2.fromScale(0.238, 0.697)
+	end),
+	Computed(function()
+		local target = ClimbTarget:get()
+		if not target then
+			return UDim2.fromScale(0, 0.697)
+		end
+		if percentage:get() < 0.5 and percentage:get() > 0.25 then
+			return UDim2.fromScale(0.238 * (percentage:get() - 0.25) * 4, 0.697)
+		end
+		if percentage:get() > 0.5 then
+			return UDim2.fromScale(0.238, 0.697)
+		end
+		return UDim2.fromScale(0, 0.697)
+	end),
+	Computed(function()
+		local target = ClimbTarget:get()
+		if not target then
+			return UDim2.fromScale(0, 0.697)
+		end
+		if percentage:get() < 0.75 and percentage:get() > 0.5 then
+			return UDim2.fromScale(0.238 * (percentage:get() - 0.5) * 4, 0.697)
+		end
+		if percentage:get() > 0.75 then
+			return UDim2.fromScale(0.238, 0.697)
+		end
+		return UDim2.fromScale(0, 0.697)
+	end),
+	Computed(function()
+		local target = ClimbTarget:get()
+		if not target then
+			return UDim2.fromScale(0, 0.697)
+		end
+		if percentage:get() > 0.75 then
+			return UDim2.fromScale(0.238 * (percentage:get() - 0.75) * 4, 0.697)
+		end
+		return UDim2.fromScale(0, 0.697)
+	end),
+}
+
 local formattedPercentage = Computed(function()
 	return `{math.round(percentage:get() * 100)}%`
 end)
 
-local percentagePosition = Computed(function()
-	return UDim2.fromScale((0.957 + 0.0739) * percentage:get(), -0.179)
-end)
+-- local percentagePosition = Computed(function()
+-- 	return UDim2.fromScale((0.957 + 0.0739) * percentage:get(), -0.179)
+-- end)
 
 local tweenInfo = Computed(function()
-	return TweenInfo.new(NextClimbLength:get())
+	return TweenInfo.new(NextClimbLength:get(), Enum.EasingStyle.Linear)
 end)
 
-local animatedPosition = Tween(percentagePosition, tweenInfo :: any)
+-- local animatedPosition = Tween(percentagePosition, tweenInfo :: any)
+
+for index, barSize in ipairs(barSizes) do
+	barSizes[index] = Tween(barSize, tweenInfo :: any)
+end
+
+local barVisibleList = {
+	Computed(function()
+		return percentage:get() > 0.25 --and barSizes[1]:get() == UDim2.fromScale(0.238, 0.697)
+	end),
+	Computed(function()
+		return percentage:get() > 0.5 --and barSizes[2]:get() == UDim2.fromScale(0.238, 0.697)
+	end),
+	Computed(function()
+		return percentage:get() > 0.75 --and barSizes[3]:get() == UDim2.fromScale(0.238, 0.697)
+	end),
+}
 
 return New "ImageLabel" {
 	Name = "Distance",
@@ -50,7 +115,7 @@ return New "ImageLabel" {
 			BorderSizePixel = 0,
 			Image = "http://www.roblox.com/asset/?id=97805880442449",
 			Position = UDim2.fromScale(0.019, 0.13),
-			Size = UDim2.fromScale(0.238, 0.697),
+			Size = barSizes[1],
 		},
 
 		New "ImageLabel" {
@@ -60,7 +125,7 @@ return New "ImageLabel" {
 			BorderColor3 = Color3.fromRGB(27, 42, 53),
 			BorderSizePixel = 0,
 			Image = "http://www.roblox.com/asset/?id=138867962997710",
-			Position = animatedPosition,
+			Position = UDim2.fromScale(-0.0739, -0.179),
 			Size = UDim2.fromScale(0.114, 1.31),
 			ZIndex = 2,
 		},
@@ -111,7 +176,8 @@ return New "ImageLabel" {
 			BorderSizePixel = 0,
 			Image = "http://www.roblox.com/asset/?id=107410864255475",
 			Position = UDim2.fromScale(0.262, 0.13),
-			Size = UDim2.fromScale(0.238, 0.697),
+			Size = barSizes[2],
+			Visible = barVisibleList[1],
 		},
 
 		New "ImageLabel" {
@@ -122,7 +188,8 @@ return New "ImageLabel" {
 			BorderSizePixel = 0,
 			Image = "http://www.roblox.com/asset/?id=127265653214108",
 			Position = UDim2.fromScale(0.505, 0.13),
-			Size = UDim2.fromScale(0.238, 0.697),
+			Size = barSizes[3],
+			Visible = barVisibleList[2],
 		},
 
 		New "ImageLabel" {
@@ -133,7 +200,8 @@ return New "ImageLabel" {
 			BorderSizePixel = 0,
 			Image = "http://www.roblox.com/asset/?id=74037487717930",
 			Position = UDim2.fromScale(0.748, 0.13),
-			Size = UDim2.fromScale(0.238, 0.697),
+			Size = barSizes[4],
+			Visible = barVisibleList[3],
 		},
 	},
 }

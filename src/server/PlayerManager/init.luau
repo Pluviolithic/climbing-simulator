@@ -74,6 +74,7 @@ Players.PlayerRemoving:Connect(function(player)
 	if profile ~= nil then
 		profile:Release()
 	end
+	producer.removePlayerData(player.Name)
 	-- store:dispatch(actions.removePlayer(player.Name))
 
 	-- for _, existingPlayer in Players:GetPlayers() do

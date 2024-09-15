@@ -15,6 +15,7 @@ local Ratelimit = require(ReplicatedStorage.Common.lib.Ratelimit)
 local Sift = require(ReplicatedStorage.Common.lib.Sift)
 local EquipPet = require(ReplicatedStorage.Common.RedEvents.EquipPet)
 local DeletePets = require(ReplicatedStorage.Common.RedEvents.DeletePets)
+local SetPetsVisibility = require(ReplicatedStorage.Common.RedEvents.SetPetsVisibility)
 local UnequipPet = require(ReplicatedStorage.Common.RedEvents.UnequipPet)
 local Grids = require(ReplicatedStorage.Common.Utils.Player.PetUtils.Grids)
 local Janitor = require(ReplicatedStorage.Common.lib.Janitor)
@@ -171,6 +172,17 @@ EvolveAllPets:Server():On(function(player)
 	end
 end)
 
+local visibilityLimit = Ratelimit(1, 0.1)
+SetPetsVisibility:Server():On(function(player, visible)
+	if not visibilityLimit(player.Name) then
+		return
+	end
+	for _, petModel in ipairs(workspace[`{player.Name}Pets`]:GetChildren()) do
+		petModel.PrimaryPart.Transparency = if visible then 0 else 1
+		petModel.PetUI.Enabled = visible
+	end
+end)
+
 Producer:observe(Selectors.selectPets, Selectors.selectPlayerName, function(_, index)
 	local petsFolder = Instance.new "Folder"
 	local obliterator = Janitor.new()
@@ -237,7 +249,7 @@ Producer:observe(Selectors.selectPets, Selectors.selectPlayerName, function(_, i
 	updateModels(Producer:getState(Selectors.selectEquippedPets(index) :: any))
 	Producer:subscribe(Selectors.selectEquippedPets(index), updateModels)
 
-	petsFolder.Name = index
+	petsFolder.Name = `{index}Pets`
 	petsFolder.Parent = workspace
 	return function()
 		obliterator:Destroy()

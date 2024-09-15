@@ -10,6 +10,7 @@ local Zone = require(ReplicatedStorage.Common.lib.ZonePlus)
 
 local Value = Fusion.Value
 
+local MapName = ClimbingValues.MapName
 local Climbing = ClimbingValues.Climbing
 local ClimbProgress = ClimbingValues.ClimbProgress
 
@@ -22,6 +23,7 @@ local function cleanup()
 	end
 
 	nextNode:set(nil)
+	MapName:set(nil)
 	currentNode:set(nil)
 	Climbing:set(false)
 	ClimbProgress:set(0)
@@ -31,6 +33,7 @@ local function cleanup()
 	ClimbingValues.ClimbTarget:set(nil)
 end
 
+require(script.PetTriggers)(currentNode)
 require(script.Animator)(currentNode)
 require(script.Mover)(nextNode, function()
 	if not Climbing:get() then
@@ -84,6 +87,7 @@ AsyncHandlers.waitForChild(workspace.AreaStartModels, "TreeClimbStart"):andThen(
 			local nodes = workspace.Nodes[startModel.Name:match "(%w+)C"]
 			nextNode:set(nodes["1"])
 			currentNode:set(nodes["1"])
+			MapName:set(startModel.Name:sub(1, -11))
 
 			Climbing:set(true)
 

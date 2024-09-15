@@ -7,7 +7,7 @@ local Computed = Fusion.Computed
 
 local meterLevels = ReplicatedStorage.Config.SpeedMeterLevels
 
-local MapName: Fusion.Value<string> = Value "Tree"
+local MapName: Fusion.Value<string?> = Value(nil)
 local Climbing: Fusion.Value<boolean> = Value(false)
 local ClimbProgress: Fusion.Value<number> = Value(0)
 local ClimbTarget: Fusion.Value<number?> = Value(nil)

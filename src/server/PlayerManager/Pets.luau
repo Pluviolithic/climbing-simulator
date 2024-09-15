@@ -195,6 +195,10 @@ Producer:observe(Selectors.selectPets, Selectors.selectPlayerName, function(_, i
 
 		local grid = Grids[#petModels]
 
+		if not grid then
+			return
+		end
+
 		obliterator:Add(RunService.Stepped:Connect(function()
 			local player = Players:FindFirstChild(index)
 			local character = if player then player.Character else nil

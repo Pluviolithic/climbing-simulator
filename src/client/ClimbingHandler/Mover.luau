@@ -6,6 +6,7 @@ local StarterPlayer = game:GetService "StarterPlayer"
 
 local ClimbingValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.Climbing.ClimbingValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
+local Janitor = require(ReplicatedStorage.Common.lib.Janitor)
 
 local Value = Fusion.Value
 local Observer = Fusion.Observer
@@ -100,7 +101,15 @@ Observer(Climbing):onChange(function()
 end)
 
 return function(node: Fusion.Value<BasePart?>, completed: () -> ())
+	local obliterator = Janitor.new()
 	local currentOverride: number? = nil
+
+	Observer(Climbing):onChange(function()
+		if not Climbing:get() then
+			obliterator:Cleanup()
+		end
+	end)
+
 	Observer(node):onChange(function()
 		local nodeObj = node:get()
 		local attachment = getHipAttachment()
@@ -154,6 +163,9 @@ return function(node: Fusion.Value<BasePart?>, completed: () -> ())
 			}
 		)
 
+		obliterator:Add(tweenPosition)
+		obliterator:Add(tweenOrientation)
+
 		if nodeObj.Name == "1" then
 			alignPosition.Position = goalPosition
 			alignOrientation.CFrame = nodeObj.CFrame
@@ -170,8 +182,7 @@ return function(node: Fusion.Value<BasePart?>, completed: () -> ())
 			tweenPosition.Completed:Wait()
 		end
 
-		tweenOrientation:Destroy()
-		tweenPosition:Destroy()
+		obliterator:Cleanup()
 
 		local override = tonumber(nodeObj:GetAttribute "Override" :: string?)
 

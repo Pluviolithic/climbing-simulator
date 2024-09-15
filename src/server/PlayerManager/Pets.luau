@@ -176,6 +176,10 @@ Producer:observe(Selectors.selectPets, Selectors.selectPlayerName, function(_, i
 	local obliterator = Janitor.new()
 
 	local function updateModels(equippedPets)
+		if not Janitor.Is(obliterator) then
+			return
+		end
+
 		obliterator:Cleanup()
 
 		local petModels = {}

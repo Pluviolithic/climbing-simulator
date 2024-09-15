@@ -8,12 +8,9 @@ local Tween = Fusion.Tween
 local Computed = Fusion.Computed
 local Children = Fusion.Children
 
+local MeterText = ClimbingValues.MeterText
 local ClickProgress = ClimbingValues.ClickProgress
 local SpeedMultiplier = ClimbingValues.SpeedMultiplier
-
-local multiplierText = Computed(function()
-	return `{SpeedMultiplier:get()}x Speed`
-end)
 
 local activeList = {
 	Computed(function()
@@ -208,7 +205,7 @@ return New "ImageLabel" {
 			Position = UDim2.fromScale(-0.43, -0.1),
 			Rotation = -18,
 			Size = UDim2.fromScale(1.52, 0.32),
-			Text = multiplierText,
+			Text = MeterText,
 			TextColor3 = Color3.fromRGB(251, 251, 251),
 			TextScaled = true,
 			TextSize = 14,

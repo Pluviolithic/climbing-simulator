@@ -50,7 +50,6 @@ AsyncHandlers.waitForChild(player, "PlayerGui"):andThen(function(PlayerGui: Play
 				IconSize = UDim2.fromScale(1, 1),
 				IconImage = "http://www.roblox.com/asset/?id=16822536581",
 				Callback = function()
-					print "clicked"
 					PetInventoryOpen:set(not PetInventoryOpen:get())
 				end,
 			},

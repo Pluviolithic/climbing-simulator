@@ -10,7 +10,6 @@ local Children = Fusion.Children
 
 local ClimbProgress = ClimbingValues.ClimbProgress
 local ClimbTarget = ClimbingValues.ClimbTarget
-local NextClimbLength = ClimbingValues.NextClimbLength
 
 local percentage = Computed(function()
 	local target = ClimbTarget:get() or 1
@@ -75,7 +74,7 @@ end)
 -- end)
 
 local tweenInfo = Computed(function()
-	return TweenInfo.new(NextClimbLength:get(), Enum.EasingStyle.Linear)
+	return TweenInfo.new(0.1, Enum.EasingStyle.Linear)
 end)
 
 -- local animatedPosition = Tween(percentagePosition, tweenInfo :: any)

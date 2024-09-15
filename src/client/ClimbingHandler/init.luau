@@ -9,22 +9,32 @@ local Zone = require(ReplicatedStorage.Common.lib.ZonePlus)
 local Value = Fusion.Value
 
 local Climbing = ClimbingValues.Climbing
-local ClickCount = ClimbingValues.ClickCount
 local ClimbProgress = ClimbingValues.ClimbProgress
 
 local nextNode: Fusion.Value<BasePart?> = Value(nil)
 local currentNode: Fusion.Value<BasePart?> = Value(nil)
 
 local function cleanup()
+	if not Climbing:get() then
+		return
+	end
+
 	nextNode:set(nil)
 	currentNode:set(nil)
 	Climbing:set(false)
 	ClimbProgress:set(0)
-	ClickCount:set(0)
+
+	ClimbingValues.ClickCount:set(0)
+	ClimbingValues.ClickCount:set(0)
+	ClimbingValues.ClimbTarget:set(nil)
 end
 
 require(script.Animator)(currentNode)
 require(script.Mover)(nextNode, function()
+	if not Climbing:get() then
+		return
+	end
+
 	local nextNodeObj = nextNode:get()
 
 	if not nextNodeObj then

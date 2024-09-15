@@ -90,6 +90,7 @@ local function selectEquippedPets(playerName: string)
 	return Reflex.createSelector(
 		selectPlayerPets(playerName),
 		function(pets: playersSlice.PlayerPets?)
+			pets = if typeof(pets) == "table" then pets else {}
 			return Sift.Array.filter(pets :: any, function(pet: Types.Pet)
 				return pet.Equipped
 			end)

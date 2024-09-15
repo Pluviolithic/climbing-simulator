@@ -12,14 +12,17 @@ local Climbing: Fusion.Value<boolean> = Value(false)
 local ClimbProgress: Fusion.Value<number> = Value(0)
 local ClimbTarget: Fusion.Value<number?> = Value(nil)
 local ClickCount: Fusion.Value<number> = Value(0)
-local NextClimbLength: Fusion.Value<number> = Value(0)
 
 local SpeedMultiplier = Computed(function()
 	local clickCount = ClickCount:get()
 	local prevMultiplier = 1
-	for i = 1, #meterLevels:GetChildren() do
+	local meterLevelCount = #meterLevels:GetChildren()
+	for i = 1, meterLevelCount do
 		local level = meterLevels[tostring(i)]
 		if clickCount >= level.Clicks.Value then
+			if meterLevelCount == i then
+				return level.Multiplier.Value
+			end
 			clickCount -= level.Clicks.Value
 			prevMultiplier = level.Multiplier.Value
 		else
@@ -31,9 +34,13 @@ end)
 
 local ClickProgress = Computed(function()
 	local clickCount = ClickCount:get()
-	for i = 1, #meterLevels:GetChildren() do
+	local meterLevelCount = #meterLevels:GetChildren()
+	for i = 1, meterLevelCount do
 		local level = meterLevels[tostring(i)]
 		if clickCount >= level.Clicks.Value then
+			if meterLevelCount == i then
+				return 1
+			end
 			clickCount -= level.Clicks.Value
 		else
 			return clickCount / level.Clicks.Value
@@ -42,13 +49,30 @@ local ClickProgress = Computed(function()
 	return 0
 end)
 
+local MeterText = Computed(function()
+	local clickCount = ClickCount:get()
+	local meterLevelCount = #meterLevels:GetChildren()
+	for i = 1, meterLevelCount do
+		local level = meterLevels[tostring(i)]
+		if clickCount >= level.Clicks.Value then
+			if meterLevelCount == i then
+				return level.HypeText.Value :: string
+			end
+			clickCount -= level.Clicks.Value
+		else
+			return level.HypeText.Value :: string
+		end
+	end
+	return ""
+end)
+
 return {
 	MapName = MapName,
+	MeterText = MeterText,
 	Climbing = Climbing,
 	ClickCount = ClickCount,
 	ClimbTarget = ClimbTarget,
 	ClimbProgress = ClimbProgress,
 	ClickProgress = ClickProgress,
-	NextClimbLength = NextClimbLength,
 	SpeedMultiplier = SpeedMultiplier,
 }

@@ -14,10 +14,10 @@ local Climbing = ClimbingValues.Climbing
 local ClickCount = ClimbingValues.ClickCount
 
 local maxClicks = 0
-local speedMeterLevels = ReplicatedStorage.Config.SpeedMeterLevels:GetChildren()
+local speedMeterLevels = ReplicatedStorage.Config.SpeedMeterLevels
 
-for _, folder in ipairs(speedMeterLevels) do
-	maxClicks += folder.Clicks.Value
+for i = 1, #speedMeterLevels:GetChildren() - 1 do
+	maxClicks += speedMeterLevels[tostring(i)].Clicks.Value
 end
 
 local goalScale = Value(1)

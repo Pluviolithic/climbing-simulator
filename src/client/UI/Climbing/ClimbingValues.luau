@@ -51,16 +51,18 @@ end)
 
 local MeterText = Computed(function()
 	local clickCount = ClickCount:get()
-	local meterLevelCount = #meterLevels:GetChildren()
-	for i = 1, meterLevelCount do
-		local level = meterLevels[tostring(i)]
-		if clickCount >= level.Clicks.Value then
+	local previousHypeText = ""
+	local meterLevelCount = #meterLevels:GetChildren() - 1
+	for i = 0, meterLevelCount do
+		local level = meterLevels:FindFirstChild(tostring(i))
+		if clickCount >= (if i ~= 0 then level.Clicks.Value else -1) then
 			if meterLevelCount == i then
 				return level.HypeText.Value :: string
 			end
-			clickCount -= level.Clicks.Value
+			clickCount -= if i ~= 0 then level.Clicks.Value else 0
+			previousHypeText = level.HypeText.Value
 		else
-			return level.HypeText.Value :: string
+			return previousHypeText
 		end
 	end
 	return ""

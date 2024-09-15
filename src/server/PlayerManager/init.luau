@@ -99,6 +99,7 @@ end)
 require(script.Pets)
 require(script.Badges)
 require(script.DataSaver)
+require(script.ClimbSystem)
 require(script.ReflexBroadcaster)
 
 return 0

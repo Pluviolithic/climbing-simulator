@@ -12,6 +12,7 @@ local Climbing: Fusion.Value<boolean> = Value(false)
 local ClimbProgress: Fusion.Value<number> = Value(0)
 local ClimbTarget: Fusion.Value<number?> = Value(nil)
 local ClickCount: Fusion.Value<number> = Value(0)
+local CheckpointTextTransparency: Fusion.Value<number> = Value(1)
 
 local SpeedMultiplier = Computed(function()
 	local clickCount = ClickCount:get()
@@ -77,4 +78,5 @@ return {
 	ClimbProgress = ClimbProgress,
 	ClickProgress = ClickProgress,
 	SpeedMultiplier = SpeedMultiplier,
+	CheckpointTextTransparency = CheckpointTextTransparency,
 }

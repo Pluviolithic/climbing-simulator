@@ -1,6 +1,8 @@
+local CollectionService = game:GetService "CollectionService"
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local StarterPlayer = game:GetService "StarterPlayer"
 
+local ReachedCheckpoint = require(ReplicatedStorage.Common.RedEvents.ReachedCheckpoint)
 local ClimbingValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.Climbing.ClimbingValues)
 local AsyncHandlers = require(ReplicatedStorage.Common.Utils.Player.AsyncHandlers)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
@@ -38,15 +40,29 @@ require(script.Mover)(nextNode, function()
 	local nextNodeObj = nextNode:get()
 
 	if not nextNodeObj then
+		local node = currentNode:get()
+		if
+			node
+			and not (node.Parent :: Folder):FindFirstChild(
+				tostring(tonumber(node.Name) :: number + 1)
+			)
+		then
+			ReachedCheckpoint:Client():Fire(true)
+		end
 		cleanup()
 		return
 	end
 
+	if CollectionService:HasTag(nextNodeObj, "Checkpoint") then
+		ReachedCheckpoint:Client():Fire()
+		ClimbingValues.CheckpointTextTransparency:set(0)
+		task.delay(2, function()
+			ClimbingValues.CheckpointTextTransparency:set(1)
+		end)
+	end
+
 	local nextNodeIndex = tonumber(nextNodeObj.Name) :: number
 	local newNextNode = (nextNodeObj.Parent :: Folder):FindFirstChild(tostring(nextNodeIndex + 1))
-
-	--TODO: Do win condition stuff when newNextNode is nil && node index is last
-	-- Also some checkpoint stuff here?
 
 	currentNode:set(nextNode:get())
 	nextNode:set(newNextNode)

@@ -18,6 +18,8 @@ local ClimbTarget = ClimbingValues.ClimbTarget
 local ClimbProgress = ClimbingValues.ClimbProgress
 local SpeedMultiplier = ClimbingValues.SpeedMultiplier
 
+local areaData = ReplicatedStorage.Config.AreaData
+
 local player = Players.LocalPlayer
 
 local function getHipAttachment(): Attachment?
@@ -133,7 +135,7 @@ return function(node: Fusion.Value<BasePart?>, completed: () -> ())
 
 		local humanoid = player.Character.Humanoid
 		local mapName = (nodeObj.Parent :: Instance).Name
-		local timeValue = ReplicatedStorage.Config.MapTimes[`{mapName}TimePerStud`].Value
+		local timeValue = areaData[mapName].TimePerStud.Value
 
 		local goalPosition = nodeObj.Position + Vector3.yAxis * humanoid.HipHeight
 		local alignPosition, alignOrientation = getOrCreateConstraints(attachment)

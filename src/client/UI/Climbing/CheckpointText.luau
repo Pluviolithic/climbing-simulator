@@ -1,9 +1,14 @@
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 
+local ClimbingValues = require(script.Parent.ClimbingValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 
 local New = Fusion.New
+local Tween = Fusion.Tween
 local Children = Fusion.Children
+
+local CheckpointTextTransparency = ClimbingValues.CheckpointTextTransparency
+local animatedTransparency = Tween(CheckpointTextTransparency)
 
 return New "TextLabel" {
 	Name = "CheckpointText",
@@ -20,13 +25,15 @@ return New "TextLabel" {
 	TextStrokeColor3 = Color3.fromRGB(30, 30, 30),
 	TextStrokeTransparency = 0,
 	TextWrapped = true,
-	Visible = false,
+	Visible = true,
+	TextTransparency = animatedTransparency,
 
 	[Children] = {
 		New "UIStroke" {
 			Name = "UIStroke",
 			Color = Color3.fromRGB(27, 27, 27),
 			Thickness = 3,
+			Transparency = animatedTransparency,
 		},
 	},
 }

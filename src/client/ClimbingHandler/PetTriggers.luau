@@ -2,6 +2,7 @@ local CollectionService = game:GetService "CollectionService"
 local Players = game:GetService "Players"
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local StarterPlayer = game:GetService "StarterPlayer"
+local TweenService = game:GetService "TweenService"
 
 local SetPetsVisibility = require(ReplicatedStorage.Common.RedEvents.SetPetsVisibility)
 local Producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
@@ -21,6 +22,7 @@ local player = Players.LocalPlayer
 
 return function(currentNode)
 	local obliterator = Janitor.new()
+	local petTriggers = table.create(3)
 
 	Observer(Climbing):onChange(function()
 		if Climbing:get() then
@@ -37,11 +39,10 @@ return function(currentNode)
 			return
 		end
 
-		local petTriggers = table.create(3)
 		for _, object in ipairs(CollectionService:GetTagged(mapName)) do
 			local tags = CollectionService:GetTags(object)
 			for _, tag in ipairs(tags) do
-				if tag:match "PetTrigger" then
+				if tag:sub(1, 10) == "PetTrigger" then
 					petTriggers[tonumber(tag:match "%d+") :: number] = object
 				end
 			end
@@ -66,11 +67,12 @@ return function(currentNode)
 				return
 			end
 
+			petModel.Name = "PetModel"
 			petModel.PrimaryPart:ClearAllChildren()
 			petModel.PrimaryPart.Anchored = true
 			petModel.PrimaryPart.CFrame = trigger.Part.CFrame
 			petModel.PrimaryPart.Position += Vector3.yAxis
-			petModel.PrimaryPart.Parent = workspace
+			petModel.Parent = trigger
 		end
 	end)
 
@@ -79,5 +81,54 @@ return function(currentNode)
 		if not node then
 			return
 		end
+
+		local tags = CollectionService:GetTags(node)
+		local triggerIndex
+
+		for _, tag in ipairs(tags) do
+			if tag:sub(1, 10) == "PetTrigger" then
+				print "yes"
+				triggerIndex = tonumber(tag:match "%d+")
+			end
+		end
+
+		if not triggerIndex then
+			return
+		end
+
+		local petModel = petTriggers[triggerIndex].PetModel
+		local tweenUp = TweenService:Create(
+			petModel.PrimaryPart,
+			TweenInfo.new(0.25, Enum.EasingStyle.Linear),
+			{ Position = petModel.PrimaryPart.Position + Vector3.yAxis }
+		)
+		local tweenBackDown = TweenService:Create(
+			petModel.PrimaryPart,
+			TweenInfo.new(0.25, Enum.EasingStyle.Linear),
+			{ Position = petModel.PrimaryPart.Position }
+		)
+		local tween180 = TweenService:Create(
+			petModel.PrimaryPart,
+			TweenInfo.new(0.25, Enum.EasingStyle.Linear),
+			{ CFrame = petModel.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(180), 0) }
+		)
+		local tween360 = TweenService:Create(
+			petModel.PrimaryPart,
+			TweenInfo.new(0.25, Enum.EasingStyle.Linear),
+			{ CFrame = petModel.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(360), 0) }
+		)
+
+		obliterator:Add(tweenUp)
+		obliterator:Add(tweenBackDown)
+		obliterator:Add(tween180)
+		obliterator:Add(tween360)
+
+		tweenUp:Play()
+		tweenUp.Completed:Wait()
+		tween180:Play()
+		tween180.Completed:Wait()
+		tween360:Play()
+		tween360.Completed:Wait()
+		tweenBackDown:Play()
 	end)
 end

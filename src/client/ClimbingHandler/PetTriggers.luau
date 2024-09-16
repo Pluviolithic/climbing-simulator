@@ -2,6 +2,7 @@ local CollectionService = game:GetService "CollectionService"
 local Players = game:GetService "Players"
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local StarterPlayer = game:GetService "StarterPlayer"
+local TextChatService = game:GetService "TextChatService"
 local TweenService = game:GetService "TweenService"
 
 local SetPetsVisibility = require(ReplicatedStorage.Common.RedEvents.SetPetsVisibility)
@@ -19,6 +20,12 @@ local MapName = ClimbingValues.MapName
 local Climbing = ClimbingValues.Climbing
 
 local player = Players.LocalPlayer
+
+local encouragingText = {
+	"Keep going!",
+	"Don't give up!",
+	"Almost there!",
+}
 
 return function(currentNode)
 	local obliterator = Janitor.new()
@@ -122,6 +129,8 @@ return function(currentNode)
 		obliterator:Add(tweenBackDown)
 		obliterator:Add(tween180)
 		obliterator:Add(tween360)
+
+		TextChatService:DisplayBubble(petModel.PrimaryPart, encouragingText[triggerIndex])
 
 		tweenUp:Play()
 		tweenUp.Completed:Wait()

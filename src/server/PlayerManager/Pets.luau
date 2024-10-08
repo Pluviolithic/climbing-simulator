@@ -247,11 +247,12 @@ Producer:observe(Selectors.selectPets, Selectors.selectPlayerName, function(_, i
 	end
 
 	updateModels(Producer:getState(Selectors.selectEquippedPets(index) :: any))
-	Producer:subscribe(Selectors.selectEquippedPets(index), updateModels)
+	local unsubscribe = Producer:subscribe(Selectors.selectEquippedPets(index), updateModels)
 
 	petsFolder.Name = `{index}Pets`
 	petsFolder.Parent = workspace
 	return function()
+		unsubscribe()
 		obliterator:Destroy()
 		petsFolder:Destroy()
 	end

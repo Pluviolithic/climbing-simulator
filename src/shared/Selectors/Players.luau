@@ -98,7 +98,22 @@ local function selectEquippedPets(playerName: string)
 	)
 end
 
+local function selectDumbbells(state: slices.SharedState)
+	return state.Players.Dumbbells
+end
+
+local function selectEquippedDumbbell(playerName: string)
+	return function(state: slices.SharedState)
+		if not state.Players.Dumbbells[playerName] then
+			return nil
+		end
+		return (state.Players.Dumbbells[playerName] :: any).EquippedDumbbell
+	end
+end
+
 return {
+	selectDumbbells = selectDumbbells,
+	selectEquippedDumbbell = selectEquippedDumbbell,
 	selectEquippedPets = selectEquippedPets,
 	selectPlayerData = selectPlayerData,
 	selectPlayerName = selectPlayerName,

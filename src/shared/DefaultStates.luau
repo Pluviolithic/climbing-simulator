@@ -61,11 +61,11 @@ local profileDataTemplate = {
 
 	Pets = {},
 
-	Dumbells = {
-		OwnedDumbells = {
-			["-"] = true,
+	Dumbbells = {
+		OwnedDumbbells = {
+			["2"] = true,
 		},
-		EquippedDumbell = "-",
+		EquippedDumbbell = "2",
 	},
 
 	MissionData = {},

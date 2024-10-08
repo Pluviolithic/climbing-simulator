@@ -5,6 +5,7 @@ local StarterPlayer = game:GetService "StarterPlayer"
 local TextChatService = game:GetService "TextChatService"
 local TweenService = game:GetService "TweenService"
 
+local ClientValues = require(StarterPlayer.StarterPlayerScripts.Client.ClientValues)
 local SetPetsVisibility = require(ReplicatedStorage.Common.RedEvents.SetPetsVisibility)
 local Producer = require(StarterPlayer.StarterPlayerScripts.Client.Producer)
 local Selectors = require(ReplicatedStorage.Common.Selectors)
@@ -16,7 +17,7 @@ local Janitor = require(ReplicatedStorage.Common.lib.Janitor)
 
 local Observer = Fusion.Observer
 
-local MapName = ClimbingValues.MapName
+local MapName = ClientValues.MapName
 local Climbing = ClimbingValues.Climbing
 
 local player = Players.LocalPlayer
@@ -111,12 +112,12 @@ return function(currentNode)
 		)
 		local tweenBackDown = TweenService:Create(
 			petModel.PrimaryPart,
-			TweenInfo.new(0.25, Enum.EasingStyle.Linear),
+			TweenInfo.new(0.125, Enum.EasingStyle.Linear),
 			{ Position = petModel.PrimaryPart.Position }
 		)
 		local tween180 = TweenService:Create(
 			petModel.PrimaryPart,
-			TweenInfo.new(0.25, Enum.EasingStyle.Linear),
+			TweenInfo.new(0.125, Enum.EasingStyle.Linear),
 			{ CFrame = petModel.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(180), 0) }
 		)
 		local tween360 = TweenService:Create(

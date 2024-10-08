@@ -2,6 +2,7 @@ local CollectionService = game:GetService "CollectionService"
 local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local StarterPlayer = game:GetService "StarterPlayer"
 
+local ClientValues = require(script.Parent.ClientValues)
 local ReachedCheckpoint = require(ReplicatedStorage.Common.RedEvents.ReachedCheckpoint)
 local ClimbingValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.Climbing.ClimbingValues)
 local AsyncHandlers = require(ReplicatedStorage.Common.Utils.Player.AsyncHandlers)
@@ -10,7 +11,7 @@ local Zone = require(ReplicatedStorage.Common.lib.ZonePlus)
 
 local Value = Fusion.Value
 
-local MapName = ClimbingValues.MapName
+local MapName = ClientValues.MapName
 local Climbing = ClimbingValues.Climbing
 local ClimbProgress = ClimbingValues.ClimbProgress
 
@@ -23,7 +24,6 @@ local function cleanup()
 	end
 
 	nextNode:set(nil)
-	MapName:set(nil)
 	currentNode:set(nil)
 	Climbing:set(false)
 	ClimbProgress:set(0)
@@ -87,7 +87,6 @@ AsyncHandlers.waitForChild(workspace.AreaStartModels, "TreeClimbStart"):andThen(
 			local nodes = workspace.Nodes[startModel.Name:match "(%w+)C"]
 			nextNode:set(nodes["1"])
 			currentNode:set(nodes["1"])
-			MapName:set(startModel.Name:sub(1, -11))
 
 			Climbing:set(true)
 

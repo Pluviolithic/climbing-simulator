@@ -31,6 +31,11 @@ export type PlayerTimestamps = {
 	["LastLogOff"]: number,
 }
 
+export type PlayerDumbbells = {
+	["OwnedDumbbells"]: { [string]: boolean },
+	["EquippedDumbbell"]: string,
+}
+
 export type Pet = {
 	Equipped: boolean,
 	Name: string,

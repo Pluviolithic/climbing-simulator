@@ -10,6 +10,7 @@ producer:observe(selectors.selectStats, selectors.selectPlayerName, function(_, 
 	local unsubscribe = producer:subscribe(selectors.selectPlayerData(index), function(data)
 		if profiles[index] then
 			profiles[index].Data.Stats = data.Stats
+			profiles[index].Data.Dumbbells = data.Dumbbells
 			profiles[index].Data.Timestamps = data.Timestamps
 
 			profiles[index].Data.Pets = Sift.Array.map(data.Pets, function(pet)

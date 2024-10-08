@@ -4,6 +4,7 @@ local ReplicatedStorage = game:GetService "ReplicatedStorage"
 local RunService = game:GetService "RunService"
 local StarterPlayer = game:GetService "StarterPlayer"
 
+local ClientValues = require(StarterPlayer.StarterPlayerScripts.Client.ClientValues)
 local ClimbingValues = require(StarterPlayer.StarterPlayerScripts.Client.UI.Climbing.ClimbingValues)
 local Fusion = require(ReplicatedStorage.Common.lib.Fusion)
 local Janitor = require(ReplicatedStorage.Common.lib.Janitor)
@@ -12,7 +13,7 @@ local Value = Fusion.Value
 local Observer = Fusion.Observer
 
 local NextNode: Fusion.Value<BasePart?> = Value(nil)
-local MapName = ClimbingValues.MapName
+local MapName = ClientValues.MapName
 local Climbing = ClimbingValues.Climbing
 local ClimbTarget = ClimbingValues.ClimbTarget
 local ClimbProgress = ClimbingValues.ClimbProgress
